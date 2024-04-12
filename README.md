@@ -1,1 +1,2 @@
-# Los moais Dioses del Mewing
+# Grupo 7
+-- Creacion de un ERP 
