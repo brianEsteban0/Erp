@@ -31,7 +31,7 @@ function validateFechas(fechaInicio, fechaTermino) {
 }
 
 // funcion para obtener publicaciones
-async function getProyecto(req, res) {
+async function getProyectos(req, res) {
   try {
     const currentDate = new Date(); // obtiene fecha actual
 
@@ -303,7 +303,7 @@ module.exports = { createProyecto };
   }
 
 module.exports = {
-    getProyecto,
+    getProyectos,
     createProyecto,
     updateProyecto: updateProyecto,
     deleteProyecto,
