@@ -31,7 +31,27 @@ async function isAdmin(req, res, next) {
     handleError(error, "authorization.middleware -> isAdmin");
   }
 }
+async function isUser(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const roles = await Role.find({ _id: { $in: user.roles } });
+    if (roles.length > 0) {
+      return next();
+    }
+    
+    return respondError(
+      req,
+      res,
+      401,
+      "Se requiere ser usuario para realizar esta acción",
+    );
+  }
+  catch (error) {
+    handleError(error, "authorization.middleware -> isUser");
+  }
+}
 
 module.exports = {
   isAdmin,
+  isUser,
 };
