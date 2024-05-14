@@ -42,7 +42,7 @@ async function createPublicacionForo(publicacion) {
 
 async function getPublicacionForoById(id) { 
     try {
-        const publicacion = await PublicacionForo.findById({ _id: id })
+        const publicacion = await PublicacionForo.findById(id)
             .populate("user")
             .exec();
         if (!publicacion) return [null, "La publicacion no existe"];
@@ -56,10 +56,13 @@ async function getPublicacionForoById(id) {
 
 async function updatePublicacionForo(id, publicacion) { 
     try {
-        const publicacionFound = await PublicacionForo.findById(id);
+        const publicacionFound = await PublicacionForo.findById(id)
+            .populate("user")
+            .exec();
         if (!publicacionFound) return [null, "La publicacion no existe"];
 
         const { titulo, contenido, imagen, comentarios, autor, fechaCreacion } = publicacion;
+        if (autor !== publicacionFound.autor) return [null, "No puedes editar esta publicacion"];
 
         const publicacionUpdated = await PublicacionForo.findByIdAndUpdate(
             id,
