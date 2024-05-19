@@ -14,6 +14,9 @@ const proyectoRoutes = require("./proyectos.routes.js");
 /** Enrutador de publicaciones */
 const publicacionForoRoutes = require("./publicacionForo.routes.js");
 
+/** Enrutador de Asignaciones**/
+const assignmentRoutes = require("./assignment.routes.js");
+
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
@@ -30,6 +33,9 @@ router.use("/proyectos", proyectoRoutes);
 
 // Define las rutas para las publicaciones
 router.use("/foro", publicacionForoRoutes);
+
+//Define las rutas para las asignaciones
+router.use("/asignaciones", assignmentRoutes);
 
 // Exporta el enrutador
 module.exports = router;
