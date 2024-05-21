@@ -20,16 +20,8 @@ router.use(authenticationMiddleware);
 router.get("/", authorizationMiddleware.isAdmin, usuarioController.getUsers);
 router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
 router.get("/:id", usuarioController.getUserById);
-router.put(
-  "/:id",
-  authorizationMiddleware.isAdmin,
-  usuarioController.updateUser,
-);
-router.delete(
-  "/:id",
-  authorizationMiddleware.isAdmin,
-  usuarioController.deleteUser,
-);
+router.put("/:id",authorizationMiddleware.isAdmin, usuarioController.updateUser,);
+router.delete("/:id",authorizationMiddleware.isAdmin,usuarioController.deleteUser,);
 
 // Exporta el enrutador
 module.exports = router;
