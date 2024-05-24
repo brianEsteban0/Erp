@@ -36,7 +36,18 @@ async function checkOut(employeeId) {
   }
 }
 
+async function getAttendanceRecords() {
+  try {
+    const records = await Attendance.find().populate('employeeId', 'name');
+    return [records, null];
+  } catch (error) {
+    handleError(error, "attendance.service -> getAttendanceRecords");
+    return [null, error.message];
+  }
+}
+
 module.exports = {
   checkIn,
   checkOut,
+  getAttendanceRecords,
 };
