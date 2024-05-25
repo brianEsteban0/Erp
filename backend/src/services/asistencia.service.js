@@ -1,47 +1,46 @@
 "use strict";
-const Attendance = require("../models/asistencia.model");
-const { handleError } = require("../utils/errorHandler");
+const Attendance = require("../models/attendance.model");
 
-async function checkIn(employeeId) {
+async function checkIn(userId) {
   try {
-    const date = new Date();
-    const attendance = new Attendance({ employeeId, date, checkIn: date });
+    const existingAttendance = await Attendance.findOne({ user: userId, checkOut: null });
+    if (existingAttendance) {
+      return [null, "User already checked in"];
+    }
+
+    const attendance = new Attendance({
+      user: userId,
+      date: new Date(),
+      checkIn: new Date(),
+    });
+
     await attendance.save();
     return [attendance, null];
   } catch (error) {
-    handleError(error, "attendance.service -> checkIn");
     return [null, error.message];
   }
 }
 
-async function checkOut(employeeId) {
+async function checkOut(userId) {
   try {
-    const date = new Date();
-    const attendance = await Attendance.findOne({ 
-      employeeId, 
-      date: { 
-        $gte: new Date().setHours(0, 0, 0, 0), 
-        $lt: new Date().setHours(23, 59, 59, 999) 
-      } 
-    });
+    const attendance = await Attendance.findOne({ user: userId, checkOut: null });
     if (!attendance) {
-      throw new Error("No check-in record found for today.");
+      return [null, "User not checked in"];
     }
-    attendance.checkOut = date;
+
+    attendance.checkOut = new Date();
     await attendance.save();
     return [attendance, null];
   } catch (error) {
-    handleError(error, "attendance.service -> checkOut");
     return [null, error.message];
   }
 }
 
 async function getAttendanceRecords() {
   try {
-    const records = await Attendance.find().populate('employeeId', 'name');
+    const records = await Attendance.find().populate('user').exec();
     return [records, null];
   } catch (error) {
-    handleError(error, "attendance.service -> getAttendanceRecords");
     return [null, error.message];
   }
 }

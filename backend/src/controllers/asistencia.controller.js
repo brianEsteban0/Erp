@@ -3,49 +3,50 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const AttendanceService = require("../services/asistencia.service");
 const FingerprintService = require('../services/fingerprint.service');
+const User = require('../models/user.model');
 const mongoose = require('mongoose');
 
 async function checkIn(req, res) {
-  const { employeeId } = req.body;
-  
-  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
-    return respondError(req, res, 400, "Invalid employeeId");
-  }
-
   try {
-    const response = await FingerprintService.verifyFingerprint(employeeId);
-    if (response.message === "Fingerprint verified successfully") {
-      const [attendance, error] = await AttendanceService.checkIn(employeeId);
-      if (error) {
-        return respondError(req, res, 400, error);
-      }
-      return respondSuccess(req, res, 200, attendance);
-    } else {
-      return respondError(req, res, 400, "Fingerprint verification failed");
+    const identifiedUser = await FingerprintService.identifyUserByFingerprint();
+    if (!identifiedUser) {
+      return respondError(req, res, 404, "User not found");
     }
+
+    // Buscar usuario en la base de datos usando el nombre de usuario identificado
+    const user = await User.findOne({ username: identifiedUser }).exec();
+    if (!user) {
+      return respondError(req, res, 404, "User not found");
+    }
+
+    const [attendance, error] = await AttendanceService.checkIn(user._id);
+    if (error) {
+      return respondError(req, res, 400, error);
+    }
+    return respondSuccess(req, res, 200, attendance);
   } catch (error) {
     return respondError(req, res, 500, error.message);
   }
 }
 
 async function checkOut(req, res) {
-  const { employeeId } = req.body;
-
-  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
-    return respondError(req, res, 400, "Invalid employeeId");
-  }
-
   try {
-    const response = await FingerprintService.verifyFingerprint(employeeId);
-    if (response.message === "Fingerprint verified successfully") {
-      const [attendance, error] = await AttendanceService.checkOut(employeeId);
-      if (error) {
-        return respondError(req, res, 400, error);
-      }
-      return respondSuccess(req, res, 200, attendance);
-    } else {
-      return respondError(req, res, 400, "Fingerprint verification failed");
+    const identifiedUser = await FingerprintService.identifyUserByFingerprint();
+    if (!identifiedUser) {
+      return respondError(req, res, 404, "User not found");
     }
+
+    // Buscar usuario en la base de datos usando el nombre de usuario identificado
+    const user = await User.findOne({ username: identifiedUser }).exec();
+    if (!user) {
+      return respondError(req, res, 404, "User not found");
+    }
+
+    const [attendance, error] = await AttendanceService.checkOut(user._id);
+    if (error) {
+      return respondError(req, res, 400, error);
+    }
+    return respondSuccess(req, res, 200, attendance);
   } catch (error) {
     return respondError(req, res, 500, error.message);
   }
@@ -60,14 +61,19 @@ async function getAttendanceRecords(req, res) {
 }
 
 async function enrollFingerprint(req, res) {
-  const { employeeId } = req.body;
+  const { rut } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
-    return respondError(req, res, 400, "Invalid employeeId");
+  if (!rut) {
+    return respondError(req, res, 400, "RUT is required");
   }
 
   try {
-    const response = await FingerprintService.enrollFingerprint(employeeId);
+    const user = await User.findOne({ rut });
+    if (!user) {
+      return respondError(req, res, 404, "User not found");
+    }
+
+    const response = await FingerprintService.enrollFingerprint(user._id);
     return respondSuccess(req, res, 200, response);
   } catch (error) {
     return respondError(req, res, 500, error.message);
@@ -75,23 +81,19 @@ async function enrollFingerprint(req, res) {
 }
 
 async function deleteFingerprint(req, res) {
-  const { employeeId } = req.body;
+  const { rut } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(employeeId)) {
-    return respondError(req, res, 400, "Invalid employeeId");
+  if (!rut) {
+    return respondError(req, res, 400, "RUT is required");
   }
 
   try {
-    const response = await FingerprintService.deleteFingerprint(employeeId);
-    return respondSuccess(req, res, 200, response);
-  } catch (error) {
-    return respondError(req, res, 500, error.message);
-  }
-}
+    const user = await User.findOne({ rut });
+    if (!user) {
+      return respondError(req, res, 404, "User not found");
+    }
 
-async function deleteAllFingerprints(req, res) {
-  try {
-    const response = await FingerprintService.deleteAllFingerprints();
+    const response = await FingerprintService.deleteFingerprint(user._id);
     return respondSuccess(req, res, 200, response);
   } catch (error) {
     return respondError(req, res, 500, error.message);
@@ -104,5 +106,4 @@ module.exports = {
   getAttendanceRecords,
   enrollFingerprint,
   deleteFingerprint,
-  deleteAllFingerprints,
 };

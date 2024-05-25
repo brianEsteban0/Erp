@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 
 const attendanceSchema = new mongoose.Schema({
-  employeeId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -10,10 +10,12 @@ const attendanceSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
+    default: Date.now,
   },
   checkIn: {
     type: Date,
     required: true,
+    default: Date.now,
   },
   checkOut: {
     type: Date,
@@ -22,5 +24,5 @@ const attendanceSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const Asistencia = mongoose.model("Asistencia", attendanceSchema);
-module.exports = Asistencia;
+const Attendance = mongoose.model("Attendance", attendanceSchema);
+module.exports = Attendance;
