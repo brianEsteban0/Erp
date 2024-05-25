@@ -1,59 +1,65 @@
-const axios = require('axios');
+const { exec } = require('child_process');
 const User = require('../models/user.model');
 
 async function verifyFingerprint(userId) {
-  try {
-    const response = await axios.post('http://localhost:5001/verify', { user_id: userId });
-    return response.data;
-  } catch (error) {
-    throw new Error('Error verifying fingerprint: ' + error.message);
-  }
+  return new Promise((resolve, reject) => {
+    exec(`fprintd-verify ${userId}`, (error, stdout, stderr) => {
+      if (error || stderr) {
+        return reject(new Error(`Error verifying fingerprint: ${stderr || error.message}`));
+      }
+      resolve({ message: "Fingerprint verified successfully" });
+    });
+  });
 }
 
 async function enrollFingerprint(userId) {
-  try {
-    const response = await axios.post('http://localhost:5001/enroll', { user_id: userId });
-    return response.data;
-  } catch (error) {
-    throw new Error('Error enrolling fingerprint: ' + error.message);
-  }
+  return new Promise((resolve, reject) => {
+    exec(`fprintd-enroll ${userId}`, (error, stdout, stderr) => {
+      if (error || stderr) {
+        return reject(new Error(`Error enrolling fingerprint: ${stderr || error.message}`));
+      }
+      resolve({ message: "Fingerprint enrolled successfully" });
+    });
+  });
 }
 
 async function deleteFingerprint(userId) {
-  try {
-    const response = await axios.post('http://localhost:5001/delete', { user_id: userId });
-    return response.data;
-  } catch (error) {
-    throw new Error('Error deleting fingerprint: ' + error.message);
-  }
-}
-
-async function deleteAllFingerprints() {
-  try {
-    const response = await axios.post('http://localhost:5001/delete-all');
-    return response.data;
-  } catch (error) {
-    throw new Error('Error deleting all fingerprints: ' + error.message);
-  }
+  return new Promise((resolve, reject) => {
+    exec(`fprintd-delete ${userId}`, (error, stdout, stderr) => {
+      if (error || stderr) {
+        return reject(new Error(`Error deleting fingerprint: ${stderr || error.message}`));
+      }
+      resolve({ message: "Fingerprint deleted successfully" });
+    });
+  });
 }
 
 async function identifyUserByFingerprint() {
   try {
-    const response = await axios.post('http://localhost:5001/identify');
-    if (response.status !== 200) {
-      throw new Error(`Failed to identify fingerprint: ${response.statusText}`);
+    const knownUsers = await User.find().exec();
+    
+    for (const user of knownUsers) {
+      try {
+        const result = await new Promise((resolve, reject) => {
+          exec(`fprintd-verify ${user._id}`, (error, stdout, stderr) => {
+            if (error || stderr) {
+              return reject(new Error(`Error verifying fingerprint for user ${user._id}: ${stderr || error.message}`));
+            }
+            resolve(user);
+          });
+        });
+
+        if (result) {
+          return { user_id: result._id, rut: result.rut };
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
     }
-    const userId = response.data.user_id;
-    if (!userId) {
-      throw new Error('User ID not returned from fingerprint service');
-    }
-    const user = await User.findById(userId).exec();
-    if (!user) {
-      throw new Error('User not found with the identified user ID');
-    }
-    return user;
+
+    throw new Error("No matching fingerprints found");
   } catch (error) {
-    throw new Error('Error identifying fingerprint: ' + error.message);
+    throw new Error(`Error identifying fingerprint: ${error.message}`);
   }
 }
 
@@ -61,6 +67,5 @@ module.exports = {
   verifyFingerprint,
   enrollFingerprint,
   deleteFingerprint,
-  deleteAllFingerprints,
   identifyUserByFingerprint,
 };

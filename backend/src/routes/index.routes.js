@@ -20,6 +20,9 @@ const assignmentRoutes = require("./assignment.routes.js");
 /** Enrutador de Asistencias */
 const attendanceRoutes = require("./asistencia.routes.js");
 
+/** Enrutador de Huellas Dactilares */
+const fingerprintRoutes = require("./fingerprint.routes.js");
+
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
@@ -44,6 +47,9 @@ router.use("/asignaciones", assignmentRoutes);
 
 // Define las rutas para las asistencias
 router.use("/asistencia", attendanceRoutes);
+
+// Define las rutas para las huellas dactilares
+router.use("/fingerprint", fingerprintRoutes);
 
 // Exporta el enrutador
 module.exports = router;

@@ -1,5 +1,3 @@
-"use strict";
-
 // Importa el archivo 'configEnv.js' para cargar las variables de entorno
 const { PORT, HOST } = require("./config/configEnv.js");
 // Importa el módulo 'cors' para agregar los cors
@@ -16,9 +14,7 @@ const indexRoutes = require("./routes/index.routes.js");
 const { setupDB } = require("./config/configDB.js");
 // Importa el handler de errores
 const { handleFatalError, handleError } = require("./utils/errorHandler.js");
-const { createRoles, createUsers } = require("./config/initialSetup.js");
-// Importa child_process para ejecutar el servicio de huellas digitales
-const { exec } = require('child_process');
+const { createRoles, createUsers } = require("./config/initialSetup");
 
 /**
  * Inicia el servidor web
@@ -45,33 +41,6 @@ async function setupServer() {
     server.listen(PORT, () => {
       console.log(`=> Servidor corriendo en ${HOST}:${PORT}/api`);
     });
-
-    // Iniciar el servicio de huellas digitales
-    const fingerprintService = exec('python3 src/external_services/fingerprint_service.py', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error al iniciar el servicio de huellas digitales: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`Error en el servicio de huellas digitales: ${stderr}`);
-        return;
-      }
-      console.log(`Servicio de huellas digitales iniciado: ${stdout}`);
-    });
-
-    // Manejar los eventos del proceso del servicio de huellas digitales
-    fingerprintService.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-    });
-
-    fingerprintService.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-    });
-
-    fingerprintService.on('close', (code) => {
-      console.log(`Servicio de huellas digitales finalizó con el código: ${code}`);
-    });
-
   } catch (err) {
     handleError(err, "/server.js -> setupServer");
   }

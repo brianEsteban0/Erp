@@ -4,17 +4,16 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const AttendanceService = require("../services/asistencia.service");
 const FingerprintService = require('../services/fingerprint.service');
 const User = require('../models/user.model');
-const mongoose = require('mongoose');
 
 async function checkIn(req, res) {
   try {
-    const identifiedUser = await FingerprintService.identifyUserByFingerprint();
-    if (!identifiedUser) {
+    const identifiedUserRut = await FingerprintService.identifyUserByFingerprint();
+    if (!identifiedUserRut) {
       return respondError(req, res, 404, "User not found");
     }
 
-    // Buscar usuario en la base de datos usando el nombre de usuario identificado
-    const user = await User.findOne({ username: identifiedUser }).exec();
+    // Buscar usuario en la base de datos usando el RUT identificado
+    const user = await User.findOne({ rut: identifiedUserRut }).exec();
     if (!user) {
       return respondError(req, res, 404, "User not found");
     }
@@ -31,13 +30,13 @@ async function checkIn(req, res) {
 
 async function checkOut(req, res) {
   try {
-    const identifiedUser = await FingerprintService.identifyUserByFingerprint();
-    if (!identifiedUser) {
+    const identifiedUserRut = await FingerprintService.identifyUserByFingerprint();
+    if (!identifiedUserRut) {
       return respondError(req, res, 404, "User not found");
     }
 
-    // Buscar usuario en la base de datos usando el nombre de usuario identificado
-    const user = await User.findOne({ username: identifiedUser }).exec();
+    // Buscar usuario en la base de datos usando el RUT identificado
+    const user = await User.findOne({ rut: identifiedUserRut }).exec();
     if (!user) {
       return respondError(req, res, 404, "User not found");
     }
@@ -51,6 +50,7 @@ async function checkOut(req, res) {
     return respondError(req, res, 500, error.message);
   }
 }
+
 
 async function getAttendanceRecords(req, res) {
   const [records, error] = await AttendanceService.getAttendanceRecords();
