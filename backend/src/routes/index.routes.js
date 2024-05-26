@@ -18,7 +18,7 @@ const publicacionForoRoutes = require("./publicacionForo.routes.js");
 const assignmentRoutes = require("./assignment.routes.js");
 
 /** Enrutador de Asistencias */
-const attendanceRoutes = require("./asistencia.routes.js");
+const attendanceRoutes = require("./attendance.routes.js");
 
 /** Enrutador de Huellas Dactilares */
 const fingerprintRoutes = require("./fingerprint.routes.js");
