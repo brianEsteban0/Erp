@@ -4,16 +4,22 @@ const User = require('../models/user.model');
 
 async function checkIn(req, res) {
   try {
-    const result = await fingerprintService.identifyUserByFingerprint();
-    const userId = result.user_id;
-    const user = await User.findById(userId).exec();
+    const user = await fingerprintService.identifyUserByFingerprint();
 
-    const existingAttendance = await Attendance.findOne({ user: user.rut, date: { $gte: new Date().setHours(0, 0, 0, 0) } });
-    if (existingAttendance) {
-      return res.status(400).json({ error: "User has already checked in today" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
 
-    const attendance = new Attendance({ user: user.rut });
+    const todayStart = new Date().setHours(0, 0, 0, 0);
+    const todayEnd = new Date().setHours(23, 59, 59, 999);
+
+    const existingAttendance = await Attendance.findOne({ user: user._id, date: { $gte: todayStart, $lte: todayEnd }, checkOut: { $exists: false } });
+
+    if (existingAttendance) {
+      return res.status(400).json({ error: "User has already checked in today and has not checked out yet" });
+    }
+
+    const attendance = new Attendance({ user: user._id });
     await attendance.save();
     return res.status(200).json({ message: "Check-in successful", attendance });
   } catch (error) {
@@ -23,11 +29,17 @@ async function checkIn(req, res) {
 
 async function checkOut(req, res) {
   try {
-    const result = await fingerprintService.identifyUserByFingerprint();
-    const userId = result.user_id;
-    const user = await User.findById(userId).exec();
+    const user = await fingerprintService.identifyUserByFingerprint();
 
-    const attendance = await Attendance.findOne({ user: user.rut, date: { $gte: new Date().setHours(0, 0, 0, 0) }, checkOut: { $exists: false } });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const todayStart = new Date().setHours(0, 0, 0, 0);
+    const todayEnd = new Date().setHours(23, 59, 59, 999);
+
+    const attendance = await Attendance.findOne({ user: user._id, date: { $gte: todayStart, $lte: todayEnd }, checkOut: { $exists: false } });
+
     if (!attendance) {
       return res.status(400).json({ error: "No active check-in found for today" });
     }
