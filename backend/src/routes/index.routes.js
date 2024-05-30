@@ -14,6 +14,9 @@ const proyectoRoutes = require("./proyectos.routes.js");
 /** Enrutador de publicaciones */
 const publicacionForoRoutes = require("./publicacionForo.routes.js");
 
+/** Enrutador de imagen*/ 
+const imagenRoutes = require("./imagen.routes.js");
+
 /** Enrutador de Asignaciones**/
 const assignmentRoutes = require("./assignment.routes.js");
 
@@ -41,6 +44,9 @@ router.use("/proyectos", proyectoRoutes);
 
 // Define las rutas para las publicaciones
 router.use("/foro", publicacionForoRoutes);
+
+// Define las rutas para las imagenes
+router.use("/imagen", imagenRoutes);
 
 // Define las rutas para las asignaciones
 router.use("/asignaciones", assignmentRoutes);

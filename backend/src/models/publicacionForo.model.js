@@ -10,7 +10,9 @@ const publicacionForoSchema = new mongoose.Schema({
         required: true,
     },
     imagen: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Imagen",
+        default: null,
     },
     comentarios: [{
         usuario: {

@@ -2,7 +2,7 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const { respondInternalError } = require("../utils/resHandler");
 const PublicacionForo = require("../models/publicacionForo.model");
-const PublicacionForoService = require("../services/publicacionForo.service");
+const PublicacionForoService = require("../services/publicacionForo.service"); 
 const { publicacionForoBodySchema, publicacionForoId } = require("../schema/publicacionForo.schema");
 
 async function getPublicacionesForo(req, res) {
