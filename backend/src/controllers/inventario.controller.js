@@ -92,10 +92,22 @@ async function deleteInventario(req, res) {
   }
 }
 
+async function restarCantidad(inventarios) {
+  try {
+    const [producto, errorProducto] = await InventarioService.restarCantidad(inventarios);
+    if (errorProducto) return respondError(req, res, 404, errorProducto);
+    return producto;
+  } catch (error) {
+    handleError(error, "Inventario.controller -> restarCantidad");
+    respondInternalError(req, res);
+  }
+}
+
 module.exports = {
     getInventario,
     createInventario,
     getInventarioById,
     updateInventario,
     deleteInventario,
+    restarCantidad,
 };

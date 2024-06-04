@@ -85,11 +85,29 @@ async function deleteInventario(id) {
     }
 }
 
+async function restarCantidad(inventarios) {
+    try {
+        for (const inventario of inventarios) {
+            const { idProducto, cantidad } = inventario;
+            const producto = await Inventario.findById(idProducto);
+            if (!producto) return null;
+
+            if (producto.cantidad < cantidad) return null;
+            producto.cantidad -= cantidad;
+            await producto.save();
+        }
+        return inventarios;
+    } catch (error) {
+        handleError(error, "inventario.service -> restarCantidad");
+        return null;
+    }
+}
 
 module.exports = {
     getInventario,
     createInventario,
     getInventarioById,
     updateInventario,
-    deleteInventario
+    deleteInventario,
+    restarCantidad,
 };
