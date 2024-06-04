@@ -17,6 +17,12 @@ const publicacionForoRoutes = require("./publicacionForo.routes.js");
 /** Enrutador de imagen*/ 
 const imagenRoutes = require("./imagen.routes.js");
 
+/** Enrutador de Inventario */
+const inventarioRoutes = require("./inventario.routes.js");
+
+/** Enrutador de Inventario Proyectos*/
+const inventarioProyectoRoutes = require("./inventarioProyecto.routes.js");
+
 /** Enrutador de Asignaciones**/
 const assignmentRoutes = require("./assignment.routes.js");
 
@@ -47,6 +53,12 @@ router.use("/foro", publicacionForoRoutes);
 
 // Define las rutas para las imagenes
 router.use("/imagen", imagenRoutes);
+
+// Define las rutas para los inventarios
+router.use("/inventario", inventarioRoutes);
+
+// Define las rutas para los inventarios de proyectos
+router.use("/inventarioProyecto", inventarioProyectoRoutes);
 
 // Define las rutas para las asignaciones
 router.use("/asignaciones", assignmentRoutes);
