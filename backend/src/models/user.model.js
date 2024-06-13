@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    photoUrl: {
+      type: String,
+      required: false,
+    },
     roles: [
       {
         type: mongoose.Schema.Types.ObjectId,

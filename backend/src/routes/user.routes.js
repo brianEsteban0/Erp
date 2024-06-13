@@ -22,6 +22,6 @@ router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
 router.get("/:id", usuarioController.getUserById);
 router.put("/:id",authorizationMiddleware.isAdmin, usuarioController.updateUser,);
 router.delete("/:id",authorizationMiddleware.isAdmin,usuarioController.deleteUser,);
-
+router.post('/uploadPhoto', usuarioController.upload.single('photo'), usuarioController.uploadPhoto);
 // Exporta el enrutador
 module.exports = router;

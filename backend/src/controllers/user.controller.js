@@ -2,8 +2,22 @@
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const UserService = require("../services/user.service");
-const { userBodySchema, userIdSchema } = require("../schema/user.schema");
+const { userBodySchema, userIdSchema, userRutSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
+const multer = require('multer');
+const path = require('path');
+
+// Configuración de multer para almacenar fotos
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, '../uploads'); // Carpeta donde se guardarán las fotos
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 /**
  * Obtiene todos los usuarios
@@ -123,10 +137,41 @@ async function deleteUser(req, res) {
   }
 }
 
+/**
+ * Carga una foto para un usuario especificado por su RUT
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function uploadPhoto(req, res) {
+  try {
+    const { rut } = req.body; // Suponiendo que el RUT se envía en el cuerpo de la solicitud
+    const user = await UserService.getUserByRut(rut);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Actualiza la URL de la foto del usuario
+    user.photoUrl = `/uploads/${req.file.filename}`;
+    await user.save();
+
+    return res.status(200).json({ message: 'Photo uploaded successfully', photoUrl: user.photoUrl });
+  } catch (error) {
+    handleError(error, "user.controller -> uploadPhoto");
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   getUsers,
   createUser,
   getUserById,
   updateUser,
   deleteUser,
+  uploadPhoto,
+  upload,
 };
