@@ -35,7 +35,7 @@ async function setupServer() {
     // Agregamos morgan para ver las peticiones que se hacen al servidor
     server.use(morgan("dev"));
     // Configuración para servir archivos estáticos desde la carpeta 'uploads'
-    server.use('./uploads', express.static('uploads'));
+    server.use('/uploads', express.static('backend/uploads'));
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
 

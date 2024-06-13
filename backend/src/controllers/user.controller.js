@@ -10,7 +10,7 @@ const path = require('path');
 // Configuración de multer para almacenar fotos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '../uploads'); // Carpeta donde se guardarán las fotos
+    cb(null, path.join(__dirname, '../../uploads')); // Carpeta donde se guardarán las fotos
   },
   filename: (req, file, cb) => {
     cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
@@ -145,24 +145,24 @@ async function deleteUser(req, res) {
 async function uploadPhoto(req, res) {
   try {
     const { rut } = req.body; // Suponiendo que el RUT se envía en el cuerpo de la solicitud
-    const user = await UserService.getUserByRut(rut);
+    const [user, errorUser] = await UserService.getUserByRut(rut);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+    if (errorUser || !user) {
+      return respondError(req, res, 404, 'User not found');
     }
 
     if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+      return respondError(req, res, 400, 'No file uploaded');
     }
 
     // Actualiza la URL de la foto del usuario
     user.photoUrl = `/uploads/${req.file.filename}`;
     await user.save();
 
-    return res.status(200).json({ message: 'Photo uploaded successfully', photoUrl: user.photoUrl });
+    return respondSuccess(req, res, 200, { message: 'Photo uploaded successfully', photoUrl: user.photoUrl });
   } catch (error) {
     handleError(error, "user.controller -> uploadPhoto");
-    return res.status(500).json({ error: error.message });
+    respondError(req, res, 500, error.message);
   }
 }
 
