@@ -1,5 +1,6 @@
 const Attendance = require('../models/attendance.model');
 const fingerprintService = require('../services/fingerprint.service');
+const User = require('../models/user.model'); // Asegúrate de importar el modelo de usuario
 
 async function checkIn(req, res) {
   try {
@@ -21,7 +22,10 @@ async function checkIn(req, res) {
 
     const attendance = new Attendance({ user: user._id });
     await attendance.save();
-    return res.status(200).json({ message: "Check-in successful", attendance });
+
+    const userData = await User.findById(user._id).select('photoUrl'); // Obtener la URL de la foto del usuario
+
+    return res.status(200).json({ message: "Check-in successful", attendance: { ...attendance.toObject(), photoUrl: userData.photoUrl } });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -47,7 +51,10 @@ async function checkOut(req, res) {
 
     attendance.checkOut = new Date();
     await attendance.save();
-    return res.status(200).json({ message: "Check-out successful", attendance });
+
+    const userData = await User.findById(user._id).select('photoUrl'); // Obtener la URL de la foto del usuario
+
+    return res.status(200).json({ message: "Check-out successful", attendance: { ...attendance.toObject(), photoUrl: userData.photoUrl } });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

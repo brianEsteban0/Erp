@@ -6,6 +6,8 @@ import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
 import Foro from './routes/Foro/Foro.jsx';
+import Asistencia from './components/AttendanceForm.jsx';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/foro',
     element: <Foro />,
+  },
+  {
+    path: '/asistencia',
+    element: <Asistencia />,
   },
 ]);
 
