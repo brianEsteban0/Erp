@@ -23,7 +23,7 @@ function AgregarPublicacion() {
     try {
       await createPublicacion(publicacionData);
       alert('Publicación agregada con éxito');
-      navigate('/publicaciones');
+      navigate('/');
     } catch (error) {
       console.error('Error al agregar la publicación', error);
       alert('Hubo un error al agregar la publicación. Por favor, inténtelo de nuevo.');
