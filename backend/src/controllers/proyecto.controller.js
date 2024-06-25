@@ -81,7 +81,7 @@ async function createProyecto(req, res) {
     const {
       titulo,
       descripcion,
-      objetivo,
+      empresa_licitante,
       fecha_inicio,
       fecha_termino
     } = body;
@@ -104,13 +104,13 @@ async function createProyecto(req, res) {
     if (!regexDescripcion.test(descripcion)) {
       return respondError(req, res, 400, "La descripción debe contener al menos una letra.");
     }
-    //validaciones objetivo
-    if (typeof objetivo !== "string" || objetivo.length < 2 || objetivo.length > 600) {
-      return respondError(req, res, 400, "Verificar largo del  objetivo (min 1 max 600 caracteres).");
+    //validaciones empresa licitante
+    if (typeof empresa_licitante !== "string" || empresa_licitante.length < 2 || empresa_licitante.length > 600) {
+      return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 1 max 600 caracteres).");
     }
-    const regexObjetivo = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
-    if (!regexObjetivo.test(objetivo)) {
-      return respondError(req, res, 400, "El objetivo debe contener al menos una letra.");
+    const regexEmpresaLicitante = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
+    if (!regexEmpresaLicitante.test(empresa_licitante)) {
+      return respondError(req, res, 400, "La empresa licitante debe contener al menos una letra.");
     }
     //validaciones fecha_inicio
     const currentDate = new Date(); // Fecha actual
@@ -148,7 +148,7 @@ async function createProyecto(req, res) {
     const proyecto = {
       titulo,
       descripcion,
-      objetivo,
+      empresa_licitante,
       fecha_inicio,
       fecha_termino
     };
@@ -189,11 +189,9 @@ module.exports = { createProyecto };
       const {
         titulo,
         descripcion,
-        objetivo,
+        empresa_licitante,
         fecha_inicio,
         fecha_termino,
-        monto,
-        cupos
       } = updateData;
 
       //validaciones titulo
@@ -214,13 +212,13 @@ module.exports = { createProyecto };
     if (!regexDescripcion.test(descripcion)) {
       return respondError(req, res, 400, "La descripción debe contener al menos una letra.");
     }
-    //validaciones objetivo
-    if (typeof objetivo !== "string" || objetivo.length < 2 || objetivo.length > 600) {
-      return respondError(req, res, 400, "Verificar largo del  objetivo (min 1 max 600 caracteres).");
+    //validaciones empresa licitante
+    if (typeof empresa_licitante !== "string" || empresa_licitante.length < 2 || empresa_licitante.length > 600) {
+      return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 1 max 600 caracteres).");
     }
-    const regexObjetivo = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
-    if (!regexObjetivo.test(objetivo)) {
-      return respondError(req, res, 400, "El objetivo debe contener al menos una letra.");
+    const regexEmpresaLicitante = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
+    if (!regexEmpresaLicitante.test(empresa_licitante)) {
+      return respondError(req, res, 400, "La empresa licitante debe contener al menos una letra.");
     }
     //validaciones fecha_inicio
     const currentDate = new Date(); // Fecha actual

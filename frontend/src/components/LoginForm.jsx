@@ -18,21 +18,28 @@ function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-4">
       <input
         name="email"
         type="email"
         {...register('email', { required: true })}
+        className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        placeholder="Email"
       />
       <input
         type="password"
         name="password"
         {...register('password', { required: true })}
+        className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        placeholder="Password"
       />
-      {errors.exampleRequired && <span>This field is required</span>}
-      <input type="submit" />
+      {errors.exampleRequired && <span className="text-red-500">This field is required</span>}
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">
+        Login
+      </button>
     </form>
   );
 }
 
 export default LoginForm;
+
