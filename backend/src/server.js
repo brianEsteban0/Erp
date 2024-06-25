@@ -15,7 +15,7 @@ const { setupDB } = require("./config/configDB.js");
 // Importa el handler de errores
 const { handleFatalError, handleError } = require("./utils/errorHandler.js");
 const { createRoles, createUsers } = require("./config/initialSetup");
-
+const path = require("path");
 /**
  * Inicia el servidor web
  */
@@ -34,6 +34,8 @@ async function setupServer() {
     server.use(cookieParser());
     // Agregamos morgan para ver las peticiones que se hacen al servidor
     server.use(morgan("dev"));
+    // Configuración para servir archivos estáticos desde la carpeta 'uploads'
+    server.use('/uploads', express.static(path.join(__dirname, '../uploads')));
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
 

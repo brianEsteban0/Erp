@@ -1,7 +1,6 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const Imagen = require("../models/imagen.model");
-const { get } = require("mongoose");
 
 async function createImagen(req, res) {
   try {

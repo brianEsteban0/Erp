@@ -10,7 +10,8 @@ const router = express.Router();
 router.use(authenticationMiddleware);
 
 // Rutas para crear, actualizar y eliminar publicaciones del foro
-router.post("/:user/:publicacionNombre",upload.single("archivos"),imagenController.createImagen);
+router.post("/:user/:publicacionNombre", upload.single("archivos"), imagenController.createImagen);
+router.get("/:id", imagenController.getImagen);
 
 
 module.exports = router;

@@ -29,8 +29,7 @@ const publicacionForoSchema = new mongoose.Schema({
         },
     }],
     autor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Usuario",
+        type: String,
         required: true,
     },
     fechaCreacion: {

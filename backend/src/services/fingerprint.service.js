@@ -2,14 +2,14 @@ const { exec } = require('child_process');
 const User = require('../models/user.model');
 
 async function verifyFingerprint(userId) {
-  return new Promise((resolve, reject) => {
-    exec(`fprintd-verify ${userId}`, (error, stdout, stderr) => {
-      if (error || stderr) {
-        return reject(new Error(`Error verifying fingerprint for user ${userId}: ${stderr || error.message}`));
-      }
-      resolve(userId);
-    });
-  });
+ return new Promise((resolve, reject) => {
+   exec(`fprintd-verify ${userId}`, (error, stdout, stderr) => {
+     if (error || stderr) {
+       return resolve(false);
+     }
+     resolve(true); // Si la verificación es exitosa
+   });
+ });
 }
 
 async function enrollFingerprint(userId) {
@@ -34,24 +34,26 @@ async function deleteFingerprint(userId) {
   });
 }
 
-async function identifyUserByFingerprint() {
-  const users = await User.find().exec();
-
-  for (const user of users) {
-    try {
-      await verifyFingerprint(user._id);
-      return user; // Return the user if fingerprint verification succeeds
-    } catch (err) {
-      // Ignore error and continue with the next user
-      continue;
+async function identifyUserByRutAndFingerprint(rut) {
+  try {
+    const user = await User.findOne({ rut }).select("_id").exec();
+    if (!user) {
+      throw new Error('User not found');
     }
-  }
-  throw new Error('No matching fingerprints found');
-}
 
+    const isMatch = await verifyFingerprint(user._id);
+    if (!isMatch) {
+      throw new Error('Fingerprint does not match');
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 module.exports = {
   verifyFingerprint,
   enrollFingerprint,
   deleteFingerprint,
-  identifyUserByFingerprint,
+  identifyUserByRutAndFingerprint,
 };
