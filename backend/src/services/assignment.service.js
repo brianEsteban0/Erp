@@ -3,6 +3,7 @@ const User = require('../models/user.model.js');
 const Proyecto = require('../models/proyecto.model.js');
 const { handleError } = require('../utils/errorHandler.js');
 const mongoose = require('mongoose');
+const Nodemailer = require('../services/nodemailer.service.js');
 
 // Obtener los participantes disponibles
 async function getAvailableParticipants() {
@@ -21,7 +22,7 @@ async function getAvailableParticipants() {
 }
 
 // Añadir un usuario a un proyecto
-async function addUserToProyect(proyectId, userIds) {
+async function createAssignment(proyectId, userIds, description) {
 
     try {
         // Verificar que el ID del proyecto es válido
@@ -51,6 +52,10 @@ async function addUserToProyect(proyectId, userIds) {
         }
 
         //Verificar que el proyecto no este ya siendo usado
+        const assignedProyect = await Assignments.findOne({ Proyecto: proyectId });
+        if (assignedProyect) {
+            return [null, 'El proyecto ya está siendo utilizado en otra asignación.'];
+        }
     
         // Verificar que los usuarios existen
         const participants = await User.find({ _id: { $in: userIds } });
@@ -60,11 +65,22 @@ async function addUserToProyect(proyectId, userIds) {
 
         // Intentar crear la asignación
         const newAssignment = new Assignments({
-            Proyecto: proyecto._id,
+            Proyecto: proyectId,
             Participantes: userIds,
+            description: description,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
         });
 
         await newAssignment.save();
+
+        // Enviar correo electrónico a los participantes
+        const participantesEmails = participants.map(participante => participante.email);
+        if (participantesEmails.length > 0) {
+            await Nodemailer.enviarEmail(participantesEmails, 'Asignación a proyecto', 
+                `Buenos días o tardes, se le informa que fue asignado al proyecto ${proyecto.titulo}`);
+        }
+
         return [newAssignment, null];
 
     } catch (error) {
@@ -125,13 +141,18 @@ async function getParticipantsByProyect(assignmentId) {
 }  
 
 // Actualizar participantes en un proyecto(retoques)
-async function updateParticipantsInProyect(proyectId, userIds) {
+//Revisar que se pueda actualizar la descripcion (unicamente) sin necesidad de añadir participantes.
+async function updateParticipantsInProyect(assignmentId, userIds, proyectId, description) {
     try {
+        // Verificar que la asignación existe
+        const assignment = await Assignments.findById(assignmentId);
+        if (!assignment) {
+            return [null, 'Asignación no encontrada.'];
+        }
+
         // Verificar que el proyecto existe
         const proyecto = await Proyecto.findById(proyectId);
-        if (!proyecto) {
-            return [null, 'Proyecto no encontrado.'];
-        }
+        if (!proyecto) return [null, 'Proyecto no encontrado.'];
 
         // Verificar que todos los userIds proporcionados correspondan a usuarios existentes
         const participants = await User.find({ _id: { $in: userIds } });
@@ -139,21 +160,36 @@ async function updateParticipantsInProyect(proyectId, userIds) {
             return [null, 'Uno o más participantes no son válidos.'];
         }
 
-        // Filtrar y añadir solo nuevos participantes que no están actualmente en el proyecto
+        // Verificar que los nuevos participantes no están asignados a otro proyecto
+        const assignedUsers = await Assignments.findOne({ Participantes: { $in: userIds } });
+        if (assignedUsers) {
+            return [null, 'Uno o más usuarios ya están asignados a un proyecto.'];
+        }
+
+        // Filtrar y añadir solo nuevos participantes que no están actualmente en el assignment
         const newParticipants = participants.filter(p => 
-            !proyecto.Participantes.includes(p._id.toString()));
+            !assignment.Participantes.includes(p._id.toString()));
 
         if (newParticipants.length > 0) {
-            proyecto.Participantes.push(...newParticipants.map(p => p._id));
-            await proyecto.save();
-            return [proyecto, null];
+            assignment.Participantes.push(...newParticipants.map(p => p._id));
+            assignment.description = description; // Actualizar la descripción si es necesario
+            await assignment.save();
+
+            // Enviar correo electrónico a los nuevos participantes
+            const newParticipantsEmails = newParticipants.map(p => p.email);
+            if (newParticipantsEmails.length > 0) {
+                await Nodemailer.enviarEmail(newParticipantsEmails, 'Asignación a proyecto', 
+                    `Buenos días o tardes, se le informa que fue asignado al proyecto ${proyecto.titulo}`);
+            }
+
+            return [assignment, null];
         } else {
             return [null, 'No hay nuevos participantes para añadir.'];
         }
 
     } catch (error) {
         handleError(error, 'updateParticipantsInProject');
-        return [null, 'Error al actualizar participantes en el proyecto.'];
+        return [null, 'Error al actualizar participantes en el assignment.'];
     }
 }
 
@@ -171,12 +207,27 @@ async function getAssignments(){
 }
 
 //Eliminar assignments
+async function deleteAssignment(assignmentId) {
+    try {
+        // Verificar que la asignación existe
+        const assignment = await Assignments.findByIdAndDelete(assignmentId);
+        if (!assignment) {
+            return [null, 'Asignación no encontrada.'];
+        }
 
+        return [assignment, null];
+
+    }catch (error) {
+        handleError(error, 'deleteAssignment');
+        return [null, 'Error al eliminar la asignación. (Servicio)'];
+}
+}
 module.exports = {
     getAvailableParticipants,
-    addUserToProyect,
+    createAssignment,
     removeUserFromProyect,
     getParticipantsByProyect,
     updateParticipantsInProyect,
     getAssignments,
+    deleteAssignment,
 }
