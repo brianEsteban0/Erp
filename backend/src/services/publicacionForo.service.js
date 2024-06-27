@@ -6,7 +6,6 @@ const { handleError } = require("../utils/errorHandler");
 async function getPublicacionesForo() {
     try {
         const publicacionesForo = await PublicacionForo.find()
-            .populate("user")
             .exec();
         if (!publicacionesForo) return [null, "No hay publicaciones en el foro"];
 
@@ -42,8 +41,7 @@ async function createPublicacionForo(publicacion) {
 
 async function getPublicacionForoById(id) { 
     try {
-        const publicacion = await PublicacionForo.findById({ _id: id })
-            .populate("user")
+        const publicacion = await PublicacionForo.findById(id)
             .exec();
         if (!publicacion) return [null, "La publicacion no existe"];
 
@@ -56,10 +54,12 @@ async function getPublicacionForoById(id) {
 
 async function updatePublicacionForo(id, publicacion) { 
     try {
-        const publicacionFound = await PublicacionForo.findById(id);
+        const publicacionFound = await PublicacionForo.findById(id)
+            .exec();
         if (!publicacionFound) return [null, "La publicacion no existe"];
 
         const { titulo, contenido, imagen, comentarios, autor, fechaCreacion } = publicacion;
+        if (autor !== publicacionFound.autor) return [null, "No puedes editar esta publicacion"];
 
         const publicacionUpdated = await PublicacionForo.findByIdAndUpdate(
             id,

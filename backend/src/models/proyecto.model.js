@@ -3,7 +3,7 @@
 
 const mongoose = require("mongoose");
 
-//esquema de las publicaciones, estas poseen un titulo, de que tratan, su objetivo, la fecha de inicio y fin de la postulacion y el monto, segun encuesta adicionalmente se agrega campo de maximo de cupos para la postulacion
+//esquema de las publicaciones, estas poseen un titulo, de que tratan, el nombre de la empresa licitante, la fecha de inicio y fin del proyecto
 const proyectosSchema = new mongoose.Schema({
     titulo: {
         type: String,
@@ -13,7 +13,7 @@ const proyectosSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    objetivo: {
+    empresa_licitante: {
         type: String,
         required: true,
     },

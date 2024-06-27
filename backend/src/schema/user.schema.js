@@ -13,6 +13,11 @@ const userBodySchema = Joi.object({
     "any.required": "El nombre de usuario es obligatorio.",
     "string.base": "El nombre de usuario debe ser de tipo string.",
   }),
+  rut: Joi.string().required().messages({
+    "string.empty": "El rut de usuario no puede estar vacío.",
+    "any.required": "El rut de usuario es obligatorio.",
+    "string.base": "El rut de usuario debe ser de tipo string.",
+  }),
   password: Joi.string().required().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",
     "any.required": "La contraseña es obligatoria.",

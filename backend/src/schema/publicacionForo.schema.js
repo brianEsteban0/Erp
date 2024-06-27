@@ -7,15 +7,19 @@ const Joi = require("joi");
  * @constant {Object}
  */
 const publicacionForoBodySchema = Joi.object({
-  titulo: Joi.string().required().messages({
+  titulo: Joi.string().required().min(5).max(30).messages({
     "string.empty": "El título no puede estar vacío.",
     "any.required": "El título es obligatorio.",
     "string.base": "El título debe ser de tipo string.",
+    "string.min": "El título debe tener al menos 5 caracteres.",
+    "string.max": "El título debe tener como máximo 30 caracteres.",
   }),
-  contenido: Joi.string().required().messages({
+  contenido: Joi.string().required().min(10).max(200).messages({
     "string.empty": "El contenido no puede estar vacío.",
     "any.required": "El contenido es obligatorio.",
     "string.base": "El contenido debe ser de tipo string.",
+    "string.min": "El contenido debe tener al menos 10 caracteres.",
+    "string.max": "El contenido debe tener como máximo 200 caracteres.",
   }),
   imagen: Joi.string().allow("").optional().messages({
     "string.base": "La imagen debe ser de tipo string.",
@@ -27,10 +31,12 @@ const publicacionForoBodySchema = Joi.object({
         "any.required": "El usuario del comentario es obligatorio.",
         "string.base": "El usuario del comentario debe ser de tipo string.",
       }),
-      contenido: Joi.string().required().messages({
+      contenido: Joi.string().required().min(3).max(50).messages({
         "string.empty": "El contenido del comentario no puede estar vacío.",
         "any.required": "El contenido del comentario es obligatorio.",
         "string.base": "El contenido del comentario debe ser de tipo string.",
+        "string.min": "El contenido del comentario debe tener al menos 3 caracteres.",
+        "string.max": "El contenido del comentario debe tener como máximo 50 caracteres.",
       }),
       fecha: Joi.date().optional().messages({
         "date.base": "La fecha del comentario debe ser de tipo date.",

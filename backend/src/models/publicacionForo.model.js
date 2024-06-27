@@ -10,7 +10,9 @@ const publicacionForoSchema = new mongoose.Schema({
         required: true,
     },
     imagen: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Imagen",
+        default: null,
     },
     comentarios: [{
         usuario: {
@@ -27,8 +29,7 @@ const publicacionForoSchema = new mongoose.Schema({
         },
     }],
     autor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Usuario",
+        type: String,
         required: true,
     },
     fechaCreacion: {

@@ -1,4 +1,5 @@
 "use strict";
+
 // Importa el modelo de datos 'User'
 const User = require("../models/user.model.js");
 const Role = require("../models/role.model.js");
@@ -29,7 +30,7 @@ async function getUsers() {
  */
 async function createUser(user) {
   try {
-    const { username, email, password, roles } = user;
+    const { username, rut, email, password, roles } = user;
 
     const userFound = await User.findOne({ email: user.email });
     if (userFound) return [null, "El usuario ya existe"];
@@ -40,6 +41,7 @@ async function createUser(user) {
 
     const newUser = new User({
       username,
+      rut,
       email,
       password: await User.encryptPassword(password),
       roles: myRole,
@@ -73,6 +75,26 @@ async function getUserById(id) {
 }
 
 /**
+ * Obtiene un usuario por su RUT de la base de datos
+ * @param {string} rut RUT del usuario
+ * @returns {Promise} Promesa con el objeto de usuario
+ */
+async function getUserByRut(rut) {
+  try {
+    const user = await User.findOne({ rut })
+      .select("-password")
+      .populate("roles")
+      .exec();
+
+    if (!user) return [null, "El usuario no existe"];
+
+    return [user, null];
+  } catch (error) {
+    handleError(error, "user.service -> getUserByRut");
+  }
+}
+
+/**
  * Actualiza un usuario por su id en la base de datos
  * @param {string} id Id del usuario
  * @param {Object} user Objeto de usuario
@@ -83,7 +105,7 @@ async function updateUser(id, user) {
     const userFound = await User.findById(id);
     if (!userFound) return [null, "El usuario no existe"];
 
-    const { username, email, password, newPassword, roles } = user;
+    const { username, rut, email, password, newPassword, roles } = user;
 
     const matchPassword = await User.comparePassword(
       password,
@@ -103,6 +125,7 @@ async function updateUser(id, user) {
       id,
       {
         username,
+        rut,
         email,
         password: await User.encryptPassword(newPassword || password),
         roles: myRole,
@@ -133,6 +156,7 @@ module.exports = {
   getUsers,
   createUser,
   getUserById,
+  getUserByRut,
   updateUser,
   deleteUser,
 };

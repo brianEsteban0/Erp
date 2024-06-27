@@ -11,9 +11,8 @@ router.use(authenticationMiddleware);
 // Rutas para obtener publicaciones del foro
 router.get("/", publicacionForoController.getPublicacionesForo);
 router.get("/:id", publicacionForoController.getPublicacionForoById);
-
-// Rutas para crear, actualizar y eliminar publicaciones del foro
 router.post("/", publicacionForoController.createPublicacionForo);
+// Rutas para crear, actualizar y eliminar publicaciones del foro
 router.put("/:id", publicacionForoController.updatePublicacionForo);
 router.delete("/:id", publicacionForoController.deletePublicacionForo);
 

@@ -10,6 +10,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    rut: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     password: {
       type: String,
       required: true,
@@ -18,6 +23,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    photoUrl: {
+      type: String,
+      required: false,
     },
     roles: [
       {

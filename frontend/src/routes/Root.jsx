@@ -18,15 +18,26 @@ function PageRoot() {
     logout();
     navigate('/auth');
   };
-
+  
   const { user } = useAuth();
 
   return (
-    <div>
-      <div>
-        <h1>Aqui deberia ir un header</h1>
-        <p>Estas logeado como: {user.email}</p>
-        <button onClick={handleLogout}>Cerrar sesion</button>
+    <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
+      <div className="bg-white p-8 rounded shadow-md">
+        <h1 className="text-3xl mb-4">ERP para empresa </h1>
+        <p className="mb-2">Estás logeado como: {user.email}</p>
+        <button 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+          onClick={() => navigate('/proyectos')}
+        >
+        Proyectos
+        </button>
+        <button 
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleLogout}
+        >
+          Cerrar sesión
+        </button>
       </div>
       <Outlet />
     </div>
@@ -34,3 +45,4 @@ function PageRoot() {
 }
 
 export default Root;
+
