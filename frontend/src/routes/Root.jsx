@@ -27,14 +27,14 @@ function PageRoot() {
         <h1 className="text-3xl mb-4">ERP</h1>
         <p className="mb-2">usuario: {user.email}</p>
         <button 
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          className=" text-black font-bold py-2 px-4"
           onClick={handleLogout}
         >
           Cerrar sesión
         </button>
       </div>
       <div className="flex">
-      <div id="sidebar" className="w-64 h-screen bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
+      <div id="sidebar" className="w-64 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
         <nav className="flex-grow ">
           <ul>
             <li>
@@ -52,7 +52,7 @@ function PageRoot() {
           </ul>
         </nav>
       </div>
-      <div className="flex-grow p-6 ml-64 md:ml-0">
+      <div className="flex-grow p-6 ml-64 md:ml-0 max-h-fit">
         <Outlet />
       </div>
       </div>

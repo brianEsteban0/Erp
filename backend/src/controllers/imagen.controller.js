@@ -5,10 +5,9 @@ const Imagen = require("../models/imagen.model");
 async function createImagen(req, res) {
   try {
     const { file } = req;
-
-
+    console.log(file);
     const newFile = new Imagen({
-        name: file.filename,
+        name: req.file.filename,
         imageUrl: file.path
     }); 
     await newFile.save();

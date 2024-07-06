@@ -13,6 +13,7 @@ import ModificarProyecto from './components/ModificarProyecto.jsx';
 import AgregarPublicacion from './components/AgregarPublicacion.jsx';
 import Foro from './routes/Foro/Foro.jsx';
 import Asistencia from './components/AttendanceForm.jsx';
+import NuevoForo from './routes/Foro/ForoPublicacion.jsx';
 
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         path: '/foro',
         element: <Foro />,
       },
+      {
+        path: '/foro/nuevo',
+        element: <NuevoForo />,
+      }
     ],
   },
   {

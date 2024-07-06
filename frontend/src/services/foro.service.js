@@ -26,9 +26,10 @@ export const getForoById = async (id) => {
 }
 
 export const createForo = async (publicacion) => {
-    try {
+  try {
+      console.log(publicacion);
       const response = await axios.post('/foro', publicacion);
-  
+      console.log(response);
       if (response.status === 200) {
         return response.data;
       }

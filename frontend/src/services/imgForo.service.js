@@ -13,13 +13,16 @@ export const getImgForo = async (id) => {
     }
 }
 
-export const createImgForo = async (imagen, user, titulo) => {
-    try {
-        const response = await axios.post(`/imagen/${user}/${titulo}`, imagen);
-  
-      if (response.status === 200) {
-        return response.data;
+export const createImgForo = async (imagen) => {
+  try {
+    const response = await axios.post(`/imagen`, imagen, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
       }
+    });
+  
+      return response.data;
+    
     } catch (error) {
       console.error(error);
       throw error;
