@@ -6,6 +6,7 @@ const { handleError } = require("../utils/errorHandler");
 async function getPublicacionesForo() {
     try {
         const publicacionesForo = await PublicacionForo.find()
+            .populate("imagen")
             .exec();
         if (!publicacionesForo) return [null, "No hay publicaciones en el foro"];
 

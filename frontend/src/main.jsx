@@ -41,16 +41,17 @@ const router = createBrowserRouter([
         path: '/proyectos/agregar',
         element: <AgregarPublicacion />,
       },
+      {
+        path: '/foro',
+        element: <Foro />,
+      },
     ],
   },
   {
     path: '/auth',
     element: <Login />,
   },
-  {
-    path: '/foro',
-    element: <Foro />,
-  },
+  
   {
     path: '/asistencia',
     element: <Asistencia />,

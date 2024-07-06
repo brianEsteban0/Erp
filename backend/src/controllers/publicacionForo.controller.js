@@ -3,7 +3,7 @@ const { handleError } = require("../utils/errorHandler");
 const { respondInternalError } = require("../utils/resHandler");
 const PublicacionForo = require("../models/publicacionForo.model");
 const PublicacionForoService = require("../services/publicacionForo.service"); 
-const { publicacionForoBodySchema, publicacionForoId } = require("../schema/publicacionForo.schema");
+const { publicacionForoBodySchema, publicacionForoIdSchema } = require("../schema/publicacionForo.schema");
 
 async function getPublicacionesForo(req, res) {
   try {
@@ -42,7 +42,7 @@ async function createPublicacionForo(req, res) {
 async function getPublicacionForoById(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = publicacionForoId.validate(params);
+    const { error: paramsError } = publicacionForoIdSchema.validate(params._id);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -59,7 +59,7 @@ async function getPublicacionForoById(req, res) {
 async function updatePublicacionForo(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = publicacionForoId.validate(params);
+    const { error: paramsError } = publicacionForoIdSchema.validate(params.id);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -79,7 +79,7 @@ async function updatePublicacionForo(req, res) {
 async function deletePublicacionForo(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = publicacionForoId.validate(params);
+    const { error: paramsError } = publicacionForoIdSchema.validate(params.id);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;

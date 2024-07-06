@@ -1,23 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getForo, getForoById } from './../../services/foro.service.js';
+import { getForo } from './../../services/foro.service.js';
 const Foro = () => {
-    /*const [posts, setPosts] = useState([]);
 
-    useEffect(() => {
-        // Fetch posts from the server and update the state
-        const fetchPosts = async () => {
-            try {
-                const response = await fetch('/api/posts');
-                const data = await response.json();
-                setPosts(data);
-            } catch (error) {
-                console.error('Error fetching posts:', error);
-            }
-        };  
-
-        fetchPosts();
-    }, []);
-    */
     const [publicacion, setpublicacion] = useState([]);
     
     const fetchData = async () => {
@@ -28,21 +12,46 @@ const Foro = () => {
       } catch (error) {
           console.error("Error al obtener datos", error);
       }
-  };
+    };
 
-  useEffect(() => {
-      fetchData();
-  }, []);
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const formatearFecha = (fecha) => {
+        const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(fecha).toLocaleDateString('es-ES', opciones);
+    }
+
+    const getPhotoUrl = (url) => {
+    return url.startsWith('http') ? url : `http://localhost:3000${url}`;
+    };
 
     return (
         <div>
-            <h1>Foro</h1>
-            {publicacion.map((post) => (
-                <div key={post._id}>
-                    <h2>{post.titulo}</h2>
-                    <p>{post.contenido}</p>
-                </div>
-            ))}
+            <div className='text-center'>
+                <h1 className='text-gray-700'>Foro Empresa</h1>
+            </div>
+            <div className='flex'>
+                <p className='text-gray-700'>Ultimas publicaciones</p>
+                <p href="/nuevaPublicacion" className='text-black'>+</p>
+            </div>
+            
+            <div>
+                {publicacion.map((post) => (
+                    <div key={post._id}>
+                        <div className='flex'>
+                            <p className='text-gray-900'>{post.autor}</p>
+                            <h2 className='text-gray-700'>{post.titulo}</h2>
+                        </div>
+                        {post.imagen && <img src={getPhotoUrl(post.imagen.imageUrl)} alt='imagen' />}
+                        {post.imagen && console.log(post.imagen.imageUrl)}
+                    <p className='text-gray-900'>{post.contenido}</p>
+                    <p className='text-gray-900'>{formatearFecha(post.fechaCreacion)}</p>                    
+                    </div>
+                ))}
+            </div>
+            
         </div>
     );
 };

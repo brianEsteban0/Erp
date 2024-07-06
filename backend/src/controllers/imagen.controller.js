@@ -9,11 +9,9 @@ async function createImagen(req, res) {
 
     const newFile = new Imagen({
         name: file.filename,
-        imageUrl: file.path,
-        user: req.params.user,
-        publicacion: req.params.publicacionNombre,
+        imageUrl: file.path
     }); 
-
+    await newFile.save();
     respondSuccess(req, res, 201, newFile);
   } catch (error) {
     handleError(error, "imagen.controller -> createImagen");
@@ -63,10 +61,23 @@ async function updateImagen(req, res) {
       respondError(req, res, 500, "No se pudo actualizar la imagen");
     }
 }
+async function getImagenAll(req, res) {
+  try {
+    const imagenes = await Imagen.find();
+    if (!imagenes) {
+      return respondError(req, res, 404, "Imagen no encontrada");
+    }
+    respondSuccess(req, res, 200, imagenes);
+  } catch (error) {
+    handleError(error, "imagen.controller -> getImagenAll");
+    respondError(req, res, 500, "No se pudo obtener la imagen");
+  }
+}
 
 module.exports = {
     createImagen,
     getImagen,
     deleteImagen,
-    updateImagen
+    updateImagen,
+    getImagenAll
 };

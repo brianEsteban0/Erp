@@ -8,14 +8,6 @@ const imagenSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: true
-    },
-    user: {
-        type: String,
-        required: true
-    },
-    publicacion: {
-        type: String,
-        required: true
     }
 });
 
