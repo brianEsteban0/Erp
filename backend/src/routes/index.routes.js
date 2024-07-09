@@ -23,6 +23,15 @@ const inventarioRoutes = require("./inventario.routes.js");
 /** Enrutador de Inventario Proyectos*/
 const inventarioProyectoRoutes = require("./inventarioProyecto.routes.js");
 
+/** Enrutador de Cantidad de inventario*/
+const cantidadRoutes = require("./cantidad.routes.js");
+
+/** Enrutador de Almacen de inventario*/
+const almacenRoutes = require("./almacen.routes.js");
+
+/** Enrutador de Material de inventario*/
+const materialRoutes = require("./material.routes.js");
+
 /** Enrutador de Asignaciones**/
 const assignmentRoutes = require("./assignment.routes.js");
 
@@ -56,6 +65,15 @@ router.use("/imagen", imagenRoutes);
 
 // Define las rutas para los inventarios
 router.use("/inventario", inventarioRoutes);
+
+// Define las rutas para los almacenes
+router.use("/almacen", almacenRoutes);
+
+// Define las rutas para los materiales
+router.use("/material", materialRoutes);
+
+// Define las rutas para las cantidades
+router.use("/cantidad", cantidadRoutes);
 
 // Define las rutas para los inventarios de proyectos
 router.use("/inventarioProyecto", inventarioProyectoRoutes);
