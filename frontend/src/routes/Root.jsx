@@ -34,7 +34,6 @@ function PageRoot() {
         </div>
         <button 
           className="text-black font-bold py-2 px-4"
-          className="text-black font-bold py-2 px-4"
           onClick={handleLogout}
         >
           Cerrar sesión
@@ -51,16 +50,19 @@ function PageRoot() {
                 <a href="/foro" className="block py-2.5 px-4 rounded hover:bg-gray-700">Foro</a>
               </li>
               <li>
-                <button 
-                  className="block w-full text-left py-2.5 px-4 rounded hover:bg-gray-700"
-                  onClick={() => navigate('/proyectos')}
-                >
-                  Proyectos
-                </button>
+                <a href="/proyectos" className="block py-2.5 px-4 rounded hover:bg-gray-700">Proyectos</a>
+              </li>
+              <li>
+                <a href="/asistencia" className="block py-2.5 px-4 rounded hover:bg-gray-700">Asistencia</a>
               </li>
               <li>
                 <a href="#" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
               </li>
+              {isAdmin && (
+                <li>
+                  <a href="/usuarios" className="block py-2.5 px-4 rounded hover:bg-gray-700">Usuarios</a>
+                </li>
+              )}
             </ul>
           </nav>
         </div>
