@@ -24,18 +24,24 @@ function Proyectos() {
 
   return (
     <div className="container">
-      <h1 className="mt-4">Publicaciones</h1>
+      <h1 className="mt-4">Proyectos</h1>
       <div className="mt-4">
-      <button 
+        <button 
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
           onClick={() => navigate('/proyectos/ver')}
         >
           Ver Proyectos
         </button>
-        <button className="btn btn-primary me-3" onClick={() => navigate('/proyectos/agregar')}>
+        <button 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+          onClick={() => navigate('/proyectos/agregar')}
+        >
           Agregar Proyecto
         </button>
-        <button className="btn btn-primary" onClick={() => navigate('/proyectos/modificar')}>
+        <button 
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => navigate('/proyectos/modificar')}
+        >
           Modificar Proyecto
         </button>
       </div>

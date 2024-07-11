@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "tailwindcss": "^3.4.4"
+  },
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "react-datepicker": "^7.3.0"
   }
 }
