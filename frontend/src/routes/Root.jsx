@@ -27,34 +27,39 @@ function PageRoot() {
         <h1 className="text-3xl mb-4">ERP</h1>
         <p className="mb-2">usuario: {user.email}</p>
         <button 
-          className=" text-black font-bold py-2 px-4"
+          className="text-black font-bold py-2 px-4"
           onClick={handleLogout}
         >
           Cerrar sesión
         </button>
       </div>
       <div className="flex">
-      <div id="sidebar" className="w-64 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
-        <nav className="flex-grow ">
-          <ul>
-            <li>
-              <a href="/" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inicio</a>
-            </li>
-            <li>
-              <a href="/foro" className="block py-2.5 px-4 rounded hover:bg-gray-700">Foro</a>
-            </li>
-            <li>
-              <a href="/proyectos" className="block py-2.5 px-4 rounded hover:bg-gray-700">Proyectos</a>
-            </li>
-            <li>
-              <a href="#" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div className="flex-grow p-6 ml-64 md:ml-0 max-h-fit">
-        <Outlet />
-      </div>
+        <div id="sidebar" className="w-64 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
+          <nav className="flex-grow">
+            <ul>
+              <li>
+                <a href="/" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inicio</a>
+              </li>
+              <li>
+                <a href="/foro" className="block py-2.5 px-4 rounded hover:bg-gray-700">Foro</a>
+              </li>
+              <li>
+                <button 
+                  className="block w-full text-left py-2.5 px-4 rounded hover:bg-gray-700"
+                  onClick={() => navigate('/proyectos')}
+                >
+                  Proyectos
+                </button>
+              </li>
+              <li>
+                <a href="#" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div className="flex-grow p-6 ml-64 md:ml-0 max-h-fit">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

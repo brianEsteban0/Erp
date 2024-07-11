@@ -33,8 +33,6 @@ function validateFechas(fechaInicio, fechaTermino) {
 // funcion para obtener publicaciones
 async function getProyectos(req, res) {
   try {
-    const currentDate = new Date(); // obtiene fecha actual
-
     const proyectos = await Proyecto.find()
       .sort({ fecha_termino: 1 }) // lista las fechas mas cercanas a terminar segun la rubrica
       .exec();
@@ -45,23 +43,13 @@ async function getProyectos(req, res) {
       // sigue las fechas de dd/mm/año
       const proyectosFormateados = proyectos.map((proyecto) => {
         const fechaInicioFormateada = formatDateToDDMMYYYY(proyecto.fecha_inicio);
-        const fechaTermino = proyecto.fecha_termino;
-        const fechaTerminoFormateada = formatDateToDDMMYYYY(fechaTermino);
+        const fechaTerminoFormateada = formatDateToDDMMYYYY(proyecto.fecha_termino);
 
-        if (fechaTermino < currentDate) {
-          // muestra plazo vencido si la fecha de termino es menor a la fecha actual
-          return {
-            ...proyecto.toObject(),
-            fecha_inicio: fechaInicioFormateada,
-            fecha_termino: "Plazo vencido",
-          };
-        } else {
-          return {
-            ...proyecto.toObject(),
-            fecha_inicio: fechaInicioFormateada,
-            fecha_termino: fechaTerminoFormateada,
-          };
-        }
+        return {
+          ...proyecto.toObject(),
+          fecha_inicio: fechaInicioFormateada,
+          fecha_termino: fechaTerminoFormateada,
+        };
       });
 
       respondSuccess(req, res, 200, proyectosFormateados);
@@ -70,6 +58,7 @@ async function getProyectos(req, res) {
     handleError(error, "proyectos.controller -> getProyecto");
   }
 }
+
 
 // Función para crear la publicación
 async function createProyecto(req, res) {
