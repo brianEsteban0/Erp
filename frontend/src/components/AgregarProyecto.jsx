@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createProyecto } from '../services/ProyectoService';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
 
 function AgregarProyecto() {
   const [proyectoData, setProyectoData] = useState({
     titulo: '',
     descripcion: '',
     empresa_licitante: '',
-    fecha_inicio: '',
-    fecha_termino: '',
+    fecha_inicio: null,
+    fecha_termino: null,
   });
 
   const navigate = useNavigate();
@@ -18,11 +21,23 @@ function AgregarProyecto() {
     setProyectoData({ ...proyectoData, [name]: value });
   };
 
+  const handleDateChange = (date, field) => {
+    setProyectoData({ ...proyectoData, [field]: date });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Formatear las fechas al formato mm/dd/aa
+    const formattedData = {
+      ...proyectoData,
+      fecha_inicio: format(proyectoData.fecha_inicio, 'MM/dd/yy'),
+      fecha_termino: format(proyectoData.fecha_termino, 'MM/dd/yy'),
+    };
+  
     try {
-      console.log('Enviando datos del proyecto:', proyectoData);
-      await createProyecto(proyectoData);
+      console.log('Enviando datos del proyecto:', formattedData);
+      await createProyecto(formattedData);
       alert('Proyecto agregado con éxito');
       navigate('/');
     } catch (error) {
@@ -73,24 +88,20 @@ function AgregarProyecto() {
 
         <div className="mb-3">
           <label htmlFor="fecha_inicio" className="form-label">Fecha de Inicio:</label>
-          <input
-            type="text"
-            id="fecha_inicio"
-            name="fecha_inicio"
-            value={proyectoData.fecha_inicio}
-            onChange={handleInputChange}
+          <DatePicker
+            selected={proyectoData.fecha_inicio}
+            onChange={(date) => handleDateChange(date, 'fecha_inicio')}
+            dateFormat="dd/MM/yy"
             className="form-control"
           />
         </div>
 
         <div className="mb-3">
           <label htmlFor="fecha_termino" className="form-label">Fecha de Término:</label>
-          <input
-            type="text"
-            id="fecha_termino"
-            name="fecha_termino"
-            value={proyectoData.fecha_termino}
-            onChange={handleInputChange}
+          <DatePicker
+            selected={proyectoData.fecha_termino}
+            onChange={(date) => handleDateChange(date, 'fecha_termino')}
+            dateFormat="dd/MM/yy"
             className="form-control"
           />
         </div>

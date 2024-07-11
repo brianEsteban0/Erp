@@ -52,7 +52,7 @@ export const obtenerProyectoById = async (id) => {
 export const createProyecto = async (proyectoData) => {
   try {
     console.log('Datos enviados al backend:', proyectoData);
-    const response = await axios.post(`${BASE_URL}, proyectoData`, {
+    const response = await axios.post(BASE_URL, proyectoData, {
       headers: {
         'Content-Type': 'application/json'
       }
