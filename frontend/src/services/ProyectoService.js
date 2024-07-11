@@ -48,12 +48,18 @@ export const obtenerProyectoById = async (id) => {
   }
 };
 
-export const createPublicacion = async (publicacion) => {
+
+export const createProyecto = async (proyectoData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/`, publicacion);
+    console.log('Datos enviados al backend:', proyectoData);
+    const response = await axios.post(`${BASE_URL}, proyectoData`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.data;
   } catch (error) {
-    console.error('Error al crear la publicación', error);
+    console.error('Error creating proyecto:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
