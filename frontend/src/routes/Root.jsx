@@ -13,20 +13,27 @@ function Root() {
 
 function PageRoot() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  console.log("User info:", user); // Verificar la información del usuario
+  console.log("User roles:", user.roles); // Verificar los roles del usuario
 
   const handleLogout = () => {
     logout();
     navigate('/auth');
   };
-  
-  const { user } = useAuth();
+
+  const isAdmin = user.roles.some(role => role.name === 'admin');
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="bg-gray-200 rounded shadow-md text-gray-700 flex">
-        <h1 className="text-3xl mb-4">ERP</h1>
-        <p className="mb-2">usuario: {user.email}</p>
+      <div className="bg-gray-200 rounded shadow-md text-gray-700 flex justify-between items-center p-4">
+        <div>
+          <h1 className="text-3xl mb-2">ERP</h1>
+          <p className="mb-2">usuario: {user.email}</p>
+        </div>
         <button 
+          className="text-black font-bold py-2 px-4"
           className="text-black font-bold py-2 px-4"
           onClick={handleLogout}
         >
@@ -66,4 +73,3 @@ function PageRoot() {
 }
 
 export default Root;
-

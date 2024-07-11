@@ -6,13 +6,16 @@ import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
 import ProyectoList from './components/ProyectoList.jsx';
-import './components/Proyectos.jsx'
+import './components/Proyectos.jsx';
 import './index.css';
 import Proyectos from './components/Proyectos.jsx';
 import ModificarProyecto from './components/ModificarProyecto.jsx';
 import Foro from './routes/Foro/Foro.jsx';
 import Asistencia from './components/AttendanceForm.jsx';
 import NuevoForo from './routes/Foro/ForoPublicacion.jsx';
+import UserManagement from './components/UserManagement.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import AgregarProyecto from './components/AgregarProyecto.jsx';
 
 // Dentro de tu configuración de rutas
@@ -49,6 +52,14 @@ const router = createBrowserRouter([
       {
         path: '/foro/nuevo',
         element: <NuevoForo />,
+      },
+      {
+        path: '/asistencia',
+        element: <Asistencia />,
+      },
+      {
+        path: '/usuarios',
+        element: <UserManagement />,
       }
     ],
   },
@@ -64,5 +75,8 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+  <React.StrictMode>
+    <RouterProvider router={router} />
+    <ToastContainer />
+  </React.StrictMode>
 );
