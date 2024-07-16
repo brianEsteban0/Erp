@@ -59,49 +59,53 @@ async function getProyectos(req, res) {
   }
 }
 
-
 // Función para crear la publicación
 async function createProyecto(req, res) {
   try {
     const { body } = req;
 
     // Aquí continúa con la creación de la publicación sin formatear las fechas
-
     const {
       titulo,
       descripcion,
       empresa_licitante,
       fecha_inicio,
-      fecha_termino
+      fecha_termino,
+      presupuesto,
+      actividades // Asegurarse de incluir actividades
     } = body;
-    
-    //validaciones titulo
+
+    // Validaciones título
     if (typeof titulo !== "string" || titulo.length < 10 || titulo.length > 70) {
-      return respondError(req, res, 400, "Verificar largo del titulo (min 10 max 70 caracteres).");
+      return respondError(req, res, 400, "Verificar largo del título (min 10 max 70 caracteres).");
     }
 
     const regexTitulo = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#-]+$/;
-    
     if (!regexTitulo.test(titulo)) {
-      return respondError(req, res, 400, "El titulo debe al menos una letra y los siguientes simbolos: ! @ # -");
+      return respondError(req, res, 400, "El título debe tener al menos una letra y puede incluir los siguientes símbolos: ! @ # -");
     }
-    //validaciones descripcion
+
+    // Validaciones descripción
     if (typeof descripcion !== "string" || descripcion.length < 2 || descripcion.length > 600) {
-      return respondError(req, res, 400, "Verificar largo de la descripcion (min 1 max 600 caracteres).");
+      return respondError(req, res, 400, "Verificar largo de la descripción (min 2 max 600 caracteres).");
     }
+
     const regexDescripcion = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
     if (!regexDescripcion.test(descripcion)) {
       return respondError(req, res, 400, "La descripción debe contener al menos una letra.");
     }
-    //validaciones empresa licitante
+
+    // Validaciones empresa licitante
     if (typeof empresa_licitante !== "string" || empresa_licitante.length < 2 || empresa_licitante.length > 600) {
-      return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 1 max 600 caracteres).");
+      return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 2 max 600 caracteres).");
     }
+
     const regexEmpresaLicitante = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
     if (!regexEmpresaLicitante.test(empresa_licitante)) {
       return respondError(req, res, 400, "La empresa licitante debe contener al menos una letra.");
     }
-    //validaciones fecha_inicio
+
+    // Validaciones fecha_inicio y fecha_termino
     const currentDate = new Date(); // Fecha actual
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() + 150); // 150 años desde la fecha actual
@@ -109,7 +113,6 @@ async function createProyecto(req, res) {
     const parsedFechaInicio = new Date(fecha_inicio);
     const parsedFechaTermino = new Date(fecha_termino);
 
-    // Validar la fecha de inicio
     if (
       parsedFechaInicio < currentDate || // La fecha de inicio no puede ser menor que la fecha actual
       parsedFechaInicio > parsedFechaTermino || // La fecha de inicio no puede ser mayor que la fecha de término
@@ -139,9 +142,10 @@ async function createProyecto(req, res) {
       descripcion,
       empresa_licitante,
       fecha_inicio,
-      fecha_termino
+      fecha_termino,
+      presupuesto,
+      actividades // Añadir las actividades al objeto proyecto
     };
-    
 
     const [proyectos, errorProyectos] = await ProyectoService.createProyecto(proyecto);
 
@@ -162,54 +166,60 @@ async function createProyecto(req, res) {
 
 module.exports = { createProyecto };
 
+// Función para editar la publicación
+async function updateProyecto(req, res) {
+  try {
+    const { id } = req.params;
+    const updateData = req.body; // nuevos datos de la pub
 
-  // funcion para editar publicacion
-  async function updateProyecto(req, res) {
-    try {
-      const { id } = req.params;
-      const updateData = req.body; // nuevos datos de la pub
-  
-      // busca publicaciobn por id
-      const proyecto = await Proyecto.findById(id);
-  
-      if (!proyecto) {
-        return res.status(404).json({ message: 'Publicación no encontrada' });
-      }
-      const {
-        titulo,
-        descripcion,
-        empresa_licitante,
-        fecha_inicio,
-        fecha_termino,
-      } = updateData;
+    // Busca publicación por ID
+    const proyecto = await Proyecto.findById(id);
 
-      //validaciones titulo
+    if (!proyecto) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+
+    const {
+      titulo,
+      descripcion,
+      empresa_licitante,
+      fecha_inicio,
+      fecha_termino,
+      presupuesto,
+      actividades // Añadir las actividades
+    } = updateData;
+
+    // Validaciones título
     if (typeof titulo !== "string" || titulo.length < 10 || titulo.length > 70) {
-      return respondError(req, res, 400, "Verificar largo del titulo (min 10 max 70 caracteres).");
+      return respondError(req, res, 400, "Verificar largo del título (min 10 max 70 caracteres).");
     }
 
     const regexTitulo = /^[a-zA-Z\d\s-!@]+$/;
-    
     if (!regexTitulo.test(titulo)) {
-      return respondError(req, res, 400, "Revisar que el titulo no contenga simbolos.");
+      return respondError(req, res, 400, "Revisar que el título no contenga símbolos no permitidos.");
     }
-    //validaciones descripcion
+
+    // Validaciones descripción
     if (typeof descripcion !== "string" || descripcion.length < 2 || descripcion.length > 600) {
-      return respondError(req, res, 400, "Verificar largo de la descripcion (min 1 max 600 caracteres).");
+      return respondError(req, res, 400, "Verificar largo de la descripción (min 2 max 600 caracteres).");
     }
+
     const regexDescripcion = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
     if (!regexDescripcion.test(descripcion)) {
       return respondError(req, res, 400, "La descripción debe contener al menos una letra.");
     }
-    //validaciones empresa licitante
+
+    // Validaciones empresa licitante
     if (typeof empresa_licitante !== "string" || empresa_licitante.length < 2 || empresa_licitante.length > 600) {
-      return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 1 max 600 caracteres).");
+      return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 2 max 600 caracteres).");
     }
+
     const regexEmpresaLicitante = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
     if (!regexEmpresaLicitante.test(empresa_licitante)) {
       return respondError(req, res, 400, "La empresa licitante debe contener al menos una letra.");
     }
-    //validaciones fecha_inicio
+
+    // Validaciones fecha_inicio y fecha_termino
     const currentDate = new Date(); // Fecha actual
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() + 150); // 150 años desde la fecha actual
@@ -217,7 +227,6 @@ module.exports = { createProyecto };
     const parsedFechaInicio = new Date(fecha_inicio);
     const parsedFechaTermino = new Date(fecha_termino);
 
-    // Validar la fecha de inicio
     if (
       parsedFechaInicio < currentDate || // La fecha de inicio no puede ser menor que la fecha actual
       parsedFechaInicio > parsedFechaTermino || // La fecha de inicio no puede ser mayor que la fecha de término
@@ -241,58 +250,60 @@ module.exports = { createProyecto };
         return respondError(req, res, 400, "La fecha de término no puede exceder los 250 años desde la fecha actual");
       }
     }
-      // se actualiza la publicacion
-      proyecto.set(updateData);
-      const updatedProyecto = await proyecto.save();
-  
-      return res.status(200).json(updatedProyecto);
-    } catch (error) {
-      handleError(error, "proyecto.controller -> updateProyecto");
-      return res.status(500).json({ message: 'Error al actualizar la publicación' });
-    }
-  }
 
-  //funcion para eliminar publicacion
-  async function deleteProyecto(req, res) {
-    try {
-      const { id } = req.params; // Obtén el ID de la URL
-  
-      // Busca la publicación por ID y elimínala
-      const proyecto = await Proyecto.findByIdAndRemove(id);
-  
-      if (!proyecto) {
-        return res.status(404).json({ message: 'Publicación no encontrada' });
-      }
-  
-      return res.status(204).send(); // Respuesta exitosa con estado 204 (No Content)
-    } catch (error) {
-      handleError(error, "proyecto.controller -> deleteProyecto");
-      return res.status(500).json({ message: 'Error al eliminar la publicación' });
-    }
-  }
+    // Se actualiza la publicación
+    proyecto.set(updateData);
+    const updatedProyecto = await proyecto.save();
 
-  async function getProyectoById(req, res) {
-    try {
-      const { id } = req.params; // Obtén el ID de la URL
-  
-      // Busca la publicación por ID
-      const proyecto = await Proyecto.findById(id);
-  
-      if (!proyecto) {
-        return res.status(404).json({ message: 'Publicación no encontrada' });
-      }
-  
-      return res.status(200).json(proyecto);
-    } catch (error) {
-      handleError(error, "proyecto.controller -> getProyectoById");
-      return res.status(500).json({ message: 'Error al obtener la publicación' });
-    }
+    return res.status(200).json(updatedProyecto);
+  } catch (error) {
+    handleError(error, "proyecto.controller -> updateProyecto");
+    return res.status(500).json({ message: 'Error al actualizar la publicación' });
   }
+}
+
+// Función para eliminar publicación
+async function deleteProyecto(req, res) {
+  try {
+    const { id } = req.params; // Obtén el ID de la URL
+
+    // Busca la publicación por ID y elimínala
+    const proyecto = await Proyecto.findByIdAndRemove(id);
+
+    if (!proyecto) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+
+    return res.status(204).send(); // Respuesta exitosa con estado 204 (No Content)
+  } catch (error) {
+    handleError(error, "proyecto.controller -> deleteProyecto");
+    return res.status(500).json({ message: 'Error al eliminar la publicación' });
+  }
+}
+
+// Función para obtener una publicación por ID
+async function getProyectoById(req, res) {
+  try {
+    const { id } = req.params; // Obtén el ID de la URL
+
+    // Busca la publicación por ID
+    const proyecto = await Proyecto.findById(id);
+
+    if (!proyecto) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+
+    return res.status(200).json(proyecto);
+  } catch (error) {
+    handleError(error, "proyecto.controller -> getProyectoById");
+    return res.status(500).json({ message: 'Error al obtener la publicación' });
+  }
+}
 
 module.exports = {
-    getProyectos,
-    createProyecto,
-    updateProyecto: updateProyecto,
-    deleteProyecto,
-    getProyectoById,
-  };
+  getProyectos,
+  createProyecto,
+  updateProyecto,
+  deleteProyecto,
+  getProyectoById,
+};
