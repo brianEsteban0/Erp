@@ -29,7 +29,7 @@ async function getProyectos(){
 
 async function createProyecto(proyectos) {
     try {//
-        const {titulo, descripcion, empresa_licitante, fecha_inicio, fecha_termino} = proyectos;
+        const {titulo, descripcion, empresa_licitante, fecha_inicio, fecha_termino, presupuesto, actividades} = proyectos;
         const proyectoFound = await Proyectos.findOne({titulo: proyectos.titulo})
         if (proyectoFound) return [null, "La publicacion ya existe"];
 
@@ -39,6 +39,8 @@ async function createProyecto(proyectos) {
             empresa_licitante,
             fecha_inicio,
             fecha_termino,
+            presupuesto,
+            actividades,
         });
 
         const myProyecto = await newProyecto.save();

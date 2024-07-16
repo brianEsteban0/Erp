@@ -12,6 +12,7 @@ function AgregarProyecto() {
     empresa_licitante: '',
     fecha_inicio: null,
     fecha_termino: null,
+    presupuesto: '', // Nuevo campo de presupuesto
   });
 
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ function AgregarProyecto() {
       ...proyectoData,
       fecha_inicio: format(proyectoData.fecha_inicio, 'MM/dd/yy'),
       fecha_termino: format(proyectoData.fecha_termino, 'MM/dd/yy'),
+      presupuesto: parseFloat(proyectoData.presupuesto), // Asegurarse de que el presupuesto sea un número
     };
   
     try {
@@ -48,10 +50,10 @@ function AgregarProyecto() {
 
   return (
     <div>
-      <h1>Agregar Proyecto</h1>
+      <h1 style={{ color: 'black' }}>Agregar Proyecto</h1>
       <form onSubmit={handleSubmit} className="add-proyecto-form">
         <div className="mb-3">
-          <label htmlFor="titulo" className="form-label">Título:</label>
+          <label htmlFor="titulo" className="text-black">Título:</label>
           <input
             type="text"
             id="titulo"
@@ -63,7 +65,7 @@ function AgregarProyecto() {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="descripcion" className="form-label">Descripción:</label>
+          <label htmlFor="descripcion" className="text-black">Descripción:</label>
           <input
             type="text"
             id="descripcion"
@@ -75,7 +77,7 @@ function AgregarProyecto() {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="empresa_licitante" className="form-label">Empresa Licitante:</label>
+          <label htmlFor="empresa_licitante" className="text-black">Empresa Licitante:</label>
           <input
             type="text"
             id="empresa_licitante"
@@ -87,7 +89,7 @@ function AgregarProyecto() {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="fecha_inicio" className="form-label">Fecha de Inicio:</label>
+          <label htmlFor="fecha_inicio" className="text-black">Fecha de Inicio:</label>
           <DatePicker
             selected={proyectoData.fecha_inicio}
             onChange={(date) => handleDateChange(date, 'fecha_inicio')}
@@ -97,7 +99,7 @@ function AgregarProyecto() {
         </div>
 
         <div className="mb-3">
-          <label htmlFor="fecha_termino" className="form-label">Fecha de Término:</label>
+          <label htmlFor="fecha_termino" className="text-black">Fecha de Término:</label>
           <DatePicker
             selected={proyectoData.fecha_termino}
             onChange={(date) => handleDateChange(date, 'fecha_termino')}
@@ -106,7 +108,19 @@ function AgregarProyecto() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">Agregar Proyecto</button>
+        <div className="mb-3">
+          <label htmlFor="presupuesto" className="text-black">Presupuesto:</label>
+          <input
+            type="number"
+            id="presupuesto"
+            name="presupuesto"
+            value={proyectoData.presupuesto}
+            onChange={handleInputChange}
+            className="form-control"
+          />
+        </div>
+
+        <button type="submit" className="text-black">Agregar Proyecto</button>
       </form>
     </div>
   );

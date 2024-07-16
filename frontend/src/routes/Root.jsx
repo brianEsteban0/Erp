@@ -50,7 +50,9 @@ function PageRoot() {
                 <a href="/foro" className="block py-2.5 px-4 rounded hover:bg-gray-700">Foro</a>
               </li>
               <li>
+              {isAdmin && (
                 <a href="/proyectos" className="block py-2.5 px-4 rounded hover:bg-gray-700">Proyectos</a>
+              )}
               </li>
               <li>
                 <a href="/asistencia" className="block py-2.5 px-4 rounded hover:bg-gray-700">Asistencia</a>

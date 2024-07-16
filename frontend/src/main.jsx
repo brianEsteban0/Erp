@@ -17,6 +17,7 @@ import UserManagement from './components/UserManagement.jsx';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AgregarProyecto from './components/AgregarProyecto.jsx';
+import AgregarActividad from './components/AgregarActividades.jsx';
 
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
@@ -38,12 +39,20 @@ const router = createBrowserRouter([
         element: <ProyectoList />,
       },
       {
+        path: '/proyectos/modificar/:id',
+        element: <ModificarProyecto />,
+      },
+      {
         path: '/proyectos/modificar/',
         element: <ModificarProyecto />,
       },
       {
         path: '/proyectos/agregar',
         element: <AgregarProyecto />,
+      },
+      {
+        path: '/proyectos/agregaractividad',
+        element: <AgregarActividad />,
       },
       {
         path: '/foro',

@@ -11,19 +11,31 @@ export async function getProyectos() {
   return data;
 }
 
-export const updateProyecto = async (id, proyecto) => {
-  const response = await fetch(`${BASE_URL}/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(proyecto)
-  });
-  if (!response.ok) {
-    throw new Error('Error al actualizar el proyecto');
+export async function updateProyecto(id, datos) {
+  try {
+    const response = await fetch(`http://localhost:3000/api/proyectos/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datos),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await response.json();
+    if (data.state === 'Success') {
+      return data.data;
+    } else {
+      throw new Error('State is not Success');
+    }
+  } catch (error) {
+    console.error('Error updating publication:', error);
+    throw error;
   }
-  return response.json();
-};
+}
 
 export const deleteProyecto = async (id) => {
   const response = await fetch(`${BASE_URL}/${id}`, {
@@ -60,6 +72,16 @@ export const createProyecto = async (proyectoData) => {
     return response.data;
   } catch (error) {
     console.error('Error creating proyecto:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+export const addActividadToProyecto = async (proyectoId, actividad) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/proyectos/${proyectoId}/actividades`, actividad);
+    return response.data;
+  } catch (error) {
+    console.error('Error al agregar la actividad', error);
     throw error;
   }
 };
