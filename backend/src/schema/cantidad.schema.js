@@ -37,9 +37,7 @@ const cantidadBodySchema = Joi.object({
         "any.required": "El nombre del inventario es obligatorio.",
         "string.base": "El nombre del inventario debe ser de tipo string.",
     }),
-    fechaIngreso: Joi.date().required().messages({
-        "date.empty": "La fecha de ingreso no puede estar vacía.",
-        "any.required": "La fecha de ingreso es obligatoria.",
+    fechaIngreso: Joi.date().optional().messages({
         "date.base": "La fecha de ingreso debe ser de tipo date.",
     }),
     usuarioIngreso: Joi.string().required().messages({

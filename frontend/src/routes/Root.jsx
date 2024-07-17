@@ -16,14 +16,6 @@ function PageRoot() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  console.log("User info:", user); // Verificar la información del usuario
-  console.log("User roles:", user.roles); // Verificar los roles del usuario
-
-  const handleLogout = () => {
-    logout();
-    navigate('/auth');
-  };
-
   const isAdmin = user.roles.some(role => role.name === 'admin');
 
   return (
@@ -35,7 +27,7 @@ function PageRoot() {
         <RootUsuario />
       </div>
       <div className="flex">
-        <div id="sidebar" className="w-64 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
+        <div id="sidebar" className="min-w-60 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
           <nav className="flex-grow">
             <ul>
               <li>
@@ -53,7 +45,7 @@ function PageRoot() {
                 <a href="/asistencia" className="block py-2.5 px-4 rounded hover:bg-gray-700">Asistencia</a>
               </li>
               <li>
-                <a href="#" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
+                <a href="/inventario" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
               </li>
               {isAdmin && (
                 <li>

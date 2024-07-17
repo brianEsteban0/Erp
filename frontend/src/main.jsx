@@ -18,6 +18,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AgregarProyecto from './components/AgregarProyecto.jsx';
 import AgregarActividad from './components/AgregarActividades.jsx';
+import Inventario from './routes/Inventario/Inventario.jsx';
+import Material from './routes/Inventario/material.jsx';
+import Almacen from './routes/Inventario/almacen.jsx';
+import AddInventario from './routes/Inventario/AddInventario.jsx';
 
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
@@ -69,6 +73,22 @@ const router = createBrowserRouter([
       {
         path: '/usuarios',
         element: <UserManagement />,
+      },
+      {
+        path: '/inventario',
+        element: <Inventario />,
+      },
+      {
+        path: '/inventario/material',
+        element: <Material />,
+      },
+      {
+        path: '/inventario/almacen',
+        element: <Almacen />,
+      },
+      {
+        path: '/inventario/registrar',
+        element: <AddInventario />,
       }
     ],
   },

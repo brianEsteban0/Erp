@@ -8,7 +8,6 @@ const Foro = () => {
     const fetchData = async () => {
       try {
           const [foroResponse] = await Promise.all([getForo()]);
-          console.log(foroResponse.data);
           setpublicacion(foroResponse.data);
       } catch (error) {
           console.error("Error al obtener datos", error);
@@ -30,8 +29,8 @@ const Foro = () => {
 
     return (
         <div className='max-w-6xl'>
-            <div className='text-center'>
-                <h1 className='text-gray-700'>Foro Empresa</h1>
+            <div className="text-center mb-4 text-gray-800">
+                <h2 className="text-lg font-bold">Foro Empresa</h2>
             </div>
             <div className='flex justify-between'>
                 <p className='text-gray-700'>Ultimas publicaciones</p>

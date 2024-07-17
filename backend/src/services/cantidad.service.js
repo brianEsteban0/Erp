@@ -8,7 +8,6 @@ async function getCantidad() {
         const materiales = await Cantidad.find()
             .populate("material")
             .populate("almacen")
-            .populate("usuarioIngreso")
             .exec();
         if (!materiales) return [null, "No se encontro materiales"];
 
@@ -45,7 +44,6 @@ async function getCantidadById(id) {
         const material = await Cantidad.findById(id)
             .populate("material")
             .populate("almacen")
-            .populate("usuarioIngreso")
             .exec();
         if (!material) return [null, "El Material no existe"];
 
@@ -98,7 +96,6 @@ async function getCantidadByMaterial(id) {
         const material = await Cantidad.find({ material: id })
             .populate("material")
             .populate("almacen")
-            .populate("usuarioIngreso")
             .exec();
         if (!material) return [null, "El Material no existe"];
 
@@ -114,7 +111,6 @@ async function getCantidadByAlmacen(id) {
         const material = await Cantidad.find({ almacen: id })
             .populate("material")
             .populate("almacen")
-            .populate("usuarioIngreso")
             .exec();
         if (!material) return [null, "El Material no existe"];
 
