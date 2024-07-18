@@ -2,7 +2,7 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const { respondInternalError } = require("../utils/resHandler");
 const InventarioProyectoService = require("../services/inventarioProyecto.service"); 
-const { inventarioProyectoBodySchema, inventarioProyectoId } = require("../schema/inventarioProyecto.schema");
+const { inventarioProyectoBodySchema, inventarioProyectoIdSchema } = require("../schema/inventarioProyecto.schema");
 
 async function getInventarioProyecto(req, res) {
   try {
@@ -11,7 +11,7 @@ async function getInventarioProyecto(req, res) {
 
     InventarioProyecto.length === 0
       ? respondSuccess(req, res, 204)
-      : respondSuccess(req, res, 200, Inventario);
+      : respondSuccess(req, res, 200, InventarioProyecto);
   } catch (error) {
     handleError(error, "inventarioProyecto.controller -> getInventarioProyecto");
     respondError(req, res, 400, error.message);
@@ -21,8 +21,6 @@ async function getInventarioProyecto(req, res) {
 async function createInventarioProyecto(req, res) {
   try {
     const { body } = req;
-    const { error: bodyError } = inventarioProyectoBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
 
     const [newInventarioProyecto, inventarioProyectoError] = await InventarioProyectoService.createInventarioProyecto(body);
 
@@ -41,7 +39,7 @@ async function createInventarioProyecto(req, res) {
 async function getInventarioProyectoById(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = inventarioProyectoId.validate(params);
+    const { error: paramsError } = inventarioProyectoIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -58,12 +56,10 @@ async function getInventarioProyectoById(req, res) {
 async function updateInventarioProyecto(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = inventarioProyectoId.validate(params);
+    const { error: paramsError } = inventarioProyectoIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
-    const { error: bodyError } = inventarioProyectoBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
 
     const [inventarioProyecto, errorInventarioProyecto] = await InventarioProyectoService.updateInventarioProyecto(id, body);
     if (errorInventarioProyecto) return respondError(req, res, 404, errorInventarioProyecto);
@@ -78,7 +74,7 @@ async function updateInventarioProyecto(req, res) {
 async function deleteInventarioProyecto(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = inventarioProyectoId.validate(params);
+    const { error: paramsError } = inventarioProyectoIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -92,10 +88,48 @@ async function deleteInventarioProyecto(req, res) {
   }
 }
 
+async function getInventarioProyectoByProyecto(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = inventarioProyectoIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const { id } = params;
+    const [inventarioProyecto, errorInventarioProyecto] = await InventarioProyectoService.getInventarioProyectoByProyecto(id);
+    if (errorInventarioProyecto) return respondError(req, res, 404, errorInventarioProyecto);
+
+    respondSuccess(req, res, 200, inventarioProyecto);
+  } catch (error) {
+    handleError(error, "inventarioProyecto.controller -> getInventarioProyectoByProyecto");
+    respondInternalError(req, res);
+  }
+}
+
+async function addCantidadToInventarioProyecto(req, res) {
+  try {
+    const { params, body } = req;
+    const { error: paramsError } = inventarioProyectoIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const { id } = params;
+
+    const [inventarioProyecto, errorInventarioProyecto] = await InventarioProyectoService.addCantidadToInventarioProyecto(id, body);
+    if (errorInventarioProyecto) return respondError(req, res, 404, errorInventarioProyecto);
+
+    respondSuccess(req, res, 200, inventarioProyecto);
+  } catch (error) {
+    handleError(error, "inventarioProyecto.controller -> addCantidadToInventarioProyecto");
+    respondInternalError(req, res);
+  }
+}
+
+
 module.exports = {
     getInventarioProyecto,
     createInventarioProyecto,
     getInventarioProyectoById,
     updateInventarioProyecto,
     deleteInventarioProyecto,
+    getInventarioProyectoByProyecto,
+    addCantidadToInventarioProyecto
 };

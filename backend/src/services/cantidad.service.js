@@ -122,17 +122,23 @@ async function getCantidadByAlmacen(id) {
 }
 
 
-async function restarCantidad(id,body) {
+async function restarCantidad(body) {
     try {
-        const {cantidad} = body;
-        const materialFound = await Cantidad.findOne({id: id})
+        console.log(body);
+        const { inventario, cantidadAsignada } = body;
+        const id  = inventario;
+        const materialFound = await Cantidad.findById(id)
             .exec();
         if (!materialFound) return [null, "El Material no existe"];
+        const cantidadParsed = Number(cantidadAsignada);
+        const cantidadActual = Number(materialFound.cantidad);
 
-        const cantidadUpdated = await Cantidad.findOneAndUpdate(
-            {id: id},
+        if (cantidadActual < cantidadParsed) return [null, "No hay suficiente cantidad"];
+
+        const cantidadUpdated = await Cantidad.findByIdAndUpdate(
+            id,
             {
-                cantidad: materialFound.cantidad - cantidad,
+                cantidad: cantidadActual - cantidadParsed,
             },
             { new: true },
         );
@@ -146,14 +152,16 @@ async function restarCantidad(id,body) {
 async function sumarCantidad(id,body) {
     try {
         const {cantidad} = body;
-        const materialFound = await Cantidad.findOne({id: id})
+        const materialFound = await Cantidad.findById(id)
             .exec();
         if (!materialFound) return [null, "El Material no existe"];
+        const cantidadParsed = Number(cantidad);
+        const cantidadActual = Number(materialFound.cantidad);
 
-        const cantidadUpdated = await Cantidad.findOneAndUpdate(
-            {id: id},
+        const cantidadUpdated = await Cantidad.findByIdAndUpdate(
+            id,
             {
-                cantidad: materialFound.cantidad + cantidad,
+                cantidad: cantidadActual + cantidadParsed,
             },
             { new: true },
         );

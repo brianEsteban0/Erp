@@ -9,19 +9,15 @@ const inventarioProyectoSchema = new mongoose.Schema({
     inventarios: [{
         inventario: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Inventario',
+        ref: 'Cantidad',
         required: true
         },
-        cantidadEnProyecto: {
+        cantidadAsignada: {
             type: Number,
-            required: true,
-        },
-        precioTotal: {
-            type: Number,
-            required: true,
-        },
+            required: true
+        }
     }],
-});
+}, { strictPopulate: false });
 
 const InventarioProyecto = mongoose.model('InventarioProyecto', inventarioProyectoSchema);
 

@@ -16,8 +16,7 @@ const publicacionForoSchema = new mongoose.Schema({
     },
     comentarios: [{
         usuario: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Usuario",
+            type: String,
             required: true,
         },
         contenido: {
@@ -26,6 +25,7 @@ const publicacionForoSchema = new mongoose.Schema({
         },
         fecha: {
             type: Date,
+            default: Date.now,
         },
     }],
     autor: {

@@ -1,7 +1,6 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const { respondInternalError } = require("../utils/resHandler");
-const PublicacionForo = require("../models/publicacionForo.model");
 const PublicacionForoService = require("../services/publicacionForo.service"); 
 const { publicacionForoBodySchema, publicacionForoIdSchema } = require("../schema/publicacionForo.schema");
 
@@ -93,10 +92,27 @@ async function deletePublicacionForo(req, res) {
   }
 }
 
+async function comentar(req, res) {
+  try {
+    const { params, body } = req;
+    console.log(body);
+    const { id } = params;
+
+    const [publicacion, errorPublicacion] = await PublicacionForoService.comentar(id, body);
+    if (errorPublicacion) return respondError(req, res, 404, errorPublicacion);
+
+    respondSuccess(req, res, 200, publicacion);
+  } catch (error) {
+    handleError(error, "publicacionForo.controller -> comentar");
+    respondInternalError(req, res);
+  }
+}
+
 module.exports = {
   getPublicacionesForo,
   getPublicacionForoById,
   createPublicacionForo,
   updatePublicacionForo,
   deletePublicacionForo,
+  comentar,
 };

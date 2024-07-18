@@ -92,11 +92,25 @@ async function deletePublicacionForo(id) {
     }
 }
 
+async function comentar(id, comentario) {
+    try {
+        const publicacion = await PublicacionForo.findById(id);
+        if (!publicacion) return [null, "La publicacion no existe"];
+
+        publicacion.comentarios.push(comentario);
+        await publicacion.save();
+        return [publicacion, null];
+    } catch (error) {
+        handleError(error, "publicacionForo.service -> comentar");
+    }
+}
+
 
 module.exports = {
     getPublicacionesForo,
     createPublicacionForo,
     getPublicacionForoById,
     updatePublicacionForo,
-    deletePublicacionForo
+    deletePublicacionForo,
+    comentar,
 };
