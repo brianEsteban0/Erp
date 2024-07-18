@@ -3,13 +3,17 @@ import { getProyectos } from '../services/ProyectoService';
 
 function ProyectoList() {
   const [proyectos, setProyectos] = useState([]);
+  const [filteredProyectos, setFilteredProyectos] = useState([]);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     async function fetchData() {
       try {
         const data = await getProyectos();
         setProyectos(data);
+        setFilteredProyectos(data);
       } catch (error) {
         setError(error.message);
       }
@@ -17,9 +21,35 @@ function ProyectoList() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    filterProyectos();
+  }, [searchTerm, sortOrder, proyectos]);
+
   function formatDate(dateString) {
     const [day, month, year] = dateString.split('/');
     return `${day}/${month}/${year}`;
+  }
+
+  function handleSearch(event) {
+    setSearchTerm(event.target.value);
+  }
+
+  function handleSortOrderChange(event) {
+    setSortOrder(event.target.value);
+  }
+
+  function filterProyectos() {
+    let filtered = proyectos.filter(proyecto =>
+      proyecto.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.fecha_inicio.split('/').reverse().join('-'));
+      const dateB = new Date(b.fecha_inicio.split('/').reverse().join('-'));
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    setFilteredProyectos(filtered);
   }
 
   if (error) {
@@ -33,8 +63,25 @@ function ProyectoList() {
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-black font-bold mb-4">Lista de Proyectos</h2>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Buscar por título..."
+          value={searchTerm}
+          onChange={handleSearch}
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <select
+          value={sortOrder}
+          onChange={handleSortOrderChange}
+          className="ml-4 p-2 border border-gray-300 rounded-md"
+        >
+          <option value="asc">Fecha de inicio ascendente</option>
+          <option value="desc">Fecha de inicio descendente</option>
+        </select>
+      </div>
       <ul className="space-y-6">
-        {proyectos.map((proyecto, index) => (
+        {filteredProyectos.map((proyecto, index) => (
           <li key={index} className="p-6 border border-gray-200 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 ease-in-out">
             <h3 className="text-black font-semibold mb-2">{proyecto.titulo}</h3>
             <p className="text-gray-700 mb-2"><strong>Descripción:</strong> {proyecto.descripcion}</p>
