@@ -14,10 +14,9 @@ const CantidadSchema = new mongoose.Schema({
         ref: "Almacen",
         required: true,
    },
-    fechaIngreso: { type: Date, required: true },
+    fechaIngreso: { type: Date, default: Date.now },
     usuarioIngreso: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Usuario",
+        type: String,
         required: true,
     },
 });

@@ -2,7 +2,7 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const { respondInternalError } = require("../utils/resHandler");
 const CantidadService = require("../services/cantidad.service"); 
-const { cantidadBodySchema, cantidadId } = require("../schema/cantidad.schema");
+const { cantidadBodySchema, cantidadIdSchema } = require("../schema/cantidad.schema");
 
 async function getCantidad(req, res) {
   try {
@@ -41,7 +41,7 @@ async function createCantidad(req, res) {
 async function getCantidadById(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = cantidadId.validate(params);
+    const { error: paramsError } = cantidadIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -58,7 +58,7 @@ async function getCantidadById(req, res) {
 async function updateCantidad(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = cantidadId.validate(params);
+    const { error: paramsError } = cantidadIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -78,7 +78,7 @@ async function updateCantidad(req, res) {
 async function deleteCantidad(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = cantidadId.validate(params);
+    const { error: paramsError } = cantidadIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -94,15 +94,9 @@ async function deleteCantidad(req, res) {
 
 async function restarCantidad(req, res) {
   try {
-    const { params, body } = req;
-    const { error: paramsError } = cantidadId.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
+    const { body } = req;
 
-    const { id } = params;
-    const { error: bodyError } = cantidadBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const [cantidad, errorCantidad] = await CantidadService.restarCantidad(id, body);
+    const [cantidad, errorCantidad] = await CantidadService.restarCantidad(body);
     if (errorCantidad) return respondError(req, res, 404, errorCantidad);
 
     respondSuccess(req, res, 200, cantidad);
@@ -115,7 +109,7 @@ async function restarCantidad(req, res) {
 async function getCantidadByMaterial(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = cantidadId.validate(params);
+    const { error: paramsError } = cantidadIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -132,7 +126,7 @@ async function getCantidadByMaterial(req, res) {
 async function getCantidadByAlmacen(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = cantidadId.validate(params);
+    const { error: paramsError } = cantidadIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -149,12 +143,10 @@ async function getCantidadByAlmacen(req, res) {
 async function sumarCantidad(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = cantidadId.validate(params);
+    const { error: paramsError } = cantidadIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
-    const { error: bodyError } = cantidadBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
 
     const [cantidad, errorCantidad] = await CantidadService.sumarCantidad(id, body);
     if (errorCantidad) return respondError(req, res, 404, errorCantidad);

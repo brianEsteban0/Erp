@@ -1,14 +1,13 @@
 "use strict";
 
-
 const InventarioProyecto = require("../models/inventarioProyecto.model.js");
 const { handleError } = require("../utils/errorHandler");
 
 async function getInventarioProyecto() {
     try {
         const inventariosProyecto = await InventarioProyecto.find()
-            .populate("Proyecto")
-            .populate("Inventario")
+            .populate("proyecto")
+            .populate("inventarios.inventario")
             .exec();
         if (!inventariosProyecto) return [null, "No existe inventario de proyecto"];
 
@@ -40,8 +39,8 @@ async function createInventarioProyecto(inventario) {
 async function getInventarioProyectoById(id) { 
     try {
         const inventarios = await InventarioProyecto.findById(id)
-            .populate("Proyecto")
-            .populate("Inventario")
+            .populate("proyecto")
+            .populate("inventarios.inventario")
             .exec();
         if (!inventarios) return [null, "El inventarios de proyecto no existe"];
 
@@ -86,11 +85,55 @@ async function deleteInventarioProyecto(id) {
     }
 }
 
+async function getInventarioProyectoByProyecto(id) {
+    try {
+        const inventarios = await InventarioProyecto.findOne({ proyecto: id })
+            .populate("proyecto")
+            .populate({
+                path: "inventarios.inventario",
+                populate: [
+                    { path: "almacen" },
+                    { path: "material" }
+                ]
+            })
+            .exec();
+        if (!inventarios) return [null, "El inventarios de proyecto no existe"];
+
+        return [inventarios, null];
+    }
+    catch (error) {
+        handleError(error, "inventarioProyecto.service -> getInventarioProyectoByProyecto");
+    }
+}
+
+async function addCantidadToInventarioProyecto(id, cantidad) {
+    try {
+        const inventarioFound = await InventarioProyecto.findById(id)
+            .exec();
+        if (!inventarioFound) return [null, "El inventario no existe"];
+
+        const inventarioUpdated = await InventarioProyecto.findByIdAndUpdate(
+            id,
+            {
+                $push: { inventarios: cantidad }
+            },
+            { new: true },
+        );
+
+        return [inventarioUpdated, null];
+    }
+    catch (error) {
+        handleError(error, "inventarioProyecto.service -> addCantidadToInventarioProyecto");
+    }
+}
+
 
 module.exports = {
     getInventarioProyecto,
     createInventarioProyecto,
     getInventarioProyectoById,
     updateInventarioProyecto,
-    deleteInventarioProyecto
+    deleteInventarioProyecto,
+    getInventarioProyectoByProyecto,
+    addCantidadToInventarioProyecto
 };

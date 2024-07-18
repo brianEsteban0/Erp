@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../services/auth.service';
 import { AuthProvider, useAuth } from '../context/AuthContext';
+import  RootUsuario  from '../components/RootUsuario.jsx';
 
 function Root() {
   return (
@@ -15,14 +16,6 @@ function PageRoot() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  console.log("User info:", user); // Verificar la información del usuario
-  console.log("User roles:", user.roles); // Verificar los roles del usuario
-
-  const handleLogout = () => {
-    logout();
-    navigate('/auth');
-  };
-
   const isAdmin = user.roles.some(role => role.name === 'admin');
 
   return (
@@ -30,17 +23,11 @@ function PageRoot() {
       <div className="bg-gray-200 rounded shadow-md text-gray-700 flex justify-between items-center p-4">
         <div>
           <h1 className="text-3xl mb-2">ERP</h1>
-          <p className="mb-2">usuario: {user.email}</p>
         </div>
-        <button 
-          className="text-black font-bold py-2 px-4"
-          onClick={handleLogout}
-        >
-          Cerrar sesión
-        </button>
+        <RootUsuario />
       </div>
       <div className="flex">
-        <div id="sidebar" className="w-64 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
+        <div id="sidebar" className="min-w-60 bg-gray-300 text-gray-900 flex flex-col fixed transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-200 ease-in-out">
           <nav className="flex-grow">
             <ul>
               <li>
@@ -58,7 +45,7 @@ function PageRoot() {
                 <a href="/asistencia" className="block py-2.5 px-4 rounded hover:bg-gray-700">Asistencia</a>
               </li>
               <li>
-                <a href="#" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
+                <a href="/inventario" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
               </li>
               {isAdmin && (
                 <li>
@@ -68,7 +55,7 @@ function PageRoot() {
             </ul>
           </nav>
         </div>
-        <div className="flex-grow p-6 ml-64 md:ml-0 max-h-fit">
+        <div className="flex-grow p-6 ml-64 md:ml-0 min-h-screen">
           <Outlet />
         </div>
       </div>

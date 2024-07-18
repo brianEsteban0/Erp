@@ -65,3 +65,15 @@ export const deleteForo= async (id) => {
       throw error;
     }
 }
+
+export const comentar = async (id, comentario) => {
+    try {
+      const response = await axios.put(`/foro/comentar/${id}`, comentario);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+}

@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
 import { getForo } from './../../services/foro.service.js';
 import { useNavigate } from 'react-router-dom';
+import ComentarModal from './ComentarModal';
+
 const Foro = () => {
 
     const [publicacion, setpublicacion] = useState([]);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [id, setId] = useState('');
     const navigate = useNavigate();
     const fetchData = async () => {
       try {
           const [foroResponse] = await Promise.all([getForo()]);
-          console.log(foroResponse.data);
-          setpublicacion(foroResponse.data);
+          const reverseData = foroResponse.data.reverse(); 
+          setpublicacion(reverseData);
       } catch (error) {
           console.error("Error al obtener datos", error);
       }
@@ -19,6 +23,15 @@ const Foro = () => {
         fetchData();
     }, []);
 
+    const openModal = (id) => {
+        setModalIsOpen(true);
+        setId(id);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+        fetchData();
+    };
     const formatearFecha = (fecha) => {
         const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(fecha).toLocaleDateString('es-ES', opciones);
@@ -30,8 +43,8 @@ const Foro = () => {
 
     return (
         <div className='max-w-6xl'>
-            <div className='text-center'>
-                <h1 className='text-gray-700'>Foro Empresa</h1>
+            <div className="text-center mb-4 text-gray-800">
+                <h2 className="text-lg font-bold">Foro Empresa</h2>
             </div>
             <div className='flex justify-between'>
                 <p className='text-gray-700'>Ultimas publicaciones</p>
@@ -52,15 +65,17 @@ const Foro = () => {
                         {post.comentarios && post.comentarios.map((comentario) => (
                             <div key={comentario._id} className='bg-gray-100 p-4 mt-4'>
                                 <p className='text-gray-700'>{comentario.contenido}</p>
-                                <p className='text-sm text-gray-600'>{comentario.autor}</p>
-                                <p className='text-sm text-gray-600'>{formatearFecha(comentario.fechaCreacion)}</p>
+                                <div className='flex justify-between'>
+                                    <p className='text-sm text-gray-600'>{comentario.usuario}</p>
+                                    <p className='text-sm text-gray-600'>{formatearFecha(comentario.fecha)}</p>                                    
+                                </div>
                             </div>
                         ))}
-                        <button className='text-red-400'>Comentar</button>
+                        <button onClick={() => openModal(post._id)} className='text-red-400'>Comentar</button>
                     </div>
                 ))}
             </div>
-            
+            <ComentarModal isOpen={modalIsOpen} onClose={closeModal} id={id} />
         </div>
     );
 };
