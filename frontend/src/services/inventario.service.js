@@ -7,8 +7,9 @@ export const getInventario = async () => {
         return response.data; 
       }
     } catch (error) {
-      console.error(error);
-      throw error; 
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 };
 
@@ -19,9 +20,9 @@ export const getInventarioById = async (id) => {
         return response.data;
       }
     } catch (error) {
-    
-        console.error('Error al encontar la publicacion', error);
-        alert('Error: ' + error.response.data.message); 
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -33,8 +34,9 @@ export const createInventario = async (publicacion) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -47,7 +49,7 @@ export const updateInventario = async (id, publicacion) => {
     } catch (error) {
       const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
       console.error('Error al editar la publicacion', error);
-      alert('Error: ' + errorMessage);
+      throw errorMessage;
     }
 }
 
@@ -59,8 +61,9 @@ export const deleteInventario = async (id) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -71,8 +74,9 @@ export const sumarInventario = async (id, body) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -83,7 +87,8 @@ export const restarInventario = async (id, body) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }

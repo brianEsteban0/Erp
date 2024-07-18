@@ -22,7 +22,10 @@ import Inventario from './routes/Inventario/Inventario.jsx';
 import Material from './routes/Inventario/material.jsx';
 import Almacen from './routes/Inventario/almacen.jsx';
 import AddInventario from './routes/Inventario/AddInventario.jsx';
-
+import EditarInventario from './routes/Inventario/EditarInventario.jsx';
+import InventarioProyecto from './routes/Inventario/InventarioDeProyecto.jsx';
+import AddProyectoInventario from './routes/Inventario/addProyectoInventario.jsx';
+import VerInventarioProyecto from './routes/Inventario/verInventarioProyecto.jsx';
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
   {
@@ -89,7 +92,23 @@ const router = createBrowserRouter([
       {
         path: '/inventario/registrar',
         element: <AddInventario />,
-      }
+      },
+      {
+        path: '/inventario/editar/:id',
+        element: <EditarInventario />,
+      },
+      {
+        path: '/proyectos/inventario',
+        element: <InventarioProyecto />,
+      },
+      {
+        path: '/proyectos/inventario/registrar',
+        element: <AddProyectoInventario />,
+      },
+      {
+        path: '/proyectos/inventario/ver/:id',
+        element: <VerInventarioProyecto />,
+      },
     ],
   },
   {

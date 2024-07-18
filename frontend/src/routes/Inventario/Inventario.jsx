@@ -1,14 +1,27 @@
 import { useState, useEffect } from 'react';
 import { getInventario } from '../../services/inventario.service';
 import { useNavigate } from 'react-router-dom';
+import ModalAddCantidad from './ModalAddCantidad';
 
 const Inventario = () => {
     const [inventory, setInventory] = useState([]);
     const navigate = useNavigate();
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [id, setId] = useState('');
 
     useEffect(() => {
         fetchInventoryData();
     }, []);
+
+    const openModal = (id) => {
+        setModalIsOpen(true);
+        setId(id);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+        fetchInventoryData();
+    };
 
     const fetchInventoryData = async () => {
         try {
@@ -27,6 +40,12 @@ const Inventario = () => {
         navigate(ruta);
     };
 
+    const formatearFecha = (fecha) => {
+        const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(fecha).toLocaleDateString('es-ES', opciones);
+    }
+
+
     return (
         <div className='text-gray-700'>
             <div className="text-center mb-4 text-gray-800">
@@ -43,9 +62,12 @@ const Inventario = () => {
                         <thead>
                             <tr class="bg-gray-200">
                                 <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Nombre</th>
+                                <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Descripcion</th>
                                 <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Cantidad</th>
-                                <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Almacen</th>
                                 <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Unidad de Medida</th>
+                                <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Almacen</th>
+                                <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Ingresado Por</th>
+                                <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Fecha Ingreso</th>
                                 <th class="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Acciones</th>
                             </tr>
                         </thead>
@@ -53,23 +75,31 @@ const Inventario = () => {
                             {inventory && inventory.length > 0 ? (
                                 inventory.map((item) => (
                                 <tr key={item._id}>
-                                    <td class="py-4 px-6 border-b border-gray-200">{item.material.nombre}</td>
-                                        <td class="py-4 px-6 border-b border-gray-200 truncate">{ item.cantidad}</td>
-                                        <td class="py-4 px-6 border-b border-gray-200">{item.almacen.nombre}</td>
+                                        <td class="py-4 px-6 border-b border-gray-200">{item.material.nombre}</td>
+                                        <td class="py-4 px-6 border-b border-gray-200">{item.material.descripcion}</td>
+                                        <td class="py-4 px-6 border-b border-gray-200 truncate">{item.cantidad}</td>
                                         <td class="py-4 px-6 border-b border-gray-200">{item.material.unidad}</td>
-                                    <td class="p-5 flex justify-between border-b border-gray-200">
-                                            <button className="bg-orange-500 text-white py-1 px-2 rounded-full text-xs">Editar</button>
-                                            <button className='bg-green-500 text-white py-1 px-2 rounded-full text-xs'>Agregar</button>
-                                            <button className='bg-red-500 text-white py-1 px-2 rounded-full text-xs'>Restar</button>
+                                        <td class="py-4 px-6 border-b border-gray-200">{item.almacen.nombre}</td>
+                                        <td class="py-4 px-6 border-b border-gray-200">{item.usuarioIngreso}</td>
+                                        <td class="py-4 px-6 border-b border-gray-200">{formatearFecha(item.fechaIngreso)}</td>
+                                        
+                                    <td class="px-6 border-b border-gray-200">
+                                            <button onClick={() => navigate(`/inventario/editar/${item._id}`)} className="bg-orange-500 text-white py-1 px-2 rounded-full text-xs">Editar</button>
+                                            <button onClick={() => openModal(item._id)} className='bg-green-500 text-white py-1 px-2 rounded-full text-xs'>Agregar</button>
                                     </td>
                                 </tr>
                                 ))
                             ) : (
-                                <p>No hay Materiales o herramientas registradas.</p>
+                                    <tr>
+                                        <td>
+                                            No existe registro de inventarios asignado a proyectos.
+                                        </td>
+                                    </tr>
                             )}
                         </tbody>
                     </table>
                 </div>
+                <ModalAddCantidad isOpen={modalIsOpen} onClose={closeModal} id={id} />
             </div>
         </div>
     );
