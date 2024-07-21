@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import { getProyectos, addActividadToProyecto } from '../services/ProyectoService';
+import { toast } from 'react-toastify';
 
 function AgregarActividad({ onActividadAdded }) {
   const [actividadData, setActividadData] = useState({
@@ -24,6 +25,7 @@ function AgregarActividad({ onActividadAdded }) {
         setProyectos(proyectos);
       } catch (error) {
         console.error('Error al obtener los proyectos', error);
+        toast.error('Error al cargar los proyectos.');
       }
     };
 
@@ -48,32 +50,31 @@ function AgregarActividad({ onActividadAdded }) {
 
     const formattedActividad = {
       ...actividadData,
-      fecha_inicio: format(actividadData.fecha_inicio, 'dd/MM HH:mm'),
-      fecha_termino: format(actividadData.fecha_termino, 'dd/MM HH:mm'),
+      fecha_inicio: format(actividadData.fecha_inicio, 'dd/MM/yyyy'),
+      fecha_termino: format(actividadData.fecha_termino, 'dd/MM/yyyy'),
     };
 
     try {
-      console.log('Enviando actividad:', formattedActividad, 'al proyecto:', selectedProyectoId);
       await addActividadToProyecto(selectedProyectoId, formattedActividad);
-      alert('Actividad agregada con éxito');
+      toast.success('Actividad agregada con éxito');
       onActividadAdded(formattedActividad);
     } catch (error) {
       console.error('Error al agregar la actividad', error.response ? error.response.data : error.message);
-      alert('Hubo un error al agregar la actividad. Por favor, inténtelo de nuevo.');
+      toast.error('Hubo un error al agregar la actividad. Por favor, inténtelo de nuevo.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-actividad-form">
-      <h3 style={{ color: 'black' }}>Agregar Actividad</h3>
-      <div className="mb-3">
-        <label htmlFor="proyecto" className="text-black">Seleccionar Proyecto:</label>
+    <form onSubmit={handleSubmit} className="container mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow-md">
+      <h3 className="text-2xl font-bold text-blue-900 mb-6">Agregar Actividad</h3>
+      <div className="mb-4">
+        <label htmlFor="proyecto" className="block text-gray-700 font-medium mb-2">Seleccionar Proyecto:</label>
         <select
           id="proyecto"
           name="proyecto"
           value={selectedProyectoId}
           onChange={handleProyectoChange}
-          className="form-control"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         >
           <option value="">Seleccione un proyecto</option>
           {proyectos.map((proyecto) => (
@@ -84,77 +85,77 @@ function AgregarActividad({ onActividadAdded }) {
         </select>
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="nombre" className="text-black">Nombre de la Actividad:</label>
+      <div className="mb-4">
+        <label htmlFor="nombre" className="block text-gray-700 font-medium mb-2">Nombre de la Actividad:</label>
         <input
           type="text"
           id="nombre"
           name="nombre"
           value={actividadData.nombre}
           onChange={handleActividadInputChange}
-          className="form-control"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="descripcion" className="text-black">Descripción de la Actividad:</label>
+      <div className="mb-4">
+        <label htmlFor="descripcion" className="block text-gray-700 font-medium mb-2">Descripción de la Actividad:</label>
         <input
           type="text"
           id="descripcion"
           name="descripcion"
           value={actividadData.descripcion}
           onChange={handleActividadInputChange}
-          className="form-control"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="fecha_inicio_actividad" className="text-black">Fecha de Inicio de la Actividad:</label>
+      <div className="mb-4">
+        <label htmlFor="fecha_inicio_actividad" className="block text-gray-700 font-medium mb-2">Fecha de Inicio de la Actividad:</label>
         <DatePicker
           selected={actividadData.fecha_inicio}
           onChange={(date) => handleActividadDateChange(date, 'fecha_inicio')}
-          dateFormat="dd/MM/yy"
-          className="form-control"
+          dateFormat="dd/MM/yyyy"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="fecha_termino_actividad" className="text-black">Fecha de Término de la Actividad:</label>
+      <div className="mb-4">
+        <label htmlFor="fecha_termino_actividad" className="block text-gray-700 font-medium mb-2">Fecha de Término de la Actividad:</label>
         <DatePicker
           selected={actividadData.fecha_termino}
           onChange={(date) => handleActividadDateChange(date, 'fecha_termino')}
-          dateFormat="dd/MM/yy"
-          className="form-control"
+          dateFormat="dd/MM/yyyy"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="responsable" className="text-black">Responsable:</label>
+      <div className="mb-4">
+        <label htmlFor="responsable" className="block text-gray-700 font-medium mb-2">Responsable:</label>
         <input
           type="text"
           id="responsable"
           name="responsable"
           value={actividadData.responsable}
           onChange={handleActividadInputChange}
-          className="form-control"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         />
       </div>
 
-      <div className="mb-3">
-        <label htmlFor="estado" className="text-black">Estado:</label>
+      <div className="mb-4">
+        <label htmlFor="estado" className="block text-gray-700 font-medium mb-2">Estado:</label>
         <select
           id="estado"
           name="estado"
           value={actividadData.estado}
           onChange={handleActividadInputChange}
-          className="form-control"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
         >
           <option value={false}>Incompleto</option>
           <option value={true}>Completo</option>
         </select>
       </div>
 
-      <button type="submit" className="text-black mb-3">Agregar Actividad</button>
+      <button type="submit" className="p-2 border border-gray-300 rounded-md shadow-sm bg-blue-600 text-white w-full">Agregar Actividad</button>
     </form>
   );
 }

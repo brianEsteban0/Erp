@@ -1,128 +1,247 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createProyecto } from '../services/ProyectoService';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
+import { createProyecto } from '../services/ProyectoService';
+import { toast } from 'react-toastify';
 
-function AgregarProyecto() {
+function AgregarProyecto({ onProyectoAdded }) {
   const [proyectoData, setProyectoData] = useState({
     titulo: '',
     descripcion: '',
     empresa_licitante: '',
     fecha_inicio: null,
     fecha_termino: null,
-    presupuesto: '', // Nuevo campo de presupuesto
+    presupuesto: '',
+    actividades: []
   });
 
-  const navigate = useNavigate();
+  const [actividadData, setActividadData] = useState({
+    nombre: '',
+    descripcion: '',
+    fecha_inicio: null,
+    fecha_termino: null,
+    responsable: '',
+    estado: false,
+  });
 
-  const handleInputChange = (e) => {
+  const handleProyectoInputChange = (e) => {
     const { name, value } = e.target;
     setProyectoData({ ...proyectoData, [name]: value });
   };
 
-  const handleDateChange = (date, field) => {
+  const handleActividadInputChange = (e) => {
+    const { name, value } = e.target;
+    setActividadData({ ...actividadData, [name]: value });
+  };
+
+  const handleProyectoDateChange = (date, field) => {
     setProyectoData({ ...proyectoData, [field]: date });
+  };
+
+  const handleActividadDateChange = (date, field) => {
+    setActividadData({ ...actividadData, [field]: date });
+  };
+
+  const agregarActividad = () => {
+    setProyectoData({
+      ...proyectoData,
+      actividades: [...proyectoData.actividades, actividadData]
+    });
+    setActividadData({
+      nombre: '',
+      descripcion: '',
+      fecha_inicio: null,
+      fecha_termino: null,
+      responsable: '',
+      estado: false,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Formatear las fechas al formato mm/dd/aa
-    const formattedData = {
+
+    const formattedProyecto = {
       ...proyectoData,
-      fecha_inicio: format(proyectoData.fecha_inicio, 'MM/dd/yy'),
-      fecha_termino: format(proyectoData.fecha_termino, 'MM/dd/yy'),
-      presupuesto: parseFloat(proyectoData.presupuesto), // Asegurarse de que el presupuesto sea un número
+      fecha_inicio: format(proyectoData.fecha_inicio, 'yyyy-MM-dd'),
+      fecha_termino: format(proyectoData.fecha_termino, 'yyyy-MM-dd'),
+      actividades: proyectoData.actividades.map((actividad) => ({
+        ...actividad,
+        fecha_inicio: actividad.fecha_inicio ? format(actividad.fecha_inicio, 'yyyy-MM-dd') : null,
+        fecha_termino: actividad.fecha_termino ? format(actividad.fecha_termino, 'yyyy-MM-dd') : null,
+      }))
     };
-  
+
     try {
-      console.log('Enviando datos del proyecto:', formattedData);
-      await createProyecto(formattedData);
-      alert('Proyecto agregado con éxito');
-      navigate('/');
+      await createProyecto(formattedProyecto);
+      toast.success('Proyecto agregado con éxito');
+      onProyectoAdded(formattedProyecto);
     } catch (error) {
       console.error('Error al agregar el proyecto', error.response ? error.response.data : error.message);
-      alert('Hubo un error al agregar el proyecto. Por favor, inténtelo de nuevo.');
+      toast.error('Hubo un error al agregar el proyecto. Por favor, inténtelo de nuevo.');
     }
   };
 
   return (
-    <div>
-      <h1 style={{ color: 'black' }}>Agregar Proyecto</h1>
-      <form onSubmit={handleSubmit} className="add-proyecto-form">
-        <div className="mb-3">
-          <label htmlFor="titulo" className="text-black">Título:</label>
+    <form onSubmit={handleSubmit} className="container mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow-md">
+      <h3 className="text-2xl font-bold text-blue-900 mb-6">Agregar Proyecto</h3>
+
+      <div className="mb-4">
+        <label htmlFor="titulo" className="block text-gray-700 font-medium mb-2">Título:</label>
+        <input
+          type="text"
+          id="titulo"
+          name="titulo"
+          value={proyectoData.titulo}
+          onChange={handleProyectoInputChange}
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="descripcion" className="block text-gray-700 font-medium mb-2">Descripción:</label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          value={proyectoData.descripcion}
+          onChange={handleProyectoInputChange}
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="empresa_licitante" className="block text-gray-700 font-medium mb-2">Empresa Licitante:</label>
+        <input
+          type="text"
+          id="empresa_licitante"
+          name="empresa_licitante"
+          value={proyectoData.empresa_licitante}
+          onChange={handleProyectoInputChange}
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="fecha_inicio" className="block text-gray-700 font-medium mb-2">Fecha de Inicio:</label>
+        <DatePicker
+          selected={proyectoData.fecha_inicio}
+          onChange={(date) => handleProyectoDateChange(date, 'fecha_inicio')}
+          dateFormat="yyyy-MM-dd"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="fecha_termino" className="block text-gray-700 font-medium mb-2">Fecha de Término:</label>
+        <DatePicker
+          selected={proyectoData.fecha_termino}
+          onChange={(date) => handleProyectoDateChange(date, 'fecha_termino')}
+          dateFormat="yyyy-MM-dd"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <label htmlFor="presupuesto" className="block text-gray-700 font-medium mb-2">Presupuesto:</label>
+        <input
+          type="number"
+          id="presupuesto"
+          name="presupuesto"
+          value={proyectoData.presupuesto}
+          onChange={handleProyectoInputChange}
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          required
+        />
+      </div>
+
+      <div className="mb-4">
+        <h4 className="text-xl font-semibold text-blue-900 mb-4">Agregar Actividad</h4>
+        <div className="mb-4">
+          <label htmlFor="nombre" className="block text-gray-700 font-medium mb-2">Nombre de la Actividad:</label>
           <input
             type="text"
-            id="titulo"
-            name="titulo"
-            value={proyectoData.titulo}
-            onChange={handleInputChange}
-            className="form-control"
+            id="nombre"
+            name="nombre"
+            value={actividadData.nombre}
+            onChange={handleActividadInputChange}
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
           />
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="descripcion" className="text-black">Descripción:</label>
+        <div className="mb-4">
+          <label htmlFor="descripcion" className="block text-gray-700 font-medium mb-2">Descripción de la Actividad:</label>
           <input
             type="text"
             id="descripcion"
             name="descripcion"
-            value={proyectoData.descripcion}
-            onChange={handleInputChange}
-            className="form-control"
+            value={actividadData.descripcion}
+            onChange={handleActividadInputChange}
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
           />
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="empresa_licitante" className="text-black">Empresa Licitante:</label>
+        <div className="mb-4">
+          <label htmlFor="fecha_inicio_actividad" className="block text-gray-700 font-medium mb-2">Fecha de Inicio de la Actividad:</label>
+          <DatePicker
+            selected={actividadData.fecha_inicio}
+            onChange={(date) => handleActividadDateChange(date, 'fecha_inicio')}
+            dateFormat="yyyy-MM-dd"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="fecha_termino_actividad" className="block text-gray-700 font-medium mb-2">Fecha de Término de la Actividad:</label>
+          <DatePicker
+            selected={actividadData.fecha_termino}
+            onChange={(date) => handleActividadDateChange(date, 'fecha_termino')}
+            dateFormat="yyyy-MM-dd"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="responsable" className="block text-gray-700 font-medium mb-2">Responsable:</label>
           <input
             type="text"
-            id="empresa_licitante"
-            name="empresa_licitante"
-            value={proyectoData.empresa_licitante}
-            onChange={handleInputChange}
-            className="form-control"
+            id="responsable"
+            name="responsable"
+            value={actividadData.responsable}
+            onChange={handleActividadInputChange}
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
           />
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="fecha_inicio" className="text-black">Fecha de Inicio:</label>
-          <DatePicker
-            selected={proyectoData.fecha_inicio}
-            onChange={(date) => handleDateChange(date, 'fecha_inicio')}
-            dateFormat="dd/MM/yy"
-            className="form-control"
-          />
+        <div className="mb-4">
+          <label htmlFor="estado" className="block text-gray-700 font-medium mb-2">Estado:</label>
+          <select
+            id="estado"
+            name="estado"
+            value={actividadData.estado}
+            onChange={handleActividadInputChange}
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          >
+            <option value={false}>Incompleto</option>
+            <option value={true}>Completo</option>
+          </select>
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="fecha_termino" className="text-black">Fecha de Término:</label>
-          <DatePicker
-            selected={proyectoData.fecha_termino}
-            onChange={(date) => handleDateChange(date, 'fecha_termino')}
-            dateFormat="dd/MM/yy"
-            className="form-control"
-          />
-        </div>
+        <button
+          type="button"
+          onClick={agregarActividad}
+          className="p-2 bg-blue-600 text-white rounded-md shadow-sm w-full mt-4"
+        >
+          Agregar Actividad
+        </button>
+      </div>
 
-        <div className="mb-3">
-          <label htmlFor="presupuesto" className="text-black">Presupuesto:</label>
-          <input
-            type="number"
-            id="presupuesto"
-            name="presupuesto"
-            value={proyectoData.presupuesto}
-            onChange={handleInputChange}
-            className="form-control"
-          />
-        </div>
-
-        <button type="submit" className="text-black">Agregar Proyecto</button>
-      </form>
-    </div>
+      <button type="submit" className="p-2 bg-blue-600 text-white rounded-md shadow-sm w-full mt-4">Agregar Proyecto</button>
+    </form>
   );
 }
 
