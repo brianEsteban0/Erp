@@ -58,10 +58,6 @@ const router = createBrowserRouter([
         element: <AgregarProyecto />,
       },
       {
-        path: '/proyectos/agregaractividad',
-        element: <AgregarActividad />,
-      },
-      {
         path: '/foro',
         element: <Foro />,
       },

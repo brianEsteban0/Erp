@@ -48,12 +48,6 @@ const Proyectos = () => {
         </button>
         <button 
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-shadow duration-300 ease-in-out mb-1.5"
-          onClick={() => navigate('/proyectos/agregaractividad')}
-        >
-          Agregar Actividad
-        </button>
-        <button 
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition-shadow duration-300 ease-in-out mb-1.5"
           onClick={() => navigate('/proyectos/inventario')}
         >
           Asignar Inventario
