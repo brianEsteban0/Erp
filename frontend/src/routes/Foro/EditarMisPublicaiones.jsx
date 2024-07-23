@@ -52,7 +52,14 @@ const EditarMisPublicaciones = () => {
     };
 
     const handleFileUpload = (fileId) => {
-        setPublicacion({ ...publicacion, imagen: fileId });
+        setPublicacion({ 
+            titulo: publicacion.titulo,
+            contenido: publicacion.contenido,
+            imagen: fileId,
+            comentarios: publicacion.comentarios,
+            autor: publicacion.autor,
+            fechaCreacion: publicacion.fechaCreacion,
+        });
     };
 
 
@@ -73,6 +80,7 @@ const EditarMisPublicaciones = () => {
                 autor: publicacion.autor,
                 fechaCreacion: publicacion.fechaCreacion,
             };
+            console.log(newPublicacion);
             await updateForo(id, newPublicacion);
             toast.success('Publicación editada con éxito');
             navigate('/foro/mispublicaciones');

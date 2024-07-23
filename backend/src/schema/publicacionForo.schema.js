@@ -26,6 +26,9 @@ const publicacionForoBodySchema = Joi.object({
   }),
   comentarios: Joi.array().items(
     Joi.object({
+      _id: Joi.string().optional().messages({
+        "string.base": "El ID del comentario debe ser de tipo string.",
+      }),
       usuario: Joi.string().required().messages({
         "string.empty": "El usuario del comentario no puede estar vacío.",
         "any.required": "El usuario del comentario es obligatorio.",

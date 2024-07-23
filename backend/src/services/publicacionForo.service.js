@@ -61,7 +61,10 @@ async function updatePublicacionForo(id, publicacion) {
         if (!publicacionFound) return [null, "La publicacion no existe"];
 
         const publicacionFounded = await PublicacionForo.findOne({ titulo: publicacion.titulo });
-        if (!(publicacionFounded.titulo == publicacionFound.titulo) && publicacionFounded) return [null, "La publicacion ya existe"];
+        if (publicacionFounded) {
+            if (!(publicacionFounded.titulo == publicacionFound.titulo)) return [null, "La publicacion ya existe"];
+            
+        }
 
         const { titulo, contenido, imagen, comentarios, autor, fechaCreacion } = publicacion;
         if (autor !== publicacionFound.autor) return [null, "No puedes editar esta publicacion"];
