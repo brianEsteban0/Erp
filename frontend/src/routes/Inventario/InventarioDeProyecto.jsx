@@ -38,7 +38,11 @@ const InventarioProyecto = () => {
             </div>
             <div className='flex justify-between mb-3 text-xl'>
                 <div></div>
-                <div><button onClick={() => redireccionar("/proyectos/inventario/registrar")}>Asignar materiales</button></div>
+                <div>
+                    <button onClick={() => redireccionar("/proyectos/inventario/registrar")}
+                            className='py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-violet-500 flex'
+                    >Crear Inventario</button>
+                </div>
             </div>
             <div>
                 <div className="shadow-lg rounded-lg overflow-hidden mx-4 md:mx-10">
@@ -46,7 +50,7 @@ const InventarioProyecto = () => {
                         <thead>
                             <tr className="bg-gray-200">
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Nombre Proyecto</th>
-                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Ver mas...</th>
+                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Ver materiales asignados</th>
 
                             </tr>
                         </thead>

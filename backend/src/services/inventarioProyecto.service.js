@@ -139,6 +139,29 @@ async function addCantidadToInventarioProyecto(id, cantidad) {
     }
 }
 
+async function deleteIndexInventarioProyecto(id, body) {
+    try {
+        const inventarioFound = await InventarioProyecto.findById(id)
+            .exec();
+        if (!inventarioFound) return [null, "El inventario no existe"];
+
+        const index = body;
+        
+        const inventarioUpdated = await InventarioProyecto.findByIdAndUpdate(
+            id,
+            {
+                $pull: { inventarios: { _id: index} }
+            },
+            { new: true },
+        );
+
+        return [inventarioUpdated, null];
+    }
+    catch (error) {
+        handleError(error, "inventarioProyecto.service -> deleteIndexInventarioProyecto");
+    }
+}
+
 
 module.exports = {
     getInventarioProyecto,
@@ -147,5 +170,6 @@ module.exports = {
     updateInventarioProyecto,
     deleteInventarioProyecto,
     getInventarioProyectoByProyecto,
-    addCantidadToInventarioProyecto
+    addCantidadToInventarioProyecto,
+    deleteIndexInventarioProyecto,
 };

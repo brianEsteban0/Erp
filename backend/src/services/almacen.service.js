@@ -54,6 +54,13 @@ async function updateAlmacen(id, almacen) {
             .exec();
         if (!almacenFound) return [null, "El almacen no existe"];
 
+                
+        const almacenFounded = await Almacen.findOne({ nombre: almacen.nombre });
+        if (almacenFounded) {
+            if (!(materialFounded.nombre == almacenFound.nombre)) return [null, "El nombre del almacen ya existe"];
+            
+        }
+
         const { nombre,ubicacion,fono} = almacen;
 
         const almacenUpdated = await Almacen.findByIdAndUpdate(

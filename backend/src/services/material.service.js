@@ -55,6 +55,12 @@ async function updateMaterial(id, material) {
             .exec();
         if (!materialFound) return [null, "El Material no existe"];
 
+        const materialFounded = await Material.findOne({ nombre: material.nombre });
+        if (materialFounded) {
+            if (!(materialFounded.descripcion == materialFound.descripcion)) return [null, "El material ya existe"];
+            
+        }
+
         const { nombre,descripcion,tipo,unidad} = material;
 
         const materialUpdated = await Material.findByIdAndUpdate(

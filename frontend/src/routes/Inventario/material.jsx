@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getMaterial } from "../../services/material.service";
 import ModalAddMaterial from "./ModalAddMaterial";
+import { useNavigate } from 'react-router-dom';
 
 const Material = () => {
+    const navigate = useNavigate();
     const [material, setMaterial] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -37,7 +39,7 @@ const Material = () => {
             </div>
             <div className="p-2 justify-between flex">
                 <div></div>
-                <button onClick={openModal} className=' py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-violet-400 flex'
+                <button onClick={openModal} className=' py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-violet-500 flex'
                 >Registar Material</button>
             </div>
             
@@ -59,11 +61,14 @@ const Material = () => {
                                 material.map((item) => (
                                 <tr key={item.id}>
                                     <td class="py-4 px-6 border-b border-gray-200">{item.nombre}</td>
-                                        <td class="py-4 px-6 border-b border-gray-200 truncate">{ item.descripcion}</td>
+                                        <td class="py-4 px-6 border-b border-gray-200">{ item.descripcion}</td>
                                         <td class="py-4 px-6 border-b border-gray-200">{item.tipo}</td>
                                         <td class="py-4 px-6 border-b border-gray-200">{item.unidad}</td>
                                     <td class="py-4 px-6 border-b border-gray-200">
-                                    <button class="bg-green-500 text-white py-1 px-2 rounded-full text-xs">Editar</button>
+
+                                        <button onClick={() => navigate(`/inventario/material/editar/${item._id}`)} className="bg-gray-600 py-1 px-2 rounded-md">
+                                            <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                                        </button>
                                 </td>
                                 </tr>
                                 ))

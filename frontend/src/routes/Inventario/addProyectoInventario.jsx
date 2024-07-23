@@ -3,8 +3,6 @@ import { createInventarioProyecto } from './../../services/inventarioProyecto.se
 import { getProyectos } from '../../services/ProyectoService.js';
 import { getInventario } from '../../services/inventario.service.js';
 import { useNavigate } from 'react-router-dom';
-import { get } from 'react-hook-form';
-
 
 const AddProyectoInventario = () => {
     const navigate = useNavigate();

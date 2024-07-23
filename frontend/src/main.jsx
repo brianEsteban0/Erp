@@ -29,6 +29,7 @@ import VerInventarioProyecto from './routes/Inventario/verInventarioProyecto.jsx
 import EditarAlmacen from './routes/Inventario/Editalmacen.jsx';
 import MisPublicaciones from './routes/Foro/MisPublicaciones.jsx';
 import EditarMisPublicaciones from './routes/Foro/EditarMisPublicaiones.jsx';
+import EditarMaterial from './routes/Inventario/EditarMaterial.jsx';
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
       {
         path: '/foro/editar/:id',
         element: <EditarMisPublicaciones />,
+      },
+      {
+        path: '/inventario/material/editar/:id',
+        element: <EditarMaterial />,
       }
     ],
   },

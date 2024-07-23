@@ -2,7 +2,7 @@
 
 const Joi = require("joi");
 
-const materialIdSchema = Joi.object({
+const materialId = Joi.object({
   id: Joi.string()
     .required()
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
@@ -52,4 +52,4 @@ const materialBodySchema = Joi.object({
     "object.unknown": "No se permiten propiedades adicionales.",
 });
 
-module.exports = { materialBodySchema, materialIdSchema };
+module.exports = { materialBodySchema, materialId };
