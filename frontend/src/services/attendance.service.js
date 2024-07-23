@@ -17,10 +17,16 @@ const getLastAttendance = async (rut) => {
   return response.data;
 };
 
+const getAttendanceRecords = async (rut, startDate, endDate) => {
+  const response = await axios.get(`${API_URL}/records`, { params: { rut, startDate, endDate } });
+  return response.data;
+};
+
 const attendanceService = {
   checkIn,
   checkOut,
   getLastAttendance,
+  getAttendanceRecords,
 };
 
 export default attendanceService;

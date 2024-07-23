@@ -85,8 +85,29 @@ async function getLastAttendance(req, res) {
   }
 }
 
+async function getAttendanceRecords(req, res) {
+  try {
+    const { rut, startDate, endDate } = req.query;
+    const user = await User.findOne({ rut });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const records = await Attendance.find({
+      user: user._id,
+      date: { $gte: new Date(startDate), $lte: new Date(endDate) },
+    }).sort({ date: -1 });
+
+    return res.status(200).json({ records });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   checkIn,
   checkOut,
   getLastAttendance,
+  getAttendanceRecords,
 };
