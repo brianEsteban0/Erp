@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
-import { getForo } from './../../services/foro.service.js';
+import { getMisPublicaciones } from './../../services/foro.service.js';
 import { useNavigate } from 'react-router-dom';
-import ComentarModal from './ComentarModal';
+import { useAuth } from '../../context/AuthContext.jsx';
 
-const Foro = () => {
-
+const MisPublicaciones = () => {
+    const { user } = useAuth();
     const [publicacion, setpublicacion] = useState([]);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [id, setId] = useState('');
     const navigate = useNavigate();
     const fetchData = async () => {
       try {
-          const [foroResponse] = await Promise.all([getForo()]);
+          const [foroResponse] = await Promise.all([getMisPublicaciones(user.email)]);
           const reverseData = foroResponse.data.reverse(); 
           setpublicacion(reverseData);
       } catch (error) {
@@ -23,22 +21,14 @@ const Foro = () => {
         fetchData();
     }, []);
 
-    const openModal = (id) => {
-        setModalIsOpen(true);
-        setId(id);
-    };
-
-    const closeModal = () => {
-        setModalIsOpen(false);
-        fetchData();
-    };
     const formatearFecha = (fecha) => {
         const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(fecha).toLocaleDateString('es-ES', opciones);
     }
 
     const getPhotoUrl = (url) => {
-    return url.startsWith('http') ? url : `http://localhost:3000/${url}`;
+        const photoUrl = url.startsWith('http') ? url : `http://localhost:3000/${url}`
+        return photoUrl;
     };
 
     const handlePhotoError = (e) => {
@@ -48,10 +38,10 @@ const Foro = () => {
     return (
         <div className='max-w-6xl'>
             <div className="text-center mb-4 text-gray-800">
-                <h2 className="text-lg font-bold">Foro Empresa</h2>
+                <h2 className="text-lg font-bold">Mis publicaciones</h2>
             </div>
             <div className='flex justify-between p-4'>
-                <p className='text-gray-700 uppercase'>Ultimas publicaciones</p>
+                <p></p>
                 <button onClick={() => navigate("/foro/nuevo")} className='bg-gray-500 px-2 py-2 rounded-md'>
                     <img className='w-5 h-5' src="http://localhost:3000/uploads/addpost.png" alt="" />
                 </button>
@@ -60,9 +50,11 @@ const Foro = () => {
             <div className='bg-white'>
                 {publicacion.map((post) => (
                     <div key={post._id} className='px-6 py-4 mb-4 ring-4 ring-gray-300 rounded-b-lg rounded-r-lg'>
-                        <div className='flex'>
-                            
+                        <div className='flex justify-between'>                            
                             <h2 className='font-bold text-xl mb-2 text-blue-900 uppercase'>{post.titulo}</h2>
+                            <button onClick={() => navigate(`/foro/editar/${post._id}`)} className='bg-gray-500 px-3 py-2 rounded-md'>
+                                <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                            </button>
                         </div>
                         {post.imagen && <img src={getPhotoUrl(post.imagen.imageUrl)} alt="archivos"  className='max-w-lg max-h-lvh shadow-xl rounded-xl' onError={handlePhotoError}/>}
                         <p className='text-gray-700 text-base text-justify overflow-ellipsis overflow-hidden p-2'>{post.contenido}</p>
@@ -80,19 +72,11 @@ const Foro = () => {
                                 </div>
                             </div>
                         ))}
-                        <div className='flex justify-between'>
-                            <div></div>
-                            <button onClick={() => openModal(post._id)} className='bg-violet-500 rounded-sm m-2 p-1'>
-                                <img className='w-5 h-5' src="http://localhost:3000/uploads/addcomentar.png" alt="" />
-                            </button>
-                        </div>
-
                     </div>
                 ))}
             </div>
-            <ComentarModal isOpen={modalIsOpen} onClose={closeModal} id={id} />
         </div>
     );
 };
 
-export default Foro;
+export default MisPublicaciones;

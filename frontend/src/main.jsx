@@ -26,6 +26,9 @@ import EditarInventario from './routes/Inventario/EditarInventario.jsx';
 import InventarioProyecto from './routes/Inventario/InventarioDeProyecto.jsx';
 import AddProyectoInventario from './routes/Inventario/addProyectoInventario.jsx';
 import VerInventarioProyecto from './routes/Inventario/verInventarioProyecto.jsx';
+import EditarAlmacen from './routes/Inventario/Editalmacen.jsx';
+import MisPublicaciones from './routes/Foro/MisPublicaciones.jsx';
+import EditarMisPublicaciones from './routes/Foro/EditarMisPublicaiones.jsx';
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
   {
@@ -105,6 +108,18 @@ const router = createBrowserRouter([
         path: '/proyectos/inventario/ver/:id',
         element: <VerInventarioProyecto />,
       },
+      {
+        path: '/inventario/almacen/editar/:id',
+        element: <EditarAlmacen />,
+      },
+      {
+        path: '/foro/mispublicaciones',
+        element: <MisPublicaciones />,
+      },
+      {
+        path: '/foro/editar/:id',
+        element: <EditarMisPublicaciones />,
+      }
     ],
   },
   {
@@ -117,5 +132,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />
     <ToastContainer />
+
   </React.StrictMode>
 );

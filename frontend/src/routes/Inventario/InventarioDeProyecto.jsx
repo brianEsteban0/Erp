@@ -46,7 +46,7 @@ const InventarioProyecto = () => {
                         <thead>
                             <tr className="bg-gray-200">
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Nombre Proyecto</th>
-                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Acciones</th>
+                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Ver mas...</th>
 
                             </tr>
                         </thead>
@@ -54,9 +54,12 @@ const InventarioProyecto = () => {
                             {inventory && inventory.length > 0 ? (
                                 inventory.map((item) => (
                                 <tr key={item._id}>
-                                        <td className="py-4 px-6 border-b border-gray-200">{item.proyecto.titulo}</td>                                        
-                                    <td className="px-6 border-b border-gray-200">
-                                            <button onClick={() => navigate(`/proyectos/inventario/ver/${item._id}`)} className="bg-orange-500 mr-3 text-white py-1 px-2 rounded-full text-xs">Ver</button>
+                                    <td className="py-4 px-6 border-b border-gray-200">{item.proyecto.titulo}</td>                                        
+                                    <td className="py-4 px-6 border-b border-gray-200">
+                                            <button onClick={() => navigate(`/proyectos/inventario/ver/${item._id}`)} className="py-2 px-2 rounded-full bg-gray-800"
+                                            >
+                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/buscar.png" alt="" />
+                                            </button>
                                     </td>
                                 </tr>
                                 ))
@@ -69,6 +72,15 @@ const InventarioProyecto = () => {
                             )}
                         </tbody>
                     </table>
+                </div>
+                <div className='p-4'>
+                    <button
+                        onClick={() => navigate('/proyectos')}
+                        className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Volver
+                    </button>
+
                 </div>
             </div>
         </div>

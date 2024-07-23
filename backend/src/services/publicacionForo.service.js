@@ -43,6 +43,7 @@ async function createPublicacionForo(publicacion) {
 async function getPublicacionForoById(id) { 
     try {
         const publicacion = await PublicacionForo.findById(id)
+            .populate("imagen")
             .exec();
         if (!publicacion) return [null, "La publicacion no existe"];
 
@@ -58,6 +59,9 @@ async function updatePublicacionForo(id, publicacion) {
         const publicacionFound = await PublicacionForo.findById(id)
             .exec();
         if (!publicacionFound) return [null, "La publicacion no existe"];
+
+        const publicacionFounded = await PublicacionForo.findOne({ titulo: publicacion.titulo });
+        if (!(publicacionFounded.titulo == publicacionFound.titulo) && publicacionFounded) return [null, "La publicacion ya existe"];
 
         const { titulo, contenido, imagen, comentarios, autor, fechaCreacion } = publicacion;
         if (autor !== publicacionFound.autor) return [null, "No puedes editar esta publicacion"];
@@ -105,6 +109,19 @@ async function comentar(id, comentario) {
     }
 }
 
+async function getPublicacionesForoByAutor(autor) {
+    try {
+        const publicacionesForo = await PublicacionForo.find({autor: autor})
+            .populate("imagen")
+            .exec();
+        if (!publicacionesForo) return [null, "No existen publicaciones"];
+
+        return [publicacionesForo, null];
+    } catch (error) {
+        handleError(error, "publicacionForo.service -> getPublicacionesForoByAutor");
+    }
+}
+
 
 module.exports = {
     getPublicacionesForo,
@@ -113,4 +130,5 @@ module.exports = {
     updatePublicacionForo,
     deletePublicacionForo,
     comentar,
+    getPublicacionesForoByAutor,
 };

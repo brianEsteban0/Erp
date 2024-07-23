@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { createForo } from './../../services/foro.service.js';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext.jsx';
+import { useState, useEffect } from 'react';
+import { updateForo, getForoById } from './../../services/foro.service.js';
+import { useNavigate, useParams } from 'react-router-dom';
 import UploadModal from './UploadModal.jsx';
+import { toast } from 'react-toastify';
 
-const NuevoForo = () => {
-    const { user } = useAuth();
+const EditarMisPublicaciones = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [publicacion, setPublicacion] = useState({
         titulo: '',
@@ -16,6 +16,31 @@ const NuevoForo = () => {
         fechaCreacion: '',
     });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    useEffect(() => {
+        if (id) {
+            publicacionDataById(id);
+        }
+    }, [id]);
+
+    const publicacionDataById = async (id) => {
+        try {
+            const response = await getForoById(id);
+            setPublicacion(
+                {
+                    titulo: response.data.titulo,
+                    contenido: response.data.contenido,
+                    imagen: response.data.imagen._id,
+                    comentarios: response.data.comentarios,
+                    autor: response.data.autor,
+                    fechaCreacion: response.data.fechaCreacion,
+                }
+            );
+        } catch (error) {
+            console.error('Error al obtener la publicación:', error);
+            alert('Hubo un error al obtener la publicación');
+        }
+    };
 
 
     const openModal = () => {
@@ -40,18 +65,17 @@ const NuevoForo = () => {
         e.preventDefault();
         
         try {
-            
             const newPublicacion = {
                 titulo: publicacion.titulo,
                 contenido: publicacion.contenido,
                 imagen: publicacion.imagen,
-                comentarios: [],
-                autor: user.email,
+                comentarios: publicacion.comentarios,
+                autor: publicacion.autor,
+                fechaCreacion: publicacion.fechaCreacion,
             };
-
-            await createForo(newPublicacion);
-            alert('Publicación creada con éxito');
-            navigate('/foro');
+            await updateForo(id, newPublicacion);
+            toast.success('Publicación editada con éxito');
+            navigate('/foro/mispublicaciones');
             setPublicacion({
                 titulo: '',
                 contenido: '',
@@ -62,7 +86,7 @@ const NuevoForo = () => {
             setImageFile(null);
         } catch (error) {
             console.error('Error al crear la publicación:', error);
-            alert('Hubo un error al crear la publicación');
+            toast.error(error);
         }
     };
 
@@ -104,12 +128,12 @@ const NuevoForo = () => {
                             className="mt-1 w-full h-80 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none  bg-gray-300 text-gray-700"
                             autoComplete='off'
                     />
-                    </div>
+                </div>
                 <button
                     type="submit"
                     className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                    Publicar
+                    Modificar
                 </button>
                 </form>
                 
@@ -119,4 +143,4 @@ const NuevoForo = () => {
     );
 };
 
-export default NuevoForo;
+export default EditarMisPublicaciones;

@@ -7,7 +7,13 @@ async function getInventarioProyecto() {
     try {
         const inventariosProyecto = await InventarioProyecto.find()
             .populate("proyecto")
-            .populate("inventarios.inventario")
+            .populate({
+                path: 'inventarios.inventario',
+                populate: [
+                    { path: 'material', model: 'Material' },
+                    { path: 'almacen', model: 'Almacen' }
+                ]
+            })
             .exec();
         if (!inventariosProyecto) return [null, "No existe inventario de proyecto"];
 
@@ -40,7 +46,13 @@ async function getInventarioProyectoById(id) {
     try {
         const inventarios = await InventarioProyecto.findById(id)
             .populate("proyecto")
-            .populate("inventarios.inventario")
+            .populate({
+                path: 'inventarios.inventario',
+                populate: [
+                    { path: 'material', model: 'Material' },
+                    { path: 'almacen', model: 'Almacen' }
+                ]
+            })
             .exec();
         if (!inventarios) return [null, "El inventarios de proyecto no existe"];
 
@@ -88,14 +100,14 @@ async function deleteInventarioProyecto(id) {
 async function getInventarioProyectoByProyecto(id) {
     try {
         const inventarios = await InventarioProyecto.findOne({ proyecto: id })
-            .populate("proyecto")
             .populate({
-                path: "inventarios.inventario",
+                path: 'inventarios.inventario',
                 populate: [
-                    { path: "almacen" },
-                    { path: "material" }
+                    { path: 'material', model: 'Material' },
+                    { path: 'almacen', model: 'Almacen' }
                 ]
             })
+            .populate("proyecto")
             .exec();
         if (!inventarios) return [null, "El inventarios de proyecto no existe"];
 

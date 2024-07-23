@@ -27,7 +27,7 @@ const VerInventarioProyecto = () => {
     return (
         <div className='text-gray-700'>
             <div className="text-center mb-4 text-gray-800">
-                <h2 className="text-lg font-bold">Inventario de </h2>
+                <h2 className="text-lg font-bold">Inventario de {inventarioMH.proyecto?.titulo}</h2>
             </div>
 
             <div>
@@ -39,9 +39,8 @@ const VerInventarioProyecto = () => {
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Descripcion</th>
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Cantidad</th>
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Unidad de Medida</th>
+                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Tipo</th>
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Almacen</th>
-                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Ingresado Por</th>
-                                <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Fecha Ingreso</th>
                                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Acciones</th>
 
                             </tr>
@@ -50,13 +49,12 @@ const VerInventarioProyecto = () => {
                             {inventarioMH.inventarios && inventarioMH.inventarios.length > 0 ? (
                                 inventarioMH.inventarios.map((item) => (
                                 <tr key={item._id}>
-                                        <td className="py-4 px-6 border-b border-gray-200"></td>
-                                        <td className="py-4 px-6 border-b border-gray-200"></td>
-                                        <td className="py-4 px-6 border-b border-gray-200 truncate"></td>
-                                        <td className="py-4 px-6 border-b border-gray-200"></td>
-                                        <td className="py-4 px-6 border-b border-gray-200"></td>
-                                        <td className="py-4 px-6 border-b border-gray-200"></td>
-                                        <td className="py-4 px-6 border-b border-gray-200"></td>
+                                        <td className="py-4 px-6 border-b border-gray-200">{item.inventario.material.nombre}</td>
+                                        <td className="py-4 border-b border-gray-200">{item.inventario.material.descripcion}</td>
+                                        <td className="py-4 px-6 border-b border-gray-200">{item.cantidadAsignada}</td>
+                                        <td className="py-4 px-6 border-b border-gray-200">{item.inventario.material.unidad}</td>
+                                        <td className="py-4 px-6 border-b border-gray-200">{item.inventario.material.tipo}</td>
+                                        <td className="py-4 px-6 border-b border-gray-200">{item.inventario.almacen.nombre}</td>
                                         
                                     <td className="px-6 border-b border-gray-200">
                                             <button onClick={() => navigate(`/inventario/editar/${item._id}`)} className="bg-orange-500 text-white py-1 px-2 rounded-full text-xs">Editar</button>
@@ -74,6 +72,16 @@ const VerInventarioProyecto = () => {
                         </tbody>
                     </table>
                 </div>
+                <div className='p-4'>
+                    <button
+                        onClick={() => navigate('/proyectos/inventario')}
+                        className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        Volver
+                    </button>
+
+                </div>
+
             </div>
         </div>
     );

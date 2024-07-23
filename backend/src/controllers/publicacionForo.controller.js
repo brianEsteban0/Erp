@@ -58,7 +58,7 @@ async function getPublicacionForoById(req, res) {
 async function updatePublicacionForo(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = publicacionForoIdSchema.validate(params.id);
+    const { error: paramsError } = publicacionForoIdSchema.validate(params._id);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -108,6 +108,20 @@ async function comentar(req, res) {
   }
 }
 
+async function getPublicacionesForoByAutor(req, res) {
+  try {
+    const { params } = req;
+    const { author } = params;
+    const [publicacionesForo, errorPublicacionesForo] = await PublicacionForoService.getPublicacionesForoByAutor(author);
+    if (errorPublicacionesForo) return respondError(req, res, 404, errorPublicacionesForo);
+
+    respondSuccess(req, res, 200, publicacionesForo);
+  } catch (error) {
+    handleError(error, "publicacionForo.controller -> getPublicacionesForoByAutor");
+    respondInternalError(req, res);
+  }
+}
+
 module.exports = {
   getPublicacionesForo,
   getPublicacionForoById,
@@ -115,4 +129,5 @@ module.exports = {
   updatePublicacionForo,
   deletePublicacionForo,
   comentar,
+  getPublicacionesForoByAutor,
 };

@@ -7,8 +7,9 @@ export const getForo = async () => {
         return response.data; 
       }
     } catch (error) {
-      console.error(error);
-      throw error; 
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 };
 
@@ -20,8 +21,9 @@ export const getForoById = async (id) => {
       }
     } catch (error) {
     
-        console.error('Error al encontar la publicacion', error);
-        alert('Error: ' + error.response.data.message); 
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -34,8 +36,9 @@ export const createForo = async (publicacion) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -49,7 +52,7 @@ export const updateForo = async (id, publicacion) => {
     } catch (error) {
       const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
       console.error('Error al editar la publicacion', error);
-      alert('Error: ' + errorMessage);
+      throw errorMessage;
     }
 }
 
@@ -61,8 +64,9 @@ export const deleteForo= async (id) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
 
@@ -73,7 +77,23 @@ export const comentar = async (id, comentario) => {
         return response.data;
       }
     } catch (error) {
-      console.error(error);
-      throw error;
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
+    }
+}
+
+export const getMisPublicaciones = async (author) => {
+  try {
+      console.log(author);
+      const response = await axios.get(`/foro/mispublicaciones/${author}`);
+      console.log(response);
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
     }
 }
