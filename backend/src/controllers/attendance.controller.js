@@ -1,29 +1,32 @@
 const Attendance = require('../models/attendance.model');
+const User = require('../models/user.model');
 const fingerprintService = require('../services/fingerprint.service');
-const User = require('../models/user.model'); // Asegúrate de importar el modelo de usuario
 
 async function checkIn(req, res) {
   try {
-    const { rut } = req.body;
-    const user = await fingerprintService.identifyUserByRutAndFingerprint(rut);
+    const { rut, isAdminOverride } = req.body;
+    let user;
+    
+    if (isAdminOverride) {
+      user = await User.findOne({ rut });
+    } else {
+      user = await fingerprintService.identifyUserByRutAndFingerprint(rut);
+    }
 
     if (!user) {
       return res.status(404).json({ error: "User not found or fingerprint does not match" });
     }
 
-    const todayStart = new Date().setHours(0, 0, 0, 0);
-    const todayEnd = new Date().setHours(23, 59, 59, 999);
-
-    const existingAttendance = await Attendance.findOne({ user: user._id, date: { $gte: todayStart, $lte: todayEnd }, checkOut: { $exists: false } });
+    const existingAttendance = await Attendance.findOne({ user: user._id, checkOut: null });
 
     if (existingAttendance) {
-      return res.status(400).json({ error: "User has already checked in today and has not checked out yet" });
+      return res.status(400).json({ error: "User has already checked in and has not checked out yet" });
     }
 
-    const attendance = new Attendance({ user: user._id });
+    const attendance = new Attendance({ user: user._id, checkIn: new Date() });
     await attendance.save();
 
-    const userData = await User.findById(user._id).select('photoUrl'); // Obtener la URL de la foto del usuario
+    const userData = await User.findById(user._id).select('photoUrl');
 
     return res.status(200).json({ message: "Check-in successful", attendance: { ...attendance.toObject(), photoUrl: userData.photoUrl } });
   } catch (error) {
@@ -33,28 +36,50 @@ async function checkIn(req, res) {
 
 async function checkOut(req, res) {
   try {
-    const { rut } = req.body;
-    const user = await fingerprintService.identifyUserByRutAndFingerprint(rut);
+    const { rut, isAdminOverride } = req.body;
+    let user;
+
+    if (isAdminOverride) {
+      user = await User.findOne({ rut });
+    } else {
+      user = await fingerprintService.identifyUserByRutAndFingerprint(rut);
+    }
 
     if (!user) {
       return res.status(404).json({ error: "User not found or fingerprint does not match" });
     }
 
-    const todayStart = new Date().setHours(0, 0, 0, 0);
-    const todayEnd = new Date().setHours(23, 59, 59, 999);
-
-    const attendance = await Attendance.findOne({ user: user._id, date: { $gte: todayStart, $lte: todayEnd }, checkOut: { $exists: false } });
+    const attendance = await Attendance.findOne({ user: user._id, checkOut: null });
 
     if (!attendance) {
-      return res.status(400).json({ error: "No active check-in found for today" });
+      return res.status(400).json({ error: "No active check-in found" });
     }
 
     attendance.checkOut = new Date();
     await attendance.save();
 
-    const userData = await User.findById(user._id).select('photoUrl'); // Obtener la URL de la foto del usuario
+    const userData = await User.findById(user._id).select('photoUrl');
 
     return res.status(200).json({ message: "Check-out successful", attendance: { ...attendance.toObject(), photoUrl: userData.photoUrl } });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getLastAttendance(req, res) {
+  try {
+    const { rut } = req.query;
+    const user = await User.findOne({ rut });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const lastAttendance = await Attendance.findOne({ user: user._id }).sort({ date: -1 });
+    if (!lastAttendance) {
+      return res.status(404).json({ error: 'No attendance record found' });
+    }
+
+    return res.status(200).json({ attendance: lastAttendance });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -63,4 +88,5 @@ async function checkOut(req, res) {
 module.exports = {
   checkIn,
   checkOut,
+  getLastAttendance,
 };

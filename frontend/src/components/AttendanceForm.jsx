@@ -3,28 +3,36 @@ import attendanceService from '../services/attendance.service';
 import { format } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import '../../public/styles.css'; // Asegúrate de importar el archivo CSS para el interruptor deslizante
 
 const AttendanceForm = () => {
   const { user } = useAuth();
   const [rut, setRut] = useState('');
   const [lastAttendance, setLastAttendance] = useState({ checkIn: null, checkOut: null, photoUrl: null });
   const [isWaiting, setIsWaiting] = useState(false);
+  const [overrideAdmin, setOverrideAdmin] = useState(false);
 
   useEffect(() => {
     if (user && user.rut) {
       setRut(user.rut);
+      fetchLastAttendance(user.rut);
     }
   }, [user]);
+
+  const fetchLastAttendance = async (rut) => {
+    try {
+      const response = await attendanceService.getLastAttendance(rut);
+      setLastAttendance(response.attendance);
+    } catch (error) {
+      console.error('Error al obtener el último registro de asistencia:', error);
+    }
+  };
 
   const handleCheckIn = async () => {
     setIsWaiting(true);
     try {
-      const response = await attendanceService.checkIn(rut);
-      setLastAttendance((prevState) => ({
-        ...prevState,
-        checkIn: response.attendance.checkIn,
-        photoUrl: response.attendance.photoUrl,
-      }));
+      const response = await attendanceService.checkIn(rut, overrideAdmin);
+      setLastAttendance(response.attendance);
       toast.success('Check-in registrado exitosamente');
     } catch (error) {
       console.error('Error al registrar check-in:', error);
@@ -37,12 +45,8 @@ const AttendanceForm = () => {
   const handleCheckOut = async () => {
     setIsWaiting(true);
     try {
-      const response = await attendanceService.checkOut(rut);
-      setLastAttendance((prevState) => ({
-        ...prevState,
-        checkOut: response.attendance.checkOut,
-        photoUrl: response.attendance.photoUrl,
-      }));
+      const response = await attendanceService.checkOut(rut, overrideAdmin);
+      setLastAttendance(response.attendance);
       toast.success('Check-out registrado exitosamente');
     } catch (error) {
       console.error('Error al registrar check-out:', error);
@@ -74,6 +78,19 @@ const AttendanceForm = () => {
             className="p-2 mb-4 text-black border border-gray-300 rounded w-full"
           />
         </div>
+        {user.roles.some(role => role.name === 'admin') && (
+          <div className="mb-4 flex items-center">
+            <label className="mr-2 text-black">Override Admin (sin huella):</label>
+            <label className="switch">
+              <input 
+                type="checkbox" 
+                checked={overrideAdmin} 
+                onChange={() => setOverrideAdmin(!overrideAdmin)} 
+              />
+              <span className="slider round"></span>
+            </label>
+          </div>
+        )}
         <div className="mb-4 flex justify-center w-full">
           <button onClick={handleCheckIn} className="bg-blue-500 text-white px-4 py-2 mr-2">Registrar Check-in</button>
           <button onClick={handleCheckOut} className="bg-red-500 text-white px-4 py-2">Registrar Check-out</button>
