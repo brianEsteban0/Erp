@@ -22,11 +22,17 @@ const getAttendanceRecords = async (rut, startDate, endDate) => {
   return response.data;
 };
 
+const getWorkHours = async (rut, startDate, endDate) => {
+  const response = await axios.get(`${API_URL}/workhours`, { params: { rut, startDate, endDate } });
+  return response.data;
+};
+
 const attendanceService = {
   checkIn,
   checkOut,
   getLastAttendance,
   getAttendanceRecords,
+  getWorkHours,
 };
 
 export default attendanceService;

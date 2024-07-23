@@ -96,10 +96,39 @@ async function getAttendanceRecords(req, res) {
 
     const records = await Attendance.find({
       user: user._id,
-      date: { $gte: new Date(startDate), $lte: new Date(endDate) },
-    }).sort({ date: -1 });
+      checkIn: { $gte: new Date(startDate) },
+      checkOut: { $lte: new Date(endDate) }
+    });
 
-    return res.status(200).json({ records });
+    return res.status(200).json({ records, user });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+async function getWorkHours(req, res) {
+  try {
+    const { rut, startDate, endDate } = req.query;
+    const user = await User.findOne({ rut });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const records = await Attendance.find({
+      user: user._id,
+      checkIn: { $gte: new Date(startDate) },
+      checkOut: { $lte: new Date(endDate) }
+    });
+
+    const totalHours = records.reduce((total, record) => {
+      const checkIn = new Date(record.checkIn);
+      const checkOut = new Date(record.checkOut);
+      const hours = (checkOut - checkIn) / 1000 / 3600;
+      return total + hours;
+    }, 0);
+
+    return res.status(200).json({ hours: totalHours.toFixed(2), user });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -110,4 +139,5 @@ module.exports = {
   checkOut,
   getLastAttendance,
   getAttendanceRecords,
+  getWorkHours,
 };

@@ -626,3 +626,19 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.custom-button {
+  background-color: #596170;
+  border-radius: 10px; /* borde redondeado */
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #2b3544; /* un poco más oscuro en hover */
+}
