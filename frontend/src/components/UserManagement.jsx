@@ -134,7 +134,7 @@ const UserManagement = () => {
   };
 
   const renderFileInput = (setter) => (
-    <label className="bg-blue-500 text-white p-2 rounded cursor-pointer">
+    <label className="bg-blue-500 text-white p-2 rounded cursor-pointer custom-button">
       Seleccionar foto de perfil
       <input
         type="file"
@@ -193,12 +193,14 @@ const UserManagement = () => {
         <div className="flex justify-center mt-2">
           {renderFileInput(setPhotoFile)}
         </div>
-        <button 
-          onClick={handleAddUser}
-          className="bg-blue-500 text-white p-2 rounded mt-2 block mx-auto"
-        >
-          Registrar usuario
-        </button>
+        <div className="flex justify-center">
+          <button 
+            onClick={handleAddUser}
+            className="bg-blue-500 text-white p-2 rounded mt-2 block custom-button"
+          >
+            Registrar usuario
+          </button>
+        </div>
       </div>
 
       <div className="user-list p-4 border rounded">
@@ -220,19 +222,19 @@ const UserManagement = () => {
                 <div className="flex space-x-2">
                   <button 
                     onClick={() => setEditingUser({ ...user, password: '', newPassword: '' })} 
-                    className="bg-yellow-500 text-white p-2 rounded"
+                    className="bg-yellow-500 text-white p-2 rounded custom-button"
                   >
                     Editar
                   </button>
                   <button 
                     onClick={() => handleDeleteUser(user._id)} 
-                    className="bg-red-500 text-white p-2 rounded"
+                    className="bg-red-500 text-white p-2 rounded custom-button"
                   >
                     Eliminar
                   </button>
                   <button 
                     onClick={() => setEnrollingUser(user)} 
-                    className="bg-green-500 text-white p-2 rounded"
+                    className="bg-green-500 text-white p-2 rounded custom-button"
                   >
                     Enroll
                   </button>
@@ -305,7 +307,7 @@ const UserManagement = () => {
           <div className="text-center mt-4">
             <button 
               onClick={handleEditUser}
-              className="bg-green-500 text-white p-2 rounded"
+              className="bg-green-500 text-white p-2 rounded custom-button"
             >
               Guardar
             </button>
@@ -329,13 +331,13 @@ const UserManagement = () => {
             <div className="flex space-x-2">
               <button 
                 onClick={handleEnrollUser}
-                className="bg-blue-500 text-white p-2 rounded"
+                className="bg-blue-500 text-white p-2 rounded custom-button"
               >
                 Registrar Huella
               </button>
               <button 
                 onClick={handleDeleteFingerprint}
-                className="bg-red-500 text-white p-2 rounded"
+                className="bg-red-500 text-white p-2 rounded custom-button"
               >
                 Eliminar Huella
               </button>
