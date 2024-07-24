@@ -84,8 +84,12 @@ const Inventario = () => {
                                         <td class="py-4 px-6 border-b border-gray-200">{formatearFecha(item.fechaIngreso)}</td>
                                         
                                     <td class="px-6 border-b border-gray-200">
-                                            <button onClick={() => navigate(`/inventario/editar/${item._id}`)} className="bg-orange-500 text-white py-1 px-2 rounded-full text-xs">Editar</button>
-                                            <button onClick={() => openModal(item._id)} className='bg-green-500 text-white py-1 px-2 rounded-full text-xs'>Agregar</button>
+                                            <button onClick={() => navigate(`/inventario/editar/${item._id}`)} className="bg-gray-600 py-1 px-2 rounded-md">
+                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                                            </button>
+                                            <button onClick={() => openModal(item._id)} className='bg-gray-600 py-1 px-2 rounded-md ml-2'>
+                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/addrows2.png" alt="" />
+                                            </button>
                                     </td>
                                 </tr>
                                 ))

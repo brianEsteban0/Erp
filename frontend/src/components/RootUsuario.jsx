@@ -26,7 +26,7 @@ const RootUsuario = () => {
             <span className="absolute -inset-1.5"></span>
             <span className="sr-only">Open user menu</span>
 
-            <img className="h-8 w-8 rounded-full" src="http://localhost:3000/uploads/defaultphoto.png" alt="" />
+            <img className="h-12 w-12 rounded-full" src="http://localhost:3000/uploads/defaultphoto.png" alt="" />
           </button>
         </div>
 
@@ -39,24 +39,15 @@ const RootUsuario = () => {
           aria-labelledby="user-menu-button"
           tabIndex="-1"
         >
-          <a
-            href="#"
-            className="block px-4 py-2 text-sm text-gray-700"
-            role="menuitem"
-            tabIndex="-1"
-            id="user-menu-item-0"
-          >
-            Your Profile
-          </a>
-          <a
-            href="#"
+          <button
+            onClick={() => navigate('/foro/mispublicaciones')}
             className="block px-4 py-2 text-sm text-gray-700"
             role="menuitem"
             tabIndex="-1"
             id="user-menu-item-1"
           >
-            Settings
-          </a>
+            Mis Publicaciones
+          </button>
           <button
             onClick={handleLogout}
             className="block px-4 py-2 text-sm text-gray-700"

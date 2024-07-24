@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getAlmacen } from "../../services/almace.service";
 import ModalAlmacen from "./ModalAlmacen";
+import { useNavigate } from "react-router-dom";
 
 const Almacen = () => {
+    const navigate = useNavigate();
     const [almacen, setAlmacen] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     useEffect(() => {
@@ -37,8 +39,8 @@ const Almacen = () => {
             </div>
             <div className="p-2 justify-between flex">
                 <div></div>
-                <button onClick={openModal} className=' py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-violet-400 flex'
-                >Registar Material</button>
+                <button onClick={openModal} className=' py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-violet-500 flex'
+                >Agregar Almacen</button>
             </div>
             <ModalAlmacen isOpen={modalIsOpen} onClose={closeModal} />
             <div>
@@ -60,8 +62,10 @@ const Almacen = () => {
                                         <td class="py-4 px-6 border-b border-gray-200 truncate">{ item.ubicacion}</td>
                                         <td class="py-4 px-6 border-b border-gray-200">{ item.fono}</td>
                                     <td class="py-4 px-6 border-b border-gray-200">
-                                    <button class="bg-green-500 text-white py-1 px-2 rounded-full text-xs">Editar</button>
-                                </td>
+                                        <button onClick={() => navigate(`/inventario/almacen/editar/${item._id}`)} class="bg-gray-500 py-1 px-2 rounded-md">
+                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                                        </button>
+                                    </td>
                                 </tr>
                                 ))
                             ) : (

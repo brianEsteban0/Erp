@@ -1,4 +1,4 @@
-const { restarCantidad } = require("../services/cantidad.service");
+const { restarCantidadmiddlewere } = require("../services/cantidad.service");
 const { handleError } = require("../utils/errorHandler");
 
 const restarCantidadMiddleware = async (req, res, next) => {
@@ -14,8 +14,7 @@ const restarCantidadMiddleware = async (req, res, next) => {
 
         // Intentar restar la cantidad de cada inventario
         for (let inventario of inventarios) {
-            console.log(inventario);
-            const producto = await restarCantidad(inventario);
+            const producto = await restarCantidadmiddlewere(inventario);
 
             // Si el producto no se encuentra, lanzar un error
             if (!producto) {

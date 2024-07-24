@@ -123,13 +123,33 @@ async function addCantidadToInventarioProyecto(req, res) {
   }
 }
 
+async function deleteIndexInventarioProyecto(req, res) {
+  try {
+    const { params } = req;
+    const { error: paramsError } = inventarioProyectoIdSchema.validate(params);
+    if (paramsError) return respondError(req, res, 400, paramsError.message);
+
+    const { id } = params;
+    const { body } = req;
+    console.log(body);
+    const [inventarioProyecto, errorInventarioProyecto] = await InventarioProyectoService.deleteIndexInventarioProyecto(id, body);
+    if (errorInventarioProyecto) return respondError(req, res, 404, errorInventarioProyecto);
+
+    respondSuccess(req, res, 200, inventarioProyecto);
+  } catch (error) {
+    handleError(error, "inventarioProyecto.controller -> deleteIndexInventarioProyecto");
+    respondInternalError(req, res);
+  }
+}
+
 
 module.exports = {
-    getInventarioProyecto,
-    createInventarioProyecto,
-    getInventarioProyectoById,
-    updateInventarioProyecto,
-    deleteInventarioProyecto,
-    getInventarioProyectoByProyecto,
-    addCantidadToInventarioProyecto
+  getInventarioProyecto,
+  createInventarioProyecto,
+  getInventarioProyectoById,
+  updateInventarioProyecto,
+  deleteInventarioProyecto,
+  getInventarioProyectoByProyecto,
+  addCantidadToInventarioProyecto,
+  deleteIndexInventarioProyecto
 };

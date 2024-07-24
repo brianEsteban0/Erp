@@ -17,5 +17,6 @@ router.put("/:id", restarCantidadMiddlewere, inventarioProyectoController.update
 router.delete("/:id", inventarioProyectoController.deleteInventarioProyecto);
 router.get("/proyecto/:id", inventarioProyectoController.getInventarioProyectoByProyecto);
 router.put("/add/:id", inventarioProyectoController.addCantidadToInventarioProyecto);
+router.put("/delete/:id", inventarioProyectoController.deleteIndexInventarioProyecto);
 
 module.exports = router;

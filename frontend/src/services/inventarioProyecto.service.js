@@ -92,3 +92,17 @@ export const addCantidadToInventarioProyecto = async (id, body) => {
       throw errorMessage;
     }
 }
+
+export const deleteIndexInventarioProyecto = async (id, body) => {
+  try {
+    const response = await axios.put(`/inventarioProyecto/delete/${id}`, body);
+    
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      const errorMessage = error.response.data.message || 'Error desconocido al editar la publicacion';
+      console.error('Error al editar la publicacion', error);
+      throw errorMessage;
+    }
+}

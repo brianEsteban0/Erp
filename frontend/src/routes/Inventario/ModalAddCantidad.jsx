@@ -18,7 +18,7 @@ const ModalAddCantidad = ({ isOpen, onClose , id}) => {
     });
 
     useEffect(() => {
-        fetchInventarioData();
+        if (isOpen) { fetchInventarioData(); }
     }, [id]);
 
     const fetchInventarioData = async () => {
@@ -77,7 +77,7 @@ const ModalAddCantidad = ({ isOpen, onClose , id}) => {
                         id='nombre'
                         name='nombre'
                         value={material.nombre}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-gray-100 text-gray-700 rounded-md shadow-sm "
                         autoComplete='off'
                         disabled 
                     />

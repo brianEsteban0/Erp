@@ -122,15 +122,40 @@ async function getCantidadByAlmacen(id) {
 }
 
 
-async function restarCantidad(body) {
+async function restarCantidadmiddlewere(body) {
     try {
-        console.log(body);
         const { inventario, cantidadAsignada } = body;
         const id  = inventario;
         const materialFound = await Cantidad.findById(id)
             .exec();
         if (!materialFound) return [null, "El Material no existe"];
         const cantidadParsed = Number(cantidadAsignada);
+        const cantidadActual = Number(materialFound.cantidad);
+
+        if (cantidadActual < cantidadParsed) return [null, "No hay suficiente cantidad"];
+
+        const cantidadUpdated = await Cantidad.findByIdAndUpdate(
+            id,
+            {
+                cantidad: cantidadActual - cantidadParsed,
+            },
+            { new: true },
+        );
+
+        return [cantidadUpdated, null];
+    } catch (error) {
+        handleError(error, "Cantidad.service -> restarCantidad");
+    }
+}
+
+async function restarCantidad(body) {
+    try {
+        const { inventario, cantidad } = body;
+        const id  = inventario;
+        const materialFound = await Cantidad.findById(id)
+            .exec();
+        if (!materialFound) return [null, "El Material no existe"];
+        const cantidadParsed = Number(cantidad);
         const cantidadActual = Number(materialFound.cantidad);
 
         if (cantidadActual < cantidadParsed) return [null, "No hay suficiente cantidad"];
@@ -181,5 +206,6 @@ module.exports = {
     getCantidadByMaterial,
     getCantidadByAlmacen,
     restarCantidad,
+    restarCantidadmiddlewere,
     sumarCantidad,
 };

@@ -16,5 +16,6 @@ router.post("/", publicacionForoController.createPublicacionForo);
 router.put("/:id", publicacionForoController.updatePublicacionForo);
 router.delete("/:id", publicacionForoController.deletePublicacionForo);
 router.put("/comentar/:id", publicacionForoController.comentar);
+router.get("/mispublicaciones/:author", publicacionForoController.getPublicacionesForoByAutor);
 
 module.exports = router;

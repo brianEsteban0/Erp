@@ -7,8 +7,6 @@ import UploadModal from './UploadModal.jsx';
 const NuevoForo = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
-    const [imageFile, setImageFile] = useState(null);
-    const [imageId, setImageId] = useState(null);
     const [publicacion, setPublicacion] = useState({
         titulo: '',
         contenido: '',
@@ -29,7 +27,6 @@ const NuevoForo = () => {
     };
 
     const handleFileUpload = (fileId) => {
-        setImageId(fileId);
         setPublicacion({ ...publicacion, imagen: fileId });
     };
 
@@ -73,11 +70,13 @@ const NuevoForo = () => {
         <div>
             <div className="">
                 
-                <div className='flex'>
+                <div className='flex justify-between'>
                     <h1 className="text-2xl font-bold text-blue-900 ">Nueva Publicacion</h1>
-                    <button onClick={openModal} className=' py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white 
-                    bg-violet-400 flex'
-                    >Subir Imagen</button>
+                    <button onClick={openModal} className=' py-2 px-3 border border-transparent shadow-sm rounded-md 
+                    bg-violet-500'
+                    >
+                        <img className='w-5 h-5' src="http://localhost:3000/uploads/addphoto.png" alt="" />
+                    </button>
                         <UploadModal isOpen={modalIsOpen} onClose={closeModal} onFileUpload={handleFileUpload} />   
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -89,7 +88,8 @@ const NuevoForo = () => {
                     name='titulo'
                     value={publicacion.titulo}
                     onChange={(e) => handleInputChange(e)}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
+                    className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
+                    autoComplete='off'
                     />
                     </div>
                     
@@ -102,6 +102,7 @@ const NuevoForo = () => {
                             value={publicacion.contenido}
                             onChange={(e) => handleInputChange(e)}
                             className="mt-1 w-full h-80 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none  bg-gray-300 text-gray-700"
+                            autoComplete='off'
                     />
                     </div>
                 <button

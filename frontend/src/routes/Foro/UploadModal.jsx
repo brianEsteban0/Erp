@@ -43,8 +43,8 @@ const UploadModal = ({ isOpen, onClose, onFileUpload }) => {
             contentLabel="Subir Archivo"
             style={customStyles}
         >
-            <div className="flex justify-between items-center mb-4 text-gray-800">
-                <h2 className="text-lg font-bold">Subir Archivo</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-bold text-gray-700">Subir Archivo</h2>
                 <button
                     onClick={onClose}
                     className="text-gray-500 hover:text-gray-700 focus:outline-none"

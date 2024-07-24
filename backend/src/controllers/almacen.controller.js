@@ -2,7 +2,7 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const { respondInternalError } = require("../utils/resHandler");
 const AlmacenService = require("../services/almacen.service"); 
-const { almacenBodySchema, almacenId } = require("../schema/almacen.schema");
+const { almacenBodySchema, almacenIdSchema } = require("../schema/almacen.schema");
 
 async function getAlmacen(req, res) {
   try {
@@ -41,7 +41,7 @@ async function createAlmacen(req, res) {
 async function getAlmacenById(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = almacenId.validate(params);
+    const { error: paramsError } = almacenIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -58,7 +58,7 @@ async function getAlmacenById(req, res) {
 async function updateAlmacen(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = almacenId.validate(params);
+    const { error: paramsError } = almacenIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
@@ -78,7 +78,7 @@ async function updateAlmacen(req, res) {
 async function deleteAlmacen(req, res) {
   try {
     const { params } = req;
-    const { error: paramsError } = almacenId.validate(params);
+    const { error: paramsError } = almacenIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { id } = params;
