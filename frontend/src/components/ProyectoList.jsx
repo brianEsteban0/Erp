@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProyectos } from '../services/ProyectoService';
+import { getProyectos, updateActividadEstado } from '../services/ProyectoService';
 import { toast } from 'react-toastify';
 
 const ProyectoList = () => {
@@ -27,8 +27,12 @@ const ProyectoList = () => {
     filterProyectos();
   }, [searchTerm, sortOrder, proyectos]);
 
-  const formatDate = (dateString) => {
-    const [day, month, year] = dateString.split('/');
+  const formateoFechas = (fecha) => {
+    if (!fecha) return 'Fecha no disponible';
+    const date = new Date(fecha);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(2);
     return `${day}/${month}/${year}`;
   };
 
@@ -46,12 +50,37 @@ const ProyectoList = () => {
     );
 
     filtered.sort((a, b) => {
-      const dateA = new Date(a.fecha_inicio.split('/').reverse().join('-'));
-      const dateB = new Date(b.fecha_inicio.split('/').reverse().join('-'));
+      const dateA = new Date(a.fecha_inicio);
+      const dateB = new Date(b.fecha_inicio);
       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
 
     setFilteredProyectos(filtered);
+  };
+
+  const handleEstadoChange = async (proyectoId, actividadIndex, newEstado) => {
+    try {
+      // Actualiza el estado de la actividad en el backend
+      await updateActividadEstado(proyectoId, actividadIndex, newEstado);
+
+      // Actualiza el estado de la actividad localmente
+      const updatedProyectos = proyectos.map((proyecto) => {
+        if (proyecto._id === proyectoId) {
+          const updatedActividades = proyecto.actividades.map((actividad, index) =>
+            index === actividadIndex ? { ...actividad, estado: newEstado } : actividad
+          );
+          return { ...proyecto, actividades: updatedActividades };
+        }
+        return proyecto;
+      });
+
+      setProyectos(updatedProyectos);
+      setFilteredProyectos(updatedProyectos);
+      toast.success('Estado de actividad actualizado');
+    } catch (error) {
+      console.error('Error al actualizar el estado de la actividad', error);
+      toast.error('Error al actualizar el estado de la actividad');
+    }
   };
 
   const calculateProgress = (actividades) => {
@@ -89,13 +118,13 @@ const ProyectoList = () => {
         </select>
       </div>
       <ul className="space-y-6">
-        {filteredProyectos.map((proyecto, index) => (
-          <li key={index} className="p-6 border border-gray-200 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 ease-in-out">
+        {filteredProyectos.map((proyecto) => (
+          <li key={proyecto._id} className="p-6 border border-gray-200 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 ease-in-out">
             <h3 className="text-xl font-semibold text-blue-900 mb-2">{proyecto.titulo}</h3>
             <p className="text-gray-700 mb-2"><strong>Descripción:</strong> {proyecto.descripcion}</p>
             <p className="text-gray-700 mb-2"><strong>Empresa Licitante:</strong> {proyecto.empresa_licitante}</p>
-            <p className="text-gray-700 mb-2"><strong>Fecha de Inicio:</strong> {formatDate(proyecto.fecha_inicio)}</p>
-            <p className="text-gray-700 mb-2"><strong>Fecha de Término:</strong> {formatDate(proyecto.fecha_termino)}</p>
+            <p className="text-gray-700 mb-2"><strong>Fecha de Inicio:</strong> {proyecto.fecha_inicio}</p>
+            <p className="text-gray-700 mb-2"><strong>Fecha de Término:</strong> {proyecto.fecha_termino}</p>
             <p className="text-gray-700 mb-4"><strong>Presupuesto:</strong> ${proyecto.presupuesto}</p>
             <div>
               <h4 className="text-lg font-medium text-blue-900 mb-2">Actividades:</h4>
@@ -104,10 +133,20 @@ const ProyectoList = () => {
                   <li key={index} className="bg-gray-50 p-3 rounded-md shadow-sm">
                     <p className="text-gray-700"><strong>Nombre:</strong> {actividad.nombre}</p>
                     <p className="text-gray-700"><strong>Descripción:</strong> {actividad.descripcion}</p>
-                    <p className="text-gray-700"><strong>Fecha de Inicio:</strong> {formatDate(actividad.fecha_inicio)}</p>
-                    <p className="text-gray-700"><strong>Fecha de Término:</strong> {formatDate(actividad.fecha_termino)}</p>
+                    <p className="text-gray-700"><strong>Fecha de Inicio:</strong> {formateoFechas(actividad.fecha_inicio)}</p>
+                    <p className="text-gray-700"><strong>Fecha de Término:</strong> {formateoFechas(actividad.fecha_termino)}</p>
                     <p className="text-gray-700"><strong>Responsable:</strong> {actividad.responsable}</p>
-                    <p className="text-gray-700"><strong>Estado:</strong> {actividad.estado ? 'Completado' : 'No completado'}</p>
+                    <div className="flex items-center">
+                      <span className="text-gray-700 mr-2"><strong>Estado:</strong></span>
+                      <select
+                        value={actividad.estado ? 'completado' : 'no completado'}
+                        onChange={(e) => handleEstadoChange(proyecto._id, index, e.target.value === 'completado')}
+                        className="p-1 border border-gray-300 rounded-md bg-gray-200 text-gray-700"
+                      >
+                        <option value="no completado">No completado</option>
+                        <option value="completado">Completado</option>
+                      </select>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -139,6 +178,6 @@ const ProyectoList = () => {
       </ul>
     </div>
   );
-}
+};
 
 export default ProyectoList;

@@ -11,9 +11,34 @@ export async function getProyectos() {
   return data;
 }
 
+// ProyectoService.js
+
+export const updateActividadEstado = async (proyectoId, actividadIndex, newEstado) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${proyectoId}/actividades/${actividadIndex}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ estado: newEstado }),
+    });
+    if (!response.ok) {
+      throw new Error('Error al actualizar el estado de la actividad');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+
+
+
 export async function updateProyecto(id, datos) {
   try {
-    const response = await fetch(`http://localhost:3000/api/proyectos/${id}`, {
+    const response = await fetch(`${BASE_URL}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

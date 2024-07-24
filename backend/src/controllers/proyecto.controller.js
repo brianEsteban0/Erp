@@ -299,6 +299,35 @@ async function getProyectoById(req, res) {
     return res.status(500).json({ message: 'Error al obtener la publicación' });
   }
 }
+// controllers/proyecto.controller.js
+
+// Función para actualizar el estado de una actividad
+async function updateActividadEstado(req, res) {
+  try {
+    const { proyectoId, actividadIndex } = req.params;
+    const { estado } = req.body; // Debe ser un booleano
+
+    // Encuentra el proyecto por ID
+    const proyecto = await Proyecto.findById(proyectoId);
+
+    if (!proyecto) {
+      return res.status(404).json({ message: 'Proyecto no encontrado' });
+    }
+
+    // Actualiza el estado de la actividad
+    proyecto.actividades[actividadIndex].estado = estado;
+    const updatedProyecto = await proyecto.save();
+
+    return res.status(200).json(updatedProyecto);
+  } catch (error) {
+    handleError(error, "proyecto.controller -> updateActividadEstado");
+    return res.status(500).json({ message: 'Error al actualizar el estado de la actividad' });
+  }
+}
+
+
+
+// controllers/proyecto.controller.js
 
 module.exports = {
   getProyectos,
@@ -306,4 +335,6 @@ module.exports = {
   updateProyecto,
   deleteProyecto,
   getProyectoById,
+  updateActividadEstado, // Añade esta línea
 };
+
