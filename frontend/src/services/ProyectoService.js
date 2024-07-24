@@ -32,10 +32,6 @@ export const updateActividadEstado = async (proyectoId, actividadIndex, newEstad
   }
 };
 
-
-
-
-
 export async function updateProyecto(id, datos) {
   try {
     const response = await fetch(`${BASE_URL}/${id}`, {
