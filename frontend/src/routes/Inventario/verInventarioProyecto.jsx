@@ -3,7 +3,6 @@ import { getInventarioProyectoById, deleteIndexInventarioProyecto } from './../.
 import { sumarInventario } from '../../services/inventario.service';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import MaddIP from './MaddIP.jsx';
 
 const VerInventarioProyecto = () => {
     const { id } = useParams();
@@ -18,7 +17,6 @@ const VerInventarioProyecto = () => {
         try {
             const response = await getInventarioProyectoById(id);
             const data = response.data;
-            console.log(data);
             setinventario(data);
         } catch (error) {
             console.error('Error fetching inventory data:', error);
@@ -46,7 +44,7 @@ const VerInventarioProyecto = () => {
             <div className='flex justify-between mb-3 text-xl'>
                 <div></div>
                 <div>
-                    <button onClick={() => console.log('locura maxima pq no funciona el modal')}
+                    <button onClick={() => navigate(`/proyectos/inventario/ver/${id}/add`)}
                             className='py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-violet-500'
                     >Agregar Materiales</button>
 

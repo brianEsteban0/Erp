@@ -80,7 +80,7 @@ export const sumarInventario = async (id, body) => {
     }
 }
 
-export const restarInventario = async (id, body) => {
+export const restarInventario = async (id,body) => {
     try {
       const response = await axios.put(`/cantidad/restar/${id}`, body);
       if (response.status === 200) {

@@ -30,6 +30,7 @@ import EditarAlmacen from './routes/Inventario/Editalmacen.jsx';
 import MisPublicaciones from './routes/Foro/MisPublicaciones.jsx';
 import EditarMisPublicaciones from './routes/Foro/EditarMisPublicaiones.jsx';
 import EditarMaterial from './routes/Inventario/EditarMaterial.jsx';
+import MaddIP from './routes/Inventario/MaddIP.jsx';
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
   {
@@ -124,7 +125,11 @@ const router = createBrowserRouter([
       {
         path: '/inventario/material/editar/:id',
         element: <EditarMaterial />,
-      }
+      },
+      {
+        path: '/proyectos/inventario/ver/:id/add',
+        element: <MaddIP />,
+      },
     ],
   },
   {
