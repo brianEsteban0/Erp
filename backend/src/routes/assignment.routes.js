@@ -6,7 +6,7 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 
 router.use(authenticationMiddleware);
 
-router.get('/dispo', authorizationMiddleware.isAdmin, assignmentController.getAvailableParticipants);
+router.get('/disponible', authorizationMiddleware.isAdmin, assignmentController.getAvailableParticipants);
 router.post('/', authorizationMiddleware.isAdmin, assignmentController.addUserToProyect);
 router.delete('/:assignmentId/:userId', authorizationMiddleware.isAdmin, assignmentController.removeUserFromProyect);
 router.get('/:assignmentId', authorizationMiddleware.isAdmin, assignmentController.getParticipantsByProyect);

@@ -31,6 +31,8 @@ import MisPublicaciones from './routes/Foro/MisPublicaciones.jsx';
 import EditarMisPublicaciones from './routes/Foro/EditarMisPublicaiones.jsx';
 import EditarMaterial from './routes/Inventario/EditarMaterial.jsx';
 import MaddIP from './routes/Inventario/MaddIP.jsx';
+import AssignmentSystem from './components/AssignmentForm.jsx';
+import AssignmentList from './components/AssignmentList.jsx';
 // Dentro de tu configuración de rutas
 const router = createBrowserRouter([
   {
@@ -129,6 +131,14 @@ const router = createBrowserRouter([
       {
         path: '/proyectos/inventario/ver/:id/add',
         element: <MaddIP />,
+      },
+      {
+        path: '/asignaciones',
+        element: <AssignmentSystem />,
+      },
+      {
+        path: '/lista-asignaciones',
+        element: <AssignmentList />,
       },
     ],
   },
