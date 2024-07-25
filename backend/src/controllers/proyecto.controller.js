@@ -170,15 +170,16 @@ module.exports = { createProyecto };
 async function updateProyecto(req, res) {
   try {
     const { id } = req.params;
-    const updateData = req.body; // nuevos datos de la pub
+    const updateData = req.body; // Nuevos datos de la publicación
 
-    // Busca publicación por ID
+    // Busca la publicación por ID
     const proyecto = await Proyecto.findById(id);
 
     if (!proyecto) {
       return res.status(404).json({ message: 'Publicación no encontrada' });
     }
 
+    // Valida y actualiza los campos de la publicación
     const {
       titulo,
       descripcion,
@@ -190,32 +191,32 @@ async function updateProyecto(req, res) {
     } = updateData;
 
     // Validaciones título
-    if (typeof titulo !== "string" || titulo.length < 10 || titulo.length > 70) {
+    if (titulo && (typeof titulo !== "string" || titulo.length < 10 || titulo.length > 70)) {
       return respondError(req, res, 400, "Verificar largo del título (min 10 max 70 caracteres).");
     }
 
     const regexTitulo = /^[a-zA-Z\d\s-!@]+$/;
-    if (!regexTitulo.test(titulo)) {
+    if (titulo && !regexTitulo.test(titulo)) {
       return respondError(req, res, 400, "Revisar que el título no contenga símbolos no permitidos.");
     }
 
     // Validaciones descripción
-    if (typeof descripcion !== "string" || descripcion.length < 2 || descripcion.length > 600) {
+    if (descripcion && (typeof descripcion !== "string" || descripcion.length < 2 || descripcion.length > 600)) {
       return respondError(req, res, 400, "Verificar largo de la descripción (min 2 max 600 caracteres).");
     }
 
     const regexDescripcion = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
-    if (!regexDescripcion.test(descripcion)) {
+    if (descripcion && !regexDescripcion.test(descripcion)) {
       return respondError(req, res, 400, "La descripción debe contener al menos una letra.");
     }
 
     // Validaciones empresa licitante
-    if (typeof empresa_licitante !== "string" || empresa_licitante.length < 2 || empresa_licitante.length > 600) {
+    if (empresa_licitante && (typeof empresa_licitante !== "string" || empresa_licitante.length < 2 || empresa_licitante.length > 600)) {
       return respondError(req, res, 400, "Verificar largo de la empresa licitante (min 2 max 600 caracteres).");
     }
 
     const regexEmpresaLicitante = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#$%^&*.,?]+$/;
-    if (!regexEmpresaLicitante.test(empresa_licitante)) {
+    if (empresa_licitante && !regexEmpresaLicitante.test(empresa_licitante)) {
       return respondError(req, res, 400, "La empresa licitante debe contener al menos una letra.");
     }
 
@@ -224,35 +225,47 @@ async function updateProyecto(req, res) {
     const maxDate = new Date();
     maxDate.setFullYear(maxDate.getFullYear() + 150); // 150 años desde la fecha actual
 
-    const parsedFechaInicio = new Date(fecha_inicio);
-    const parsedFechaTermino = new Date(fecha_termino);
-
-    if (
-      parsedFechaInicio < currentDate || // La fecha de inicio no puede ser menor que la fecha actual
-      parsedFechaInicio > parsedFechaTermino || // La fecha de inicio no puede ser mayor que la fecha de término
-      parsedFechaInicio > maxDate // El año no puede ser mayor a la fecha actual + 150 años
-    ) {
-      if (parsedFechaInicio < currentDate) {
-        return respondError(req, res, 400, "La fecha de inicio no puede ser menor que la fecha actual");
-      } else if (parsedFechaInicio > parsedFechaTermino) {
-        return respondError(req, res, 400, "La fecha de inicio no puede ser mayor que la fecha de término");
-      } else {
-        return respondError(req, res, 400, "El año ingresado no puede ser mayor a 150 años desde la fecha actual");
-      }
-    }
-    if (
-      parsedFechaTermino <= parsedFechaInicio || // La fecha de término no puede ser menor o igual que la fecha de inicio
-      parsedFechaTermino > maxDate // No puede exceder 250 años desde la fecha actual
-    ) {
-      if (parsedFechaTermino <= parsedFechaInicio) {
-        return respondError(req, res, 400, "La fecha de término debe ser posterior a la fecha de inicio");
-      } else {
-        return respondError(req, res, 400, "La fecha de término no puede exceder los 250 años desde la fecha actual");
+    if (fecha_inicio) {
+      const parsedFechaInicio = new Date(fecha_inicio);
+      if (
+        parsedFechaInicio < currentDate || // La fecha de inicio no puede ser menor que la fecha actual
+        parsedFechaInicio > maxDate // El año no puede ser mayor a la fecha actual + 150 años
+      ) {
+        return respondError(req, res, 400, "La fecha de inicio no puede ser menor que la fecha actual o mayor a 150 años desde la fecha actual.");
       }
     }
 
-    // Se actualiza la publicación
-    proyecto.set(updateData);
+    if (fecha_termino) {
+      const parsedFechaTermino = new Date(fecha_termino);
+      if (
+        parsedFechaTermino <= (fecha_inicio ? new Date(fecha_inicio) : currentDate) || // La fecha de término no puede ser menor o igual que la fecha de inicio
+        parsedFechaTermino > maxDate // No puede exceder 150 años desde la fecha actual
+      ) {
+        return respondError(req, res, 400, "La fecha de término debe ser posterior a la fecha de inicio y no exceder 150 años desde la fecha actual.");
+      }
+    }
+
+    // Actualiza la publicación solo con los campos proporcionados
+    if (titulo) proyecto.titulo = titulo;
+    if (descripcion) proyecto.descripcion = descripcion;
+    if (empresa_licitante) proyecto.empresa_licitante = empresa_licitante;
+    if (fecha_inicio) proyecto.fecha_inicio = fecha_inicio;
+    if (fecha_termino) proyecto.fecha_termino = fecha_termino;
+    if (presupuesto) proyecto.presupuesto = presupuesto;
+
+    // Actualiza las actividades solo si se proporciona la información
+    if (actividades) {
+      actividades.forEach((actividad, index) => {
+        if (actividad.estado !== undefined) {
+          // Convertir a booleano y validar
+          const estado = actividad.estado === true || actividad.estado === 'true';
+          proyecto.actividades[index].estado = estado;
+        }
+        // También podrías querer actualizar otros campos de las actividades si es necesario
+      });
+    }
+
+    // Guarda el proyecto actualizado
     const updatedProyecto = await proyecto.save();
 
     return res.status(200).json(updatedProyecto);
@@ -261,6 +274,8 @@ async function updateProyecto(req, res) {
     return res.status(500).json({ message: 'Error al actualizar la publicación' });
   }
 }
+
+
 
 // Función para eliminar publicación
 async function deleteProyecto(req, res) {
