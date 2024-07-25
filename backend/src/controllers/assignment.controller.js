@@ -88,30 +88,26 @@ async function getParticipantsByProyect(req, res) {
 //los que ya están no deben ponerse en la solicitud ya que no se puede)
 async function updateParticipantsInProyect(req, res) {
     try {
-        const { id } = req.params; // ID de la asignación desde los parámetros de la URL
-        const { Proyecto, Participantes, description } = req.body; // Datos del cuerpo de la solicitud
-
-        // Validar los datos de la petición
-        const { error: bodyError } = assignmentBodySchema.validate(req.body);
-        if (bodyError) {
-            return respondError(req, res, 400, bodyError.message);
-        }
-
-        // Verificar que se proporcionaron los datos necesarios
-        if (!Proyecto || !Participantes || !Array.isArray(Participantes)) {
-            return respondError(req, res, 400, "Datos insuficientes o incorrectos.");
-        }
-
-        const [updatedAssignment, error] = await AssignmentService.updateParticipantsInProyect(id, Participantes, Proyecto, description);
-
-        if (error) {
-            return respondError(req, res, 400, error);
-        }
-        return respondSuccess(req, res, 200, updatedAssignment);
+      const { id } = req.params;
+      const { Participantes, Proyecto, description } = req.body;
+  
+      if (!id || !Participantes || !Array.isArray(Participantes) || typeof Proyecto !== 'string') {
+        return respondError(req, res, 400, "Datos insuficientes o incorrectos.");
+      }
+  
+      const [updatedAssignment, error] = await AssignmentService.updateParticipantsInProyect(id, Participantes, Proyecto, description);
+  
+      if (error) {
+        return respondError(req, res, 400, error);
+      }
+      return respondSuccess(req, res, 200, updatedAssignment);
     } catch (error) {
-        return respondError(req, res, 500, "No se pudo actualizar los participantes (Controller).");
+      return respondError(req, res, 500, "No se pudo actualizar los participantes (Controller).");
     }
-}
+  }
+  
+  
+  
 
 //Obtener todas las asignaciones
 async function getAssignments(req,res){
@@ -142,6 +138,7 @@ async function deleteAssignment(req, res){
     return respondSuccess(req, res, 200, deletedAssignment);
 
 }
+
 
 module.exports = {
     getAvailableParticipants,

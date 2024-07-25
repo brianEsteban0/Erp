@@ -142,61 +142,51 @@ async function getParticipantsByProyect(assignmentId) {
 
 // Actualizar participantes en un proyecto(retoques)
 //Revisar que se pueda actualizar la descripcion (unicamente) sin necesidad de añadir participantes.
-async function updateParticipantsInProyect(assignmentId, userIds, proyectId, description) {
+async function updateParticipantsInProyect(assignmentId, userIds, projectId, description) {
     try {
-        // Verificar que la asignación existe
-        const assignment = await Assignments.findById(assignmentId);
-        if (!assignment) {
-            return [null, 'Asignación no encontrada.'];
-        }
+      const assignment = await Assignments.findById(assignmentId);
+      if (!assignment) {
+        return [null, 'Asignación no encontrada.'];
+      }
+  
+      const participants = await User.find({ _id: { $in: userIds } });
+      if (participants.length !== userIds.length) {
+        return [null, 'Uno o más participantes no son válidos.'];
+      }
 
-        // Verificar que el proyecto existe
-        const proyecto = await Proyecto.findById(proyectId);
-        if (!proyecto) return [null, 'Proyecto no encontrado.'];
-
-        // Verificar que todos los userIds proporcionados correspondan a usuarios existentes
-        const participants = await User.find({ _id: { $in: userIds } });
-        if (participants.length !== userIds.length) {
-            return [null, 'Uno o más participantes no son válidos.'];
-        }
-
-        // Verificar que los nuevos participantes no están asignados a otro proyecto
-        const assignedUsers = await Assignments.findOne({ Participantes: { $in: userIds } });
-        if (assignedUsers) {
-            return [null, 'Uno o más usuarios ya están asignados a un proyecto.'];
-        }
-
-        // Filtrar y añadir solo nuevos participantes que no están actualmente en el assignment
-        const newParticipants = participants.filter(p => 
-            !assignment.Participantes.includes(p._id.toString()));
-
-        if (newParticipants.length > 0) {
-            assignment.Participantes.push(...newParticipants.map(p => p._id));
-            assignment.description = description; // Actualizar la descripción si es necesario
-            await assignment.save();
-
-            // Enviar correo electrónico a los nuevos participantes
-            const newParticipantsEmails = newParticipants.map(p => p.email);
-            if (newParticipantsEmails.length > 0) {
-                await Nodemailer.enviarEmail(newParticipantsEmails, 'Asignación a proyecto', 
-                    `Buenos días o tardes, se le informa que fue asignado al proyecto ${proyecto.titulo}`);
-            }
-
-            return [assignment, null];
-        } else {
-            return [null, 'No hay nuevos participantes para añadir.'];
-        }
-
+  
+      assignment.Participantes = participants.map(p => p._id);
+      assignment.Proyecto = projectId;
+  
+      if (description) {
+        assignment.description = description;
+      }
+  
+      await assignment.save();
+  
+      const newParticipantsEmails = participants.map(p => p.email);
+      if (newParticipantsEmails.length > 0) {
+        await Nodemailer.enviarEmail(newParticipantsEmails, 'Asignación a proyecto', 
+          `Buenos días o tardes, se le informa que fue asignado al proyecto ${assignment.Proyecto.titulo}`);
+      }
+  
+      return [assignment, null];
+  
     } catch (error) {
-        handleError(error, 'updateParticipantsInProject');
-        return [null, 'Error al actualizar participantes en el assignment.'];
+      handleError(error, 'updateParticipantsInProject');
+      return [null, 'Error al actualizar participantes en el assignment.'];
     }
-}
+  }
+  
+  
+  
 
 //Obtener todos las asignaciones
 async function getAssignments(){
     try {
-        const asignaciones = await Assignments.find();
+        const asignaciones = await Assignments.find()
+        .populate('Proyecto', 'titulo')
+        .populate('Participantes', 'username');
 
         return [asignaciones, null];
 
@@ -222,6 +212,7 @@ async function deleteAssignment(assignmentId) {
         return [null, 'Error al eliminar la asignación. (Servicio)'];
 }
 }
+
 module.exports = {
     getAvailableParticipants,
     createAssignment,

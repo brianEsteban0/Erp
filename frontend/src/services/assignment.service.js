@@ -1,108 +1,76 @@
 import axios from './root.service';
 
+const API_URL = 'http://localhost:3000/api/asignaciones';
+
 export const getAvailableParticipants = async () => {
-
     try {
-        const response = await axios.get('/asignaciones/dispo');
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-    }catch (error) {
-        console.log(message, "Error en getAvailableParticipants");
-    }
-
-};
-
-//No probada en backend, no tiene ruta aun.
-export const getProyectos = async () => {
-
-    try {
-        const response = await axios.get('/proyectos');
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-
-    }catch (error) {
-    console.log(message,"Error en getProyectos");
+        const response = await axios.get(`${API_URL}/disponible`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error en getAvailableParticipants:", error.response ? error.response.data : error.message);
+        throw error;
     }
 };
 
 export const createAssignment = async (data) => {
-
     try {
-        const response = await axios.post('/asignaciones', data);
-        const { status, data } = response;
-        if (status === 201) {
-            return data.data;
-        }
-    }catch (error) {
-        console.log(message, "Error en createAssignment");
-    }
-
-};
-//Revisar funcionamiento
-export const removeUserFromProyect = async (id) => {
-    
-    try {
-        const response = await axios.delete('/asignaciones/${id}/${id}', data);
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-    }catch (error) {
-        console.log(message, "Error en removeUserFromProyect");
-    }
-    
-};
-
-export const getParticipantsByProyect = async (id) => {
-
-    try {
-        const response = await axios.get('/asignaciones/${id}');
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-
-    }catch (error) {
-        console.log(message, "Error en getParticipantsByProyect");
+        const response = await axios.post(`${API_URL}`, data);
+        return response.data;
+    } catch (error) {
+        console.error("Error en createAssignment:", error.response ? error.response.data : error.message);
+        throw error;
     }
 };
-
-export const updateParticipantsInProyect = async (id, data) => {
-    try {
-        const response = await axios.put('/asignaciones/${id}', data);
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-    }catch (error) {
-        console.log(message, "Error en updateParticipantsInProyect");
-    }
-}
 
 export const getAssignments = async () => {
     try {
-        const response = await axios.get('/asignaciones');
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-    }catch (error) {
-        console.log(message, "Error en getAssignments");
+        const response = await axios.get(`${API_URL}`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error en getAssignments:", error.response ? error.response.data : error.message);
+        throw error;
     }
-}
+};
 
-export const deleteAssignment = async (id) => {
+export const removeUserFromProyect = async (assignmentId, userId) => {
     try {
-        const response = await axios.delete('/asignaciones/${id}');
-        const { status, data } = response;
-        if (status === 200) {
-            return data.data;
-        }
-    }catch (error) {
-        console.log(message, "Error en deleteAssignment");
+        const response = await axios.delete(`${API_URL}/${assignmentId}/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error en removeUserFromProyect:", error.response ? error.response.data : error.message);
+        throw error;
     }
-}
+};
+
+export const getParticipantsByProyect = async (assignmentId) => {
+    try {
+        const response = await axios.get(`${API_URL}/${assignmentId}`);
+        return response.data.data;
+    } catch (error) {
+        console.error("Error en getParticipantsByProyect:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+export const updateParticipantsInProyect = async (assignmentId, data) => {
+    try {
+      const response = await axios.put(`${API_URL}/${assignmentId}`, data);
+      console.log('API Response Update Assignment:', response.data); // Debugging
+      return response.data;
+    } catch (error) {
+      console.error("Error en updateParticipantsInProyect:", error.response ? error.response.data : error.message);
+      throw error;
+    }
+  };
+  
+  
+
+export const deleteAssignment = async (assignmentId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${assignmentId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error en deleteAssignment:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
