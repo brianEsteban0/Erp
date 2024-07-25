@@ -76,7 +76,7 @@ async function createProyecto(req, res) {
     } = body;
 
     // Validaciones título
-    if (typeof titulo !== "string" || titulo.length < 10 || titulo.length > 70) {
+    if (typeof titulo !== "string" || titulo.length < 2 || titulo.length > 70) {
       return respondError(req, res, 400, "Verificar largo del título (min 10 max 70 caracteres).");
     }
 
@@ -136,6 +136,26 @@ async function createProyecto(req, res) {
         return respondError(req, res, 400, "La fecha de término no puede exceder los 250 años desde la fecha actual");
       }
     }
+
+    // Validaciones presupuesto
+    const parsedPresupuesto = parseInt(presupuesto, 10);
+    if (
+      isNaN(parsedPresupuesto) || // Verificar si no es un número
+      parsedPresupuesto <= 0 || // No puede ser negativo o igual a 0
+      parsedPresupuesto !== parseFloat(presupuesto) ||
+      parsedPresupuesto > 999999999 // No puede exceder los 999.999.999
+    ) {
+      if (isNaN(parsedPresupuesto)) {
+        return respondError(req, res, 400, "El presupuesto debe ser un número válido");
+      } else if (parsedPresupuesto <= 0) {
+        return respondError(req, res, 400, "El presupuesto no puede ser negativo o igual a 0");
+      } else if (isNaN(parsedPresupuesto) || parsedPresupuesto !== parseFloat(presupuesto)) {
+        return respondError(req, res, 400, "El presupuesto debe ser un número entero válido");
+      } else {
+        return respondError(req, res, 400, "El presupuesto no puede exceder los 999.999.999");
+      }
+    }
+ 
 
     const proyecto = {
       titulo,
@@ -244,6 +264,25 @@ async function updateProyecto(req, res) {
         return respondError(req, res, 400, "La fecha de término debe ser posterior a la fecha de inicio y no exceder 150 años desde la fecha actual.");
       }
     }
+    // Validaciones presupuesto
+    const parsedPresupuesto = parseInt(presupuesto, 10);
+    if (
+      isNaN(parsedPresupuesto) || // Verificar si no es un número
+      parsedPresupuesto <= 0 || // No puede ser negativo o igual a 0
+      parsedPresupuesto !== parseFloat(presupuesto) ||
+      parsedPresupuesto > 999999999 // No puede exceder los 999.999.999
+    ) {
+      if (isNaN(parsedPresupuesto)) {
+        return respondError(req, res, 400, "El presupuesto debe ser un número válido");
+      } else if (parsedPresupuesto <= 0) {
+        return respondError(req, res, 400, "El presupuesto no puede ser negativo o igual a 0");
+      } else if (isNaN(parsedPresupuesto) || parsedPresupuesto !== parseFloat(presupuesto)) {
+        return respondError(req, res, 400, "El presupuesto debe ser un número entero válido");
+      } else {
+        return respondError(req, res, 400, "El presupuesto no puede exceder los 999.999.999");
+      }
+    }
+ 
 
     // Actualiza la publicación solo con los campos proporcionados
     if (titulo) proyecto.titulo = titulo;
