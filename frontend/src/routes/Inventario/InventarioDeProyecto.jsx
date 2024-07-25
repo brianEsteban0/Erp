@@ -56,16 +56,15 @@ const InventarioProyecto = () => {
                         </thead>
                         <tbody className="bg-white">
                             {inventory && inventory.length > 0 ? (
-                                inventory.map((item) => (
-                                <tr key={item._id}>
-                                    <td className="py-4 px-6 border-b border-gray-200">{item.proyecto.titulo}</td>                                        
-                                    <td className="py-4 px-6 border-b border-gray-200">
-                                            <button onClick={() => navigate(`/proyectos/inventario/ver/${item._id}`)} className="py-2 px-2 rounded-full bg-gray-800"
-                                            >
-                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/buscar.png" alt="" />
+                                inventory.filter(item => item.proyecto != null).map(item => (
+                                    <tr key={item._id}>
+                                        <td className="py-4 px-6 border-b border-gray-200">{item.proyecto.titulo}</td>
+                                        <td className="py-4 px-6 border-b border-gray-200">
+                                            <button onClick={() => navigate(`/proyectos/inventario/ver/${item._id}`)} className="py-2 px-2 rounded-full bg-gray-800">
+                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/buscar.png" alt="Buscar" />
                                             </button>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 ))
                             ) : (
                                     <tr>
