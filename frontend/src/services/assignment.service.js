@@ -54,16 +54,13 @@ export const getParticipantsByProyect = async (assignmentId) => {
 
 export const updateParticipantsInProyect = async (assignmentId, data) => {
     try {
-      const response = await axios.put(`${API_URL}/${assignmentId}`, data);
-      console.log('API Response Update Assignment:', response.data); // Debugging
-      return response.data;
+        const response = await axios.put(`${API_URL}/${assignmentId}`, data);
+        return response.data;
     } catch (error) {
-      console.error("Error en updateParticipantsInProyect:", error.response ? error.response.data : error.message);
-      throw error;
+        console.error("Error en updateParticipantsInProyect:", error.response ? error.response.data : error.message);
+        throw error;
     }
-  };
-  
-  
+};
 
 export const deleteAssignment = async (assignmentId) => {
     try {
@@ -71,6 +68,16 @@ export const deleteAssignment = async (assignmentId) => {
         return response.data;
     } catch (error) {
         console.error("Error en deleteAssignment:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+export const updateAssignmentStatus = async (assignmentId, status) => {
+    try {
+        const response = await axios.patch(`${API_URL}/${assignmentId}/status`, { status });
+        return response.data;
+    } catch (error) {
+        console.error("Error en updateAssignmentStatus:", error.response ? error.response.data : error.message);
         throw error;
     }
 };

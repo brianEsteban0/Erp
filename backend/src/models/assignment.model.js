@@ -19,6 +19,12 @@ const assignmentSchema = new mongoose.Schema({
         required: true,
     },
 
+    status: {
+        type: String,
+        enum: ['En curso', 'Completado'],
+        default: 'En curso',
+    },
+
     createdAt: {
         type: Date,
         default: Date.now

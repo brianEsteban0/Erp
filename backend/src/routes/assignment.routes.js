@@ -10,9 +10,10 @@ router.get('/disponible', authorizationMiddleware.isAdmin, assignmentController.
 router.post('/', authorizationMiddleware.isAdmin, assignmentController.addUserToProyect);
 router.delete('/:assignmentId/:userId', authorizationMiddleware.isAdmin, assignmentController.removeUserFromProyect);
 router.get('/:assignmentId', authorizationMiddleware.isAdmin, assignmentController.getParticipantsByProyect);
-router.put('/:id', authorizationMiddleware.isAdmin, assignmentController.updateParticipantsInProyect);
+router.put('/:assignmentId', authorizationMiddleware.isAdmin, assignmentController.updateParticipantsInProyect);
 router.delete('/:assignmentId', authorizationMiddleware.isAdmin, assignmentController.deleteAssignment)
 router.get('/', authorizationMiddleware.isAdmin, assignmentController.getAssignments)
+router.patch('/:assignmentId/status', assignmentController.updateAssignmentStatus);
 
 module.exports = router;
 
