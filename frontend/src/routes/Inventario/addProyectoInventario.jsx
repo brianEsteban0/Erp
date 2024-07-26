@@ -116,9 +116,11 @@ const AddProyectoInventario = () => {
                     <label>
                     </label>
                         <div className='flex justify-between'>
+                            <div></div>
                             <div>
                                 <h3>Material o Herramienta</h3>
                             </div>
+                            <div></div>
                             <div>
                                 <h3>Cantidad</h3>
                             </div>
@@ -131,7 +133,7 @@ const AddProyectoInventario = () => {
                             <img className='w-5 h-5' src="http://localhost:3000/uploads/add.png" alt="" />
                         </button>
                     </div>
-                    </div>
+                </div>
                     
 
                     {inventarioProyecto.inventarios?.map((criteria, index) => (
@@ -142,7 +144,7 @@ const AddProyectoInventario = () => {
                             id='inventario'
                             name='inventario'
                             value={criteria.inventario}
-                            className="px-3 py-2 mr-2 max-h-10 min-w-max border border-gray-300 rounded-md shadow-sm focus:outline-none  bg-gray-300 text-gray-700"
+                            className="px-3 py-2 mr-2 max-h-10 w-2/3 border border-gray-300 rounded-md shadow-sm focus:outline-none  bg-gray-300 text-gray-700"
                             onChange={(e) =>
                                 handleCriteriaChange(index, "inventario", e.target.value)
                             }
