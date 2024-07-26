@@ -44,9 +44,11 @@ function PageRoot() {
               <li>
                 <a href="/asistencia" className="block py-2.5 px-4 rounded hover:bg-gray-700">Asistencia</a>
               </li>
-              <li>
-                <a href="/inventario" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
-              </li>
+              {isAdmin && (
+                <li>
+                  <a href="/inventario" className="block py-2.5 px-4 rounded hover:bg-gray-700">Inventario</a>
+                </li>
+              )}
               {isAdmin && (
                 <li>
                   <a href="/usuarios" className="block py-2.5 px-4 rounded hover:bg-gray-700">Usuarios</a>

@@ -14,9 +14,13 @@ function Login() {
   }
 
   return (
-    <div>
-      <h2>Inicia sesion!</h2>
-      <LoginForm />
+    <div className='container px-4 mx-auto'>
+      <div className='max-w-lg mx-auto'>
+        <div className='text-center mb-6'>
+          <h2 className='text-3xl md:text-4xl font-extrabold'>Inicia sesion!</h2>
+        </div>
+        <LoginForm />
+      </div>
     </div>
   );
 }
