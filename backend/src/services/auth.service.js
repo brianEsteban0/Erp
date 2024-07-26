@@ -40,7 +40,7 @@ async function login(user) {
     }
 
     const accessToken = jwt.sign(
-      { email: userFound.email, roles: userFound.roles, rut: userFound.rut },
+      { email: userFound.email, roles: userFound.roles, rut: userFound.rut, photoUrl: userFound.photoUrl },
       ACCESS_JWT_SECRET,
       {
         expiresIn: "1d",
@@ -87,7 +87,12 @@ async function refresh(cookies) {
         if (!userFound) return [null, "No usuario no autorizado"];
 
         const accessToken = jwt.sign(
-          { email: userFound.email, roles: userFound.roles, rut: userFound.rut },
+          {
+            email: userFound.email,
+            roles: userFound.roles,
+            rut: userFound.rut,
+            photoUrl: userFound.photoUrl,
+          },
           ACCESS_JWT_SECRET,
           {
             expiresIn: "1d",

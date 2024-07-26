@@ -1,10 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../services/auth.service';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const RootUsuario = () => {
     const navigate = useNavigate();
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const loggedUser = JSON.parse(localStorage.getItem('user'));
+        console.log('Logged User:', loggedUser);
+        setUser(loggedUser);
+        console.log('User Photo URL:', loggedUser.photoUrl);  // Agregamos este log para verificar
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -26,7 +34,7 @@ const RootUsuario = () => {
             <span className="absolute -inset-1.5"></span>
             <span className="sr-only">Open user menu</span>
 
-            <img className="h-12 w-12 rounded-full" src="http://localhost:3000/uploads/defaultphoto.png" alt="" />
+            <img className="h-12 w-12 rounded-full" src={user.photoUrl ? `http://localhost:3000${user.photoUrl}` : "http://localhost:3000/uploads/defaultphoto.png"} alt="" />
           </button>
         </div>
 
