@@ -1,7 +1,12 @@
-import { useRouteError } from 'react-router-dom';
+import { useRouteError, useNavigate } from 'react-router-dom';
 
 const ErrorPage = () => {
   const error = useRouteError();
+  const navigate = useNavigate();
+
+  const handleRedirect = () => {
+    navigate('/auth');
+  };
 
   /**
    * Este mensaje de error, está pensado para los desarrolladores.
@@ -18,6 +23,7 @@ const ErrorPage = () => {
     <div>
       <h1>Oops!</h1>
       <p>Sorry, un error inesperado a ocurrido.</p>
+      <button onClick={handleRedirect}>Ir a la página de autenticación</button>
     </div>
   );
 };
