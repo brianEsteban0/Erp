@@ -94,12 +94,13 @@ export const createProyecto = async (proyectoData) => {
   }
 };
 
-export const addActividadToProyecto = async (proyectoId, actividad) => {
+export const addActividadToProyecto = async (proyectoId, actividadData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/proyectos/${proyectoId}/actividades`, actividad);
+    const response = await axios.post(`${BASE_URL}/${proyectoId}/actividades`, actividadData);
     return response.data;
   } catch (error) {
     console.error('Error al agregar la actividad', error);
     throw error;
   }
 };
+

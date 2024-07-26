@@ -379,6 +379,26 @@ async function updateActividadEstado(req, res) {
   }
 }
 
+const addActividad = async (req, res) => {
+  const { proyectoId } = req.params;
+  const actividadData = req.body;
+
+  try {
+      const proyecto = await Proyecto.findById(proyectoId);
+      if (!proyecto) {
+          return res.status(404).json({ message: 'Proyecto no encontrado' });
+      }
+
+      proyecto.actividades.push(actividadData);
+      await proyecto.save();
+
+      res.status(201).json(proyecto);
+  } catch (error) {
+      res.status(500).json({ message: 'Error al agregar la actividad', error });
+  }
+};
+
+
 
 
 // controllers/proyecto.controller.js
@@ -389,6 +409,7 @@ module.exports = {
   updateProyecto,
   deleteProyecto,
   getProyectoById,
-  updateActividadEstado, // Añade esta línea
+  updateActividadEstado,
+  addActividad,
 };
 

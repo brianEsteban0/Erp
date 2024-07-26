@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { obtenerProyectoById, getProyectos, updateProyecto, deleteProyecto } from '../services/ProyectoService';
+import { obtenerProyectoById, getProyectos, updateProyecto, deleteProyecto, addActividadToProyecto } from '../services/ProyectoService';
 import { toast } from 'react-toastify';
 
 const ModificarProyecto = () => {
@@ -14,8 +14,16 @@ const ModificarProyecto = () => {
         empresa_licitante: '',
         fecha_inicio: '',
         fecha_termino: '',
-        presupuesto: '',  // Añadido presupuesto
+        presupuesto: '',
         actividades: [],
+    });
+    const [nuevaActividad, setNuevaActividad] = useState({
+        nombre: '',
+        descripcion: '',
+        fecha_inicio: '',
+        fecha_termino: '',
+        responsable: '',
+        estado: false,
     });
 
     useEffect(() => {
@@ -63,6 +71,11 @@ const ModificarProyecto = () => {
         setProyectoData({ ...proyectoData, [name]: value });
     };
 
+    const handleActividadInputChange = (e) => {
+        const { name, value } = e.target;
+        setNuevaActividad({ ...nuevaActividad, [name]: value });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -94,6 +107,29 @@ const ModificarProyecto = () => {
         } catch (error) {
             console.error('Error al eliminar el proyecto', error);
             toast.error('Error al eliminar el proyecto');
+        }
+    };
+
+    const handleAddActividad = async (e) => {
+        e.preventDefault();
+        try {
+            await addActividadToProyecto(proyectoData._id, nuevaActividad);
+            setProyectoData((prevData) => ({
+                ...prevData,
+                actividades: [...prevData.actividades, nuevaActividad],
+            }));
+            setNuevaActividad({
+                nombre: '',
+                descripcion: '',
+                fecha_inicio: '',
+                fecha_termino: '',
+                responsable: '',
+                estado: false,
+            });
+            toast.success('Actividad añadida con éxito');
+        } catch (error) {
+            console.error('Error al agregar la actividad', error);
+            toast.error('Error al agregar la actividad');
         }
     };
 
@@ -165,31 +201,31 @@ const ModificarProyecto = () => {
                                     name="empresa_licitante"
                                     value={proyectoData.empresa_licitante || ''}
                                     onChange={handleInputChange}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">Fecha de inicio</label>
+                                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">Fecha Inicio</label>
                                 <input
                                     type="date"
                                     id="fecha_inicio"
                                     name="fecha_inicio"
-                                    value={formatDateForInput(proyectoData.fecha_inicio)}
+                                    value={proyectoData.fecha_inicio || ''}
                                     onChange={handleInputChange}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="fecha_termino" className="block text-sm font-medium text-gray-700">Fecha de término</label>
+                                <label htmlFor="fecha_termino" className="block text-sm font-medium text-gray-700">Fecha Término</label>
                                 <input
                                     type="date"
                                     id="fecha_termino"
                                     name="fecha_termino"
-                                    value={formatDateForInput(proyectoData.fecha_termino)}
+                                    value={proyectoData.fecha_termino || ''}
                                     onChange={handleInputChange}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                                 />
                             </div>
 
@@ -205,30 +241,115 @@ const ModificarProyecto = () => {
                                 />
                             </div>
 
+                            <div className="mb-3">
+                                <h2 className="text-lg font-semibold">Actividades</h2>
+                                <ul className="list-disc pl-5">
+                                    {proyectoData.actividades && proyectoData.actividades.map((actividad, index) => (
+                                        <li key={index} className="mb-2">{actividad.nombre}</li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="mb-3">
+                                <h2 className="text-lg font-semibold">Agregar Actividad</h2>
+                                <div>
+                                    <label htmlFor="actividadNombre" className="block text-sm font-medium text-gray-700">Nombre</label>
+                                    <input
+                                        type="text"
+                                        id="actividadNombre"
+                                        name="nombre"
+                                        value={nuevaActividad.nombre}
+                                        onChange={handleActividadInputChange}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="actividadDescripcion" className="block text-sm font-medium text-gray-700">Descripción</label>
+                                    <textarea
+                                        id="actividadDescripcion"
+                                        name="descripcion"
+                                        value={nuevaActividad.descripcion}
+                                        onChange={handleActividadInputChange}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                        rows="3"
+                                    ></textarea>
+                                </div>
+
+                                <div>
+                                    <label htmlFor="actividadFechaInicio" className="block text-sm font-medium text-gray-700">Fecha Inicio</label>
+                                    <input
+                                        type="date"
+                                        id="actividadFechaInicio"
+                                        name="fecha_inicio"
+                                        value={nuevaActividad.fecha_inicio}
+                                        onChange={handleActividadInputChange}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="actividadFechaTermino" className="block text-sm font-medium text-gray-700">Fecha Término</label>
+                                    <input
+                                        type="date"
+                                        id="actividadFechaTermino"
+                                        name="fecha_termino"
+                                        value={nuevaActividad.fecha_termino}
+                                        onChange={handleActividadInputChange}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="actividadResponsable" className="block text-sm font-medium text-gray-700">Responsable</label>
+                                    <input
+                                        type="text"
+                                        id="actividadResponsable"
+                                        name="responsable"
+                                        value={nuevaActividad.responsable}
+                                        onChange={handleActividadInputChange}
+                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="actividadEstado" className="block text-sm font-medium text-gray-700">Estado</label>
+                                    <input
+                                        type="checkbox"
+                                        id="actividadEstado"
+                                        name="estado"
+                                        checked={nuevaActividad.estado}
+                                        onChange={(e) => setNuevaActividad({ ...nuevaActividad, estado: e.target.checked })}
+                                        className="mt-1"
+                                    />
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={handleAddActividad}
+                                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                                >
+                                    Añadir Actividad
+                                </button>
+                            </div>
+
                             <button
                                 type="submit"
-                                className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
                             >
-                                Modificar Proyecto
+                                Guardar Cambios
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => handleEliminarProyecto(proyectoData._id)}
+                                className="ml-4 px-4 py-2 bg-red-500 text-white rounded-md"
+                            >
+                                Eliminar Proyecto
                             </button>
                         </div>
                     )}
                 </form>
-                
-                <div className="modify-project-actions mt-4">
-                    <button
-                        onClick={() => handleEliminarProyecto(proyectoData._id)}
-                        className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                    >
-                        Eliminar Proyecto
-                    </button>
-                    <button
-                        onClick={() => navigate('/proyectos')}
-                        className="ml-4 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                    >
-                        Cancelar
-                    </button>
-                </div>
             </div>
         </div>
     );

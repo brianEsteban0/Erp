@@ -22,4 +22,6 @@ router.delete("/:id", proyectoController.deleteProyecto);
 // Ruta para actualizar el estado de una actividad
 router.patch("/:proyectoId/actividades/:actividadIndex", proyectoController.updateActividadEstado);
 
+router.post('/:proyectoId/actividades', proyectoController.addActividad);
+
 module.exports = router;
