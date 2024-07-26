@@ -149,7 +149,7 @@ const UserManagement = () => {
       <div className="shadow-lg rounded-lg overflow-hidden mx-4 md:mx-10">
         <table className="w-full table-fixed">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-200">
               <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Agregar Usuario</th>
             </tr>
           </thead>
@@ -218,7 +218,7 @@ const UserManagement = () => {
       <div className="shadow-lg rounded-lg overflow-hidden mx-4 md:mx-10">
         <table className="w-full table-fixed">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-200">
               <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Lista de Usuarios</th>
             </tr>
           </thead>
@@ -273,7 +273,7 @@ const UserManagement = () => {
         <div className="shadow-lg rounded-lg overflow-hidden mx-4 md:mx-10">
           <table className="w-full table-fixed">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-gray-200">
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Editar Usuario</th>
               </tr>
             </thead>
@@ -355,7 +355,7 @@ const UserManagement = () => {
         <div className="shadow-lg rounded-lg overflow-hidden mx-4 md:mx-10">
           <table className="w-full table-fixed">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-gray-200">
                 <th className="w-1/4 py-4 px-6 text-left text-gray-600 font-bold uppercase">Enroll Huella Digital</th>
               </tr>
             </thead>
