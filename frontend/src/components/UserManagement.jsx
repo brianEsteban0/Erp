@@ -110,7 +110,7 @@ const UserManagement = () => {
   const handleEnrollUser = async () => {
     setIsWaiting(true);
     try {
-      await axios.post('http://localhost:3000/api/fingerprint/enroll', { rut: enrollingUser.rut });
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/fingerprint/enroll`, { rut: enrollingUser.rut });
       toast.success('Huella digital registrada exitosamente');
     } catch (error) {
       console.error('Error al registrar la huella:', error);
@@ -123,7 +123,7 @@ const UserManagement = () => {
   const handleDeleteFingerprint = async () => {
     setIsWaiting(true);
     try {
-      await axios.post('http://localhost:3000/api/fingerprint/delete', { rut: enrollingUser.rut });
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/api/fingerprint/delete`, { rut: enrollingUser.rut });
       toast.success('Huella digital eliminada exitosamente');
     } catch (error) {
       console.error('Error al eliminar la huella:', error);
@@ -282,7 +282,7 @@ const UserManagement = () => {
                 <td className="py-4 px-6 border-b border-gray-200">
                   {editingUser.photoUrl && (
                     <div className="flex flex-col items-center mb-4">
-                      <img src={`http://localhost:3000${editingUser.photoUrl}`} alt="Foto del usuario" className="w-32 h-32 object-cover rounded-full mb-2" />
+                      <img src={`${import.meta.env.VITE_BASE_URL}${editingUser.photoUrl}`} alt="Foto del usuario" className="w-32 h-32 object-cover rounded-full mb-2" />
                       {renderFileInput(setEditingPhotoFile)}
                     </div>
                   )}
@@ -362,7 +362,7 @@ const UserManagement = () => {
             <tbody className="bg-white">
               <tr>
                 <td className="py-4 px-6 border-b border-gray-200 flex flex-col items-center">
-                  <img src={`http://localhost:3000${enrollingUser.photoUrl}`} alt="Foto del usuario" className="mb-4 w-32 h-32 object-cover rounded-full" />
+                  <img src={`${import.meta.env.VITE_BASE_URL}${enrollingUser.photoUrl}`} alt="Foto del usuario" className="mb-4 w-32 h-32 object-cover rounded-full" />
                   <div className="bg-gray-200 p-4 rounded text-black text-center mb-4 w-full">
                     <span className="font-medium">{enrollingUser.username}</span> - <span>{enrollingUser.rut}</span>
                   </div>

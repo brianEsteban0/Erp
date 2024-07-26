@@ -61,7 +61,7 @@ const AssignmentEdit = ({ assignment, onClose, onUpdate }) => {
                   className="bg-gray-500 p-1 rounded ml-2"
                   onClick={() => handleRemoveParticipant(participant._id)}
                 >
-                  <img src="http://localhost:3000/uploads/eliminar.png" alt="Eliminar" className="w-5 h-5" />
+                  <img src={`${import.meta.env.VITE_BASE_URL}/uploads/eliminar.png`} alt="Eliminar" className="w-5 h-5" />
                 </button>
               </li>
             ))}

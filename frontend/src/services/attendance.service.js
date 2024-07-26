@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/asistencia';
+const API_URL = `${import.meta.env.VITE_BASE_URL}/api/asistencia`;
 
 const checkIn = async (rut, isAdminOverride = false) => {
   const response = await axios.post(`${API_URL}/checkin`, { rut, isAdminOverride });

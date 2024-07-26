@@ -27,12 +27,12 @@ const MisPublicaciones = () => {
     }
 
     const getPhotoUrl = (url) => {
-        const photoUrl = url.startsWith('http') ? url : `http://localhost:3000/${url}`
+        const photoUrl = url.startsWith('http') ? url : `${import.meta.env.VITE_BASE_URL}/${url}`
         return photoUrl;
     };
 
     const handlePhotoError = (e) => {
-        e.target.src = 'http://localhost:3000/uploads/imagesNotFound.png';
+        e.target.src = `${import.meta.env.VITE_BASE_URL}/uploads/imagesNotFound.png`;
     };
 
     return (
@@ -43,7 +43,7 @@ const MisPublicaciones = () => {
             <div className='flex justify-between p-4'>
                 <p></p>
                 <button onClick={() => navigate("/foro/nuevo")} className='bg-gray-500 px-2 py-2 rounded-md'>
-                    <img className='w-5 h-5' src="http://localhost:3000/uploads/addpost.png" alt="" />
+                    <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addpost.png`} alt="" />
                 </button>
             </div>
             
@@ -53,7 +53,7 @@ const MisPublicaciones = () => {
                         <div className='flex justify-between'>                            
                             <h2 className='font-bold text-xl mb-2 text-blue-900 uppercase'>{post.titulo}</h2>
                             <button onClick={() => navigate(`/foro/editar/${post._id}`)} className='bg-gray-500 px-3 py-2 rounded-md'>
-                                <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                                <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/editar.png`} alt="" />
                             </button>
                         </div>
                         {post.imagen && <img src={getPhotoUrl(post.imagen.imageUrl)} alt="archivos"  className='max-w-lg max-h-lvh shadow-xl rounded-xl' onError={handlePhotoError}/>}

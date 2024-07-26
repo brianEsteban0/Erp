@@ -1,7 +1,7 @@
 import axios from './root.service';
 import cookies from 'js-cookie';
 
-const API_URL = 'http://localhost:3000/api/users';
+const API_URL = `${import.meta.env.VITE_BASE_URL}/api/users`;
 
 const getAuthHeader = () => {
   const token = cookies.get('jwt-auth');

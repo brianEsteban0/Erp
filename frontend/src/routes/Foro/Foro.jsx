@@ -38,11 +38,11 @@ const Foro = () => {
     }
 
     const getPhotoUrl = (url) => {
-    return url.startsWith('http') ? url : `http://localhost:3000/${url}`;
+    return url.startsWith('http') ? url : `${import.meta.env.VITE_BASE_URL}/${url}`;
     };
 
     const handlePhotoError = (e) => {
-        e.target.src = 'http://localhost:3000/uploads/imagesNotFound.png';
+        e.target.src = `${import.meta.env.VITE_BASE_URL}/uploads/imagesNotFound.png`;
     };
 
     return (
@@ -53,7 +53,7 @@ const Foro = () => {
             <div className='flex justify-between p-4'>
                 <p className='text-gray-700 uppercase'>Ultimas publicaciones</p>
                 <button onClick={() => navigate("/foro/nuevo")} className='bg-gray-500 px-2 py-2 rounded-md'>
-                    <img className='w-5 h-5' src="http://localhost:3000/uploads/addpost.png" alt="" />
+                    <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addpost.png`} alt="" />
                 </button>
             </div>
             
@@ -83,7 +83,7 @@ const Foro = () => {
                         <div className='flex justify-between'>
                             <div></div>
                             <button onClick={() => openModal(post._id)} className='bg-gray-700 hover:bg-gray-500 rounded-sm m-2 p-1'>
-                                <img className='w-5 h-5' src="http://localhost:3000/uploads/addcomentar.png" alt="" />
+                                <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addcomentar.png`} alt="" />
                             </button>
                         </div>
 

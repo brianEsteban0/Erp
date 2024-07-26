@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'http://localhost:3000/api/proyectos';
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}/api/proyectos`;
 
 export async function getProyectos() {
   const response = await fetch(`${BASE_URL}/`);

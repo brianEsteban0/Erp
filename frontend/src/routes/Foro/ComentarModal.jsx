@@ -83,13 +83,13 @@ const ComentarModal = ({ isOpen, onClose, id }) => {
                         type="submit"
                         className="bg-gray-700 hover:bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
                     >
-                        <img className='w-5 h-5' src="http://localhost:3000/uploads/addcomentar.png" alt="" />
+                        <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addcomentar.png`} alt="" />
                     </button>
                     <button
                         onClick={onClose}
                         className="text-gray-500 hover:bg-gray-500 bg-gray-700 py-2 px-4 rounded-md"
                     >
-                        <img className='w-5 h-5' src="http://localhost:3000/uploads/circlecancel.png" alt="" />
+                        <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/circlecancel.png`} alt="" />
                     </button>
                 </div>
 

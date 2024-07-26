@@ -67,7 +67,7 @@ const Material = () => {
                                     <td class="py-4 px-6 border-b border-gray-200">
 
                                         <button onClick={() => navigate(`/inventario/material/editar/${item._id}`)} className="bg-gray-600 py-1 px-2 rounded-md">
-                                            <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                                            <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/editar.png`} alt="" />
                                         </button>
                                 </td>
                                 </tr>

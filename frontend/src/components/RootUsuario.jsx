@@ -34,7 +34,7 @@ const RootUsuario = () => {
             <span className="absolute -inset-1.5"></span>
             <span className="sr-only">Open user menu</span>
 
-            <img className="h-12 w-12 rounded-full" src={user.photoUrl ? `http://localhost:3000${user.photoUrl}` : "http://localhost:3000/uploads/defaultphoto.png"} alt="" />
+            <img className="h-12 w-12 rounded-full" src={user.photoUrl ? `${import.meta.env.VITE_BASE_URL}${user.photoUrl}` : `${import.meta.env.VITE_BASE_URL}/uploads/defaultphoto.png`} alt="" />
           </button>
         </div>
 

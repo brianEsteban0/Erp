@@ -126,7 +126,7 @@ const AssignmentForm = () => {
               )}
             </select>
             <button onClick={handleAddParticipant} className="bg-gray-500 text-white p-2 ml-2 rounded">
-              <img className="w-5 h-5" src="http://localhost:3000/uploads/add.png" alt="Añadir" />
+              <img className="w-5 h-5" src={`${import.meta.env.VITE_BASE_URL}/uploads/add.png`} alt="Añadir" />
             </button>
           </div>
           <button onClick={handleCreateAssignment} className="bg-gray-500 text-white p-2 rounded mb-2">Guardar</button>

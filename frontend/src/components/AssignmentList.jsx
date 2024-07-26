@@ -90,14 +90,14 @@ const AssignmentList = () => {
                   className="bg-gray-500 text-white p-2 rounded flex items-center"
                   onClick={() => handleDelete(assignment._id)}
                 >
-                  <img src="http://localhost:3000/uploads/eliminar.png" alt="Eliminar" className="w-5 h-5 mr-2" />
+                  <img src={`${import.meta.env.VITE_BASE_URL}/uploads/eliminar.png`} alt="Eliminar" className="w-5 h-5 mr-2" />
                   Eliminar
                 </button>
                 <button
                   className="bg-gray-500 text-white p-2 rounded flex items-center"
                   onClick={() => handleEdit(assignment)}
                 >
-                  <img src="http://localhost:3000/uploads/editar.png" alt="Editar" className="w-5 h-5 mr-2" />
+                  <img src={`${import.meta.env.VITE_BASE_URL}/uploads/editar.png`} alt="Editar" className="w-5 h-5 mr-2" />
                   Editar
                 </button>
                 {assignment.status !== 'Completado' && (
@@ -105,7 +105,7 @@ const AssignmentList = () => {
                     className="bg-gray-500 text-white p-2 rounded flex items-center"
                     onClick={() => handleStatusChange(assignment._id, 'Completado')}
                   >
-                    <img src="http://localhost:3000/uploads/completado.png" alt="Completado" className="w-5 h-5 mr-2" />
+                    <img src={`${import.meta.env.VITE_BASE_URL}/uploads/completado.png`} alt="Completado" className="w-5 h-5 mr-2" />
                     Marcar como Completado
                   </button>
                 )}

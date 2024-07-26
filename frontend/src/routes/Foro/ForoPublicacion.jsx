@@ -75,7 +75,7 @@ const NuevoForo = () => {
                     <button onClick={openModal} className=' py-2 px-3 border border-transparent shadow-sm rounded-md 
                     bg-gray-700 hover:bg-gray-500'
                     >
-                        <img className='w-5 h-5' src="http://localhost:3000/uploads/addphoto.png" alt="" />
+                        <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addphoto.png`} alt="" />
                     </button>
                         <UploadModal isOpen={modalIsOpen} onClose={closeModal} onFileUpload={handleFileUpload} />   
                 </div>

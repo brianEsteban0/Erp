@@ -101,7 +101,7 @@ const AttendanceForm = () => {
   };
 
   const getPhotoUrl = (url) => {
-    return url.startsWith('http') ? url : `http://localhost:3000${url}`;
+    return url.startsWith('http') ? url : `${import.meta.env.VITE_BASE_URL}${url}`;
   };
 
   const formatDateTime = (dateTime) => {
