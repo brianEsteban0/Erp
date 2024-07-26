@@ -73,7 +73,7 @@ const NuevoForo = () => {
                 <div className='flex justify-between'>
                     <h1 className="text-2xl font-bold text-blue-900 ">Nueva Publicacion</h1>
                     <button onClick={openModal} className=' py-2 px-3 border border-transparent shadow-sm rounded-md 
-                    bg-violet-500'
+                    bg-gray-700 hover:bg-gray-500'
                     >
                         <img className='w-5 h-5' src="http://localhost:3000/uploads/addphoto.png" alt="" />
                     </button>

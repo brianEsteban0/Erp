@@ -128,7 +128,7 @@ const AddProyectoInventario = () => {
                         <button
                         type="button"
                         onClick={handleAddCriteria}
-                        className="justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             <img className='w-5 h-5' src="http://localhost:3000/uploads/add.png" alt="" />
                         </button>
@@ -170,7 +170,7 @@ const AddProyectoInventario = () => {
                             <button
                             type="button"
                             onClick={() => handleRemoveCriteria(index)}
-                            className="justify-center ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="justify-center ml-3 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-700 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
                                 <img className='w-5 h-5' src="http://localhost:3000/uploads/eliminar.png" alt="" />
                             </button>

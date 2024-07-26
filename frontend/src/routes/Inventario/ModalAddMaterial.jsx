@@ -122,13 +122,13 @@ const ModalAddMaterial = ({ isOpen, onClose}) => {
                 <div>
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-2"
+                        className="bg-gray-700 hover:bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
                     >
                         Registrar
                     </button>
                     <button
                         onClick={onClose}
-                        className="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md"
+                        className="bg-gray-700 hover:bg-gray-500 py-2 px-4 rounded-md"
                     >
                         Cancelar
                     </button>
