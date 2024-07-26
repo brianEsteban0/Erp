@@ -47,16 +47,13 @@ export async function updateProyecto(id, datos) {
     }
 
     const data = await response.json();
-    if (data.state === 'Success') {
-      return data.data;
-    } else {
-      throw new Error('State is not Success');
-    }
+    return data.data; // Devuelve directamente los datos sin comprobar el estado
   } catch (error) {
     console.error('Error updating publication:', error);
     throw error;
   }
 }
+
 
 export const deleteProyecto = async (id) => {
   const response = await fetch(`${BASE_URL}/${id}`, {

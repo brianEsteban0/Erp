@@ -7,7 +7,7 @@ const ProyectoList = () => {
   const [filteredProyectos, setFilteredProyectos] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortOrder, setSortOrder] = useState('fechaAsc');
 
   useEffect(() => {
     async function fetchData() {
@@ -49,21 +49,36 @@ const ProyectoList = () => {
       proyecto.titulo.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    filtered.sort((a, b) => {
-      const dateA = new Date(a.fecha_inicio);
-      const dateB = new Date(b.fecha_inicio);
-      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
-    });
+    switch (sortOrder) {
+      case 'fechaAsc':
+        filtered.sort((a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
+        break;
+      case 'fechaDesc':
+        filtered.sort((a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio));
+        break;
+      case 'tituloAsc':
+        filtered.sort((a, b) => a.titulo.localeCompare(b.titulo));
+        break;
+      case 'tituloDesc':
+        filtered.sort((a, b) => b.titulo.localeCompare(a.titulo));
+        break;
+      case 'presupuestoAsc':
+        filtered.sort((a, b) => a.presupuesto - b.presupuesto);
+        break;
+      case 'presupuestoDesc':
+        filtered.sort((a, b) => b.presupuesto - a.presupuesto);
+        break;
+      default:
+        break;
+    }
 
     setFilteredProyectos(filtered);
   };
 
   const handleEstadoChange = async (proyectoId, actividadIndex, newEstado) => {
     try {
-      // Actualiza el estado de la actividad en el backend
       await updateActividadEstado(proyectoId, actividadIndex, newEstado);
 
-      // Actualiza el estado de la actividad localmente
       const updatedProyectos = proyectos.map((proyecto) => {
         if (proyecto._id === proyectoId) {
           const updatedActividades = proyecto.actividades.map((actividad, index) =>
@@ -113,8 +128,12 @@ const ProyectoList = () => {
           onChange={handleSortOrderChange}
           className="p-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
         >
-          <option value="asc">Fecha de inicio ascendente</option>
-          <option value="desc">Fecha de inicio descendente</option>
+          <option value="fechaAsc">Fecha de inicio ascendente</option>
+          <option value="fechaDesc">Fecha de inicio descendente</option>
+          <option value="tituloAsc">Título ascendente</option>
+          <option value="tituloDesc">Título descendente</option>
+          <option value="presupuestoAsc">Presupuesto menor a mayor</option>
+          <option value="presupuestoDesc">Presupuesto mayor a menor</option>
         </select>
       </div>
       <ul className="space-y-6">
@@ -168,16 +187,17 @@ const ProyectoList = () => {
                     <div
                       style={{ width: `${calculateProgress(proyecto.actividades)}%` }}
                       className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"
-                    ></div>
+                      ></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-export default ProyectoList;
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+  
+  export default ProyectoList;
+  

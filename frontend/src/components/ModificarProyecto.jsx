@@ -14,6 +14,7 @@ const ModificarProyecto = () => {
         empresa_licitante: '',
         fecha_inicio: '',
         fecha_termino: '',
+        presupuesto: '',  // Añadido presupuesto
         actividades: [],
     });
 
@@ -75,15 +76,13 @@ const ModificarProyecto = () => {
             })),
         };
 
-        console.log('Datos enviados:', formattedData);
-
         try {
             await updateProyecto(proyectoData._id, formattedData);
             toast.success('Proyecto modificado con éxito');
             navigate('/proyectos');
         } catch (error) {
             console.error('Error al modificar el proyecto', error);
-            toast.success('Proyecto modificado con éxito');
+            toast.error('Error al modificar el proyecto, verificar datos');
         }
     };
 
@@ -189,6 +188,18 @@ const ModificarProyecto = () => {
                                     id="fecha_termino"
                                     name="fecha_termino"
                                     value={formatDateForInput(proyectoData.fecha_termino)}
+                                    onChange={handleInputChange}
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="presupuesto" className="block text-sm font-medium text-gray-700">Presupuesto</label>
+                                <input
+                                    type="number"
+                                    id="presupuesto"
+                                    name="presupuesto"
+                                    value={proyectoData.presupuesto || ''}
                                     onChange={handleInputChange}
                                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
                                 />
