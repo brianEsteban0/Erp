@@ -14,10 +14,10 @@ const ModificarProyecto = () => {
         empresa_licitante: '',
         fecha_inicio: '',
         fecha_termino: '',
-        presupuesto: '',
+        presupuesto: '',  // Añadido presupuesto
         actividades: [],
     });
-    const [nuevaActividad, setNuevaActividad] = useState({
+    const [actividadData, setActividadData] = useState({
         nombre: '',
         descripcion: '',
         fecha_inicio: '',
@@ -73,7 +73,7 @@ const ModificarProyecto = () => {
 
     const handleActividadInputChange = (e) => {
         const { name, value } = e.target;
-        setNuevaActividad({ ...nuevaActividad, [name]: value });
+        setActividadData({ ...actividadData, [name]: value });
     };
 
     const handleSubmit = async (e) => {
@@ -85,7 +85,7 @@ const ModificarProyecto = () => {
             fecha_termino: formatDateToBackend(proyectoData.fecha_termino),
             actividades: proyectoData.actividades.map(actividad => ({
                 ...actividad,
-                estado: actividad.estado || 'defaultEstado',
+                estado: actividad.estado || false,
             })),
         };
 
@@ -113,12 +113,10 @@ const ModificarProyecto = () => {
     const handleAddActividad = async (e) => {
         e.preventDefault();
         try {
-            await addActividadToProyecto(proyectoData._id, nuevaActividad);
-            setProyectoData((prevData) => ({
-                ...prevData,
-                actividades: [...prevData.actividades, nuevaActividad],
-            }));
-            setNuevaActividad({
+            await addActividadToProyecto(proyectoData._id, actividadData);
+            toast.success('Actividad añadida con éxito');
+            // Opcional: Limpiar el formulario de actividad
+            setActividadData({
                 nombre: '',
                 descripcion: '',
                 fecha_inicio: '',
@@ -126,7 +124,6 @@ const ModificarProyecto = () => {
                 responsable: '',
                 estado: false,
             });
-            toast.success('Actividad añadida con éxito');
         } catch (error) {
             console.error('Error al agregar la actividad', error);
             toast.error('Error al agregar la actividad');
@@ -201,31 +198,31 @@ const ModificarProyecto = () => {
                                     name="empresa_licitante"
                                     value={proyectoData.empresa_licitante || ''}
                                     onChange={handleInputChange}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">Fecha Inicio</label>
+                                <label htmlFor="fecha_inicio" className="block text-sm font-medium text-gray-700">Fecha de inicio</label>
                                 <input
                                     type="date"
                                     id="fecha_inicio"
                                     name="fecha_inicio"
-                                    value={proyectoData.fecha_inicio || ''}
+                                    value={formatDateForInput(proyectoData.fecha_inicio)}
                                     onChange={handleInputChange}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
                                 />
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="fecha_termino" className="block text-sm font-medium text-gray-700">Fecha Término</label>
+                                <label htmlFor="fecha_termino" className="block text-sm font-medium text-gray-700">Fecha de término</label>
                                 <input
                                     type="date"
                                     id="fecha_termino"
                                     name="fecha_termino"
-                                    value={proyectoData.fecha_termino || ''}
+                                    value={formatDateForInput(proyectoData.fecha_termino)}
                                     onChange={handleInputChange}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
+                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-300 text-gray-700"
                                 />
                             </div>
 
@@ -241,115 +238,111 @@ const ModificarProyecto = () => {
                                 />
                             </div>
 
-                            <div className="mb-3">
-                                <h2 className="text-lg font-semibold">Actividades</h2>
-                                <ul className="list-disc pl-5">
-                                    {proyectoData.actividades && proyectoData.actividades.map((actividad, index) => (
-                                        <li key={index} className="mb-2">{actividad.nombre}</li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <div className="mb-3">
-                                <h2 className="text-lg font-semibold">Agregar Actividad</h2>
-                                <div>
-                                    <label htmlFor="actividadNombre" className="block text-sm font-medium text-gray-700">Nombre</label>
-                                    <input
-                                        type="text"
-                                        id="actividadNombre"
-                                        name="nombre"
-                                        value={nuevaActividad.nombre}
-                                        onChange={handleActividadInputChange}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label htmlFor="actividadDescripcion" className="block text-sm font-medium text-gray-700">Descripción</label>
-                                    <textarea
-                                        id="actividadDescripcion"
-                                        name="descripcion"
-                                        value={nuevaActividad.descripcion}
-                                        onChange={handleActividadInputChange}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
-                                        rows="3"
-                                    ></textarea>
-                                </div>
-
-                                <div>
-                                    <label htmlFor="actividadFechaInicio" className="block text-sm font-medium text-gray-700">Fecha Inicio</label>
-                                    <input
-                                        type="date"
-                                        id="actividadFechaInicio"
-                                        name="fecha_inicio"
-                                        value={nuevaActividad.fecha_inicio}
-                                        onChange={handleActividadInputChange}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label htmlFor="actividadFechaTermino" className="block text-sm font-medium text-gray-700">Fecha Término</label>
-                                    <input
-                                        type="date"
-                                        id="actividadFechaTermino"
-                                        name="fecha_termino"
-                                        value={nuevaActividad.fecha_termino}
-                                        onChange={handleActividadInputChange}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label htmlFor="actividadResponsable" className="block text-sm font-medium text-gray-700">Responsable</label>
-                                    <input
-                                        type="text"
-                                        id="actividadResponsable"
-                                        name="responsable"
-                                        value={nuevaActividad.responsable}
-                                        onChange={handleActividadInputChange}
-                                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label htmlFor="actividadEstado" className="block text-sm font-medium text-gray-700">Estado</label>
-                                    <input
-                                        type="checkbox"
-                                        id="actividadEstado"
-                                        name="estado"
-                                        checked={nuevaActividad.estado}
-                                        onChange={(e) => setNuevaActividad({ ...nuevaActividad, estado: e.target.checked })}
-                                        className="mt-1"
-                                    />
-                                </div>
-
-                                <button
-                                    type="button"
-                                    onClick={handleAddActividad}
-                                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
-                                >
-                                    Añadir Actividad
-                                </button>
-                            </div>
-
                             <button
                                 type="submit"
-                                className="mt-4 px-4 py-2 bg-green-500 text-white rounded-md"
+                                className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                             >
-                                Guardar Cambios
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => handleEliminarProyecto(proyectoData._id)}
-                                className="ml-4 px-4 py-2 bg-red-500 text-white rounded-md"
-                            >
-                                Eliminar Proyecto
+                                Modificar Proyecto
                             </button>
                         </div>
                     )}
                 </form>
+
+                <div className="modify-project-actions mt-4">
+                    <button
+                        type="button"
+                        onClick={() => handleEliminarProyecto(proyectoData._id)}
+                        className="py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                    >
+                        Eliminar Proyecto
+                    </button>
+                </div>
+
+                <div className="mt-8">
+                    <h2 className="text-xl font-bold text-gray-900">Añadir Actividad</h2>
+                    <form onSubmit={handleAddActividad} className="space-y-4">
+                        <div className="mb-4">
+                            <label htmlFor="nombre" className="block text-gray-700 font-medium mb-2">Nombre:</label>
+                            <input
+                                type="text"
+                                id="nombre"
+                                name="nombre"
+                                value={actividadData.nombre}
+                                onChange={handleActividadInputChange}
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="descripcion" className="block text-gray-700 font-medium mb-2">Descripción:</label>
+                            <textarea
+                                id="descripcion"
+                                name="descripcion"
+                                value={actividadData.descripcion}
+                                onChange={handleActividadInputChange}
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                rows="3"
+                            ></textarea>
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="fecha_inicio" className="block text-gray-700 font-medium mb-2">Fecha de Inicio:</label>
+                            <input
+                                type="date"
+                                id="fecha_inicio"
+                                name="fecha_inicio"
+                                value={actividadData.fecha_inicio}
+                                onChange={handleActividadInputChange}
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="fecha_termino" className="block text-gray-700 font-medium mb-2">Fecha de Término:</label>
+                            <input
+                                type="date"
+                                id="fecha_termino"
+                                name="fecha_termino"
+                                value={actividadData.fecha_termino}
+                                onChange={handleActividadInputChange}
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="responsable" className="block text-gray-700 font-medium mb-2">Responsable:</label>
+                            <input
+                                type="text"
+                                id="responsable"
+                                name="responsable"
+                                value={actividadData.responsable}
+                                onChange={handleActividadInputChange}
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                            />
+                        </div>
+
+                        <div className="mb-4">
+                            <label htmlFor="estado" className="block text-gray-700 font-medium mb-2">Estado:</label>
+                            <select
+                                id="estado"
+                                name="estado"
+                                value={actividadData.estado}
+                                onChange={handleActividadInputChange}
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                            >
+                                <option value={false}>Incompleto</option>
+                                <option value={true}>Completo</option>
+                            </select>
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-gray-700 bg-gray-300 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                        >
+                            Añadir Actividad
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     );

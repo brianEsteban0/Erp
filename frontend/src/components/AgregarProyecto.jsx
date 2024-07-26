@@ -83,8 +83,8 @@ function AgregarProyecto({ onProyectoAdded }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow-md">
-      <h3 className="text-2xl font-bold text-blue-900 mb-6">Agregar Proyecto</h3>
+    <form onSubmit={handleSubmit} className="container mx-auto p-4 bg-gray-100 border border-gray-300 rounded-lg shadow-md">
+      <h3 className="text-2xl font-bold text-gray-900 mb-6">Agregar Proyecto</h3>
 
       <div className="mb-4">
         <label htmlFor="titulo" className="block text-gray-700 font-medium mb-2">Título:</label>
@@ -94,7 +94,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="titulo"
           value={proyectoData.titulo}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           required
         />
       </div>
@@ -106,7 +106,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="descripcion"
           value={proyectoData.descripcion}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           required
         />
       </div>
@@ -119,7 +119,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="empresa_licitante"
           value={proyectoData.empresa_licitante}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           required
         />
       </div>
@@ -130,7 +130,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           selected={proyectoData.fecha_inicio}
           onChange={(date) => handleProyectoDateChange(date, 'fecha_inicio')}
           dateFormat="yyyy-MM-dd"
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           required
         />
       </div>
@@ -141,7 +141,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           selected={proyectoData.fecha_termino}
           onChange={(date) => handleProyectoDateChange(date, 'fecha_termino')}
           dateFormat="yyyy-MM-dd"
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           required
         />
       </div>
@@ -154,13 +154,13 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="presupuesto"
           value={proyectoData.presupuesto}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           required
         />
       </div>
 
       <div className="mb-4">
-        <h4 className="text-xl font-semibold text-blue-900 mb-4">Agregar Actividad</h4>
+        <h4 className="text-xl font-semibold text-gray-900 mb-4">Agregar Actividad</h4>
         <div className="mb-4">
           <label htmlFor="nombre" className="block text-gray-700 font-medium mb-2">Nombre de la Actividad:</label>
           <input
@@ -169,7 +169,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="nombre"
             value={actividadData.nombre}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           />
         </div>
 
@@ -181,7 +181,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="descripcion"
             value={actividadData.descripcion}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           />
         </div>
 
@@ -191,7 +191,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             selected={actividadData.fecha_inicio}
             onChange={(date) => handleActividadDateChange(date, 'fecha_inicio')}
             dateFormat="yyyy-MM-dd"
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           />
         </div>
 
@@ -201,7 +201,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             selected={actividadData.fecha_termino}
             onChange={(date) => handleActividadDateChange(date, 'fecha_termino')}
             dateFormat="yyyy-MM-dd"
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           />
         </div>
 
@@ -213,7 +213,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="responsable"
             value={actividadData.responsable}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           />
         </div>
 
@@ -224,7 +224,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="estado"
             value={actividadData.estado}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
           >
             <option value={false}>Incompleto</option>
             <option value={true}>Completo</option>
@@ -234,13 +234,13 @@ function AgregarProyecto({ onProyectoAdded }) {
         <button
           type="button"
           onClick={agregarActividad}
-          className="p-2 bg-blue-600 text-white rounded-md shadow-sm w-full mt-4"
+          className="p-2 bg-gray-600 text-white rounded-md shadow-sm w-full mt-4 hover:bg-gray-700"
         >
           Agregar Actividad
         </button>
       </div>
 
-      <button type="submit" className="p-2 bg-blue-600 text-white rounded-md shadow-sm w-full mt-4">Agregar Proyecto</button>
+      <button type="submit" className="p-2 bg-gray-600 text-white rounded-md shadow-sm w-full mt-4 hover:bg-gray-700">Agregar Proyecto</button>
     </form>
   );
 }
