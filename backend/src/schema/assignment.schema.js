@@ -29,6 +29,13 @@ const assignmentBodySchema = JOI.object({
             "string.max": "La descripción no puede tener más de 255 carácteres",
       }),
 
+    status: JOI.string()
+        .valid('En curso', 'Completado')
+        .default('En curso')
+        .messages({
+            "any.only": "El estado debe ser 'En curso' o 'Completado'."
+        }),
+
     createdAt: JOI.date()
         .optional()
         .messages({

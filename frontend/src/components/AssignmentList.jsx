@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAssignments, deleteAssignment, updateParticipantsInProyect } from '../services/assignment.service';
+import { getAssignments, deleteAssignment, updateParticipantsInProyect, updateAssignmentStatus } from '../services/assignment.service';
 import AssignmentEdit from './AssignmentEdit';
 
 const AssignmentList = () => {
@@ -45,6 +45,15 @@ const AssignmentList = () => {
     }
   };
 
+  const handleStatusChange = async (assignmentId, status) => {
+    try {
+      await updateAssignmentStatus(assignmentId, status);
+      fetchAssignments();
+    } catch (err) {
+      setError('Error al actualizar el estado de la asignación');
+    }
+  };
+
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -59,33 +68,48 @@ const AssignmentList = () => {
       ) : (
         <ul className="pl-5 text-black">
           {assignments.map(assignment => (
-            <li key={assignment._id} className="bg-white p-4 mb-4 rounded shadow-md">
-              <strong>Proyecto:</strong> {assignment.Proyecto?.titulo}
-              <br />
-              <strong>Estado:</strong> {assignment.Proyecto?.estado ? 'Activo' : 'Inactivo'}
-              <br />
-              <strong>Fecha de Creación:</strong> {formatDate(assignment.createdAt)}
-              <br />
-              <strong>Participantes:</strong>
-              <ul className="list-disc pl-5 text-black">
-                {assignment.Participantes?.map(participant => (
-                  <li key={participant._id} className="text-black">
-                    {participant.username}
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="bg-red-500 text-white p-2 rounded mt-2"
-                onClick={() => handleDelete(assignment._id)}
-              >
-                Eliminar
-              </button>
-              <button
-                className="bg-blue-500 text-white p-2 rounded mt-2 ml-2"
-                onClick={() => handleEdit(assignment)}
-              >
-                Editar
-              </button>
+            <li key={assignment._id} className="bg-white p-4 mb-4 rounded shadow-md flex justify-between">
+              <div>
+                <strong>Proyecto:</strong> {assignment.Proyecto?.titulo}
+                <br />
+                <strong>Fecha de Creación:</strong> {formatDate(assignment.createdAt)}
+                <br />
+                <strong>Status:</strong> {assignment.status}
+                <br />
+                <strong>Participantes:</strong>
+                <ul className="list-disc pl-5 text-black">
+                  {assignment.Participantes?.map(participant => (
+                    <li key={participant._id} className="text-black">
+                      {participant.username}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-col space-y-2 ml-4">
+                <button
+                  className="bg-gray-500 text-white p-2 rounded flex items-center"
+                  onClick={() => handleDelete(assignment._id)}
+                >
+                  <img src="http://localhost:3000/uploads/eliminar.png" alt="Eliminar" className="w-5 h-5 mr-2" />
+                  Eliminar
+                </button>
+                <button
+                  className="bg-gray-500 text-white p-2 rounded flex items-center"
+                  onClick={() => handleEdit(assignment)}
+                >
+                  <img src="http://localhost:3000/uploads/editar.png" alt="Editar" className="w-5 h-5 mr-2" />
+                  Editar
+                </button>
+                {assignment.status !== 'Completado' && (
+                  <button
+                    className="bg-gray-500 text-white p-2 rounded flex items-center"
+                    onClick={() => handleStatusChange(assignment._id, 'Completado')}
+                  >
+                    <img src="http://localhost:3000/uploads/completado.png" alt="Completado" className="w-5 h-5 mr-2" />
+                    Marcar como Completado
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>
