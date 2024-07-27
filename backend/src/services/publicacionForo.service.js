@@ -23,6 +23,17 @@ async function createPublicacionForo(publicacion) {
         const publicacionFound = await PublicacionForo.findOne({ titulo: publicacion.titulo });
         if (publicacionFound) return [null, "La publicacion ya existe"];
 
+        if (imagen === "") {
+            const newPublicacion = new PublicacionForo({
+                titulo,
+                contenido,
+                comentarios,
+                autor,
+                fechaCreacion,
+            });
+            await newPublicacion.save();
+            return [newPublicacion, null];
+        } else {
         const newPublicacion = new PublicacionForo({
             titulo,
             contenido,
@@ -32,9 +43,9 @@ async function createPublicacionForo(publicacion) {
             fechaCreacion,
         
         });
-        await newPublicacion.save();
-        
-        return [newPublicacion, null];
+            await newPublicacion.save();
+            return [newPublicacion, null];
+    }
     }catch (error) {
         handleError(error, "publicacionForo.service -> createPublicacionForo");
     }   

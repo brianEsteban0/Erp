@@ -3,6 +3,7 @@ import { createForo } from './../../services/foro.service.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
 import UploadModal from './UploadModal.jsx';
+import { toast } from 'react-toastify';
 
 const NuevoForo = () => {
     const { user } = useAuth();
@@ -50,7 +51,7 @@ const NuevoForo = () => {
             };
 
             await createForo(newPublicacion);
-            alert('Publicación creada con éxito');
+            toast.success('Publicación creada con éxito');
             navigate('/foro');
             setPublicacion({
                 titulo: '',
@@ -59,10 +60,9 @@ const NuevoForo = () => {
                 comentarios: [],
                 autor: '',
             });
-            setImageFile(null);
         } catch (error) {
             console.error('Error al crear la publicación:', error);
-            alert('Hubo un error al crear la publicación');
+            toast.error('Hubo un error al crear la publicación');
         }
     };
 

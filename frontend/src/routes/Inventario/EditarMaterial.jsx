@@ -66,7 +66,7 @@ const EditarMaterial = () => {
             });
         } catch (error) {
             console.error('Error al modificar el almacen:', error);
-            toast.error('Hubo un error al modificar el almacen');
+            toast.error('Error:', error.response.data.message);
         }
     };
 
@@ -85,7 +85,7 @@ const EditarMaterial = () => {
                         name='nombre'
                         value={material.nombre}
                         onChange={(e) => handleInputChange(e)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                         autoComplete='off'
                     />
                 </div>
@@ -97,7 +97,7 @@ const EditarMaterial = () => {
                         name='descripcion'
                         value={material.descripcion}
                         onChange={(e) => handleInputChange(e)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700"
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                         autoComplete='off'
                     />
                 </div>
@@ -110,7 +110,7 @@ const EditarMaterial = () => {
                             name='tipo'
                             value={material.tipo}
                             onChange={(e) => handleInputChange(e)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                         >
                             <option value="">Seleccionar tipo de material</option>
                             <option value="material">Material</option>
@@ -124,7 +124,7 @@ const EditarMaterial = () => {
                             name='unidad'
                             value={material.unidad}
                             onChange={(e) => handleInputChange(e)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-200 text-gray-700"
                         >
                             <option value="">Seleccionar unidad de medida</option>
                             <option value="bolsa">Bolsa</option>
@@ -149,13 +149,13 @@ const EditarMaterial = () => {
                 <div>
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-2"
+                        className="bg-gray-700 hover:bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
                     >
                         Registrar
                     </button>
                     <button
                         onClick={() => navigate('/inventario/material')}
-                        className="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md"
+                        className="bg-gray-700 hover:bg-gray-50 py-2 px-4 rounded-md"
                     >
                         Cancelar
                     </button>

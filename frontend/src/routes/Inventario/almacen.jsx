@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAlmacen } from "../../services/almace.service";
 import ModalAlmacen from "./ModalAlmacen";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Almacen = () => {
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Almacen = () => {
             setAlmacen(data);
         } catch (error) {
             console.error('Error fetching almacen data:', error);
+            toast.error('Error al obtener los datos del almacen');
         }
     };
 
@@ -63,7 +65,7 @@ const Almacen = () => {
                                         <td class="py-4 px-6 border-b border-gray-200">{ item.fono}</td>
                                     <td class="py-4 px-6 border-b border-gray-200">
                                         <button onClick={() => navigate(`/inventario/almacen/editar/${item._id}`)} class="bg-gray-500 py-1 px-2 rounded-md">
-                                                <img className='w-5 h-5' src="http://localhost:3000/uploads/editar.png" alt="" />
+                                                <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/editar.png`} alt="" />
                                         </button>
                                     </td>
                                 </tr>

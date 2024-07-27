@@ -21,7 +21,7 @@ const publicacionForoBodySchema = Joi.object({
     "string.min": "El contenido debe tener al menos 10 caracteres.",
     "string.max": "El contenido debe tener como máximo 200 caracteres.",
   }),
-  imagen: Joi.string().allow("").optional().messages({
+  imagen: Joi.string().allow('',"").optional().messages({
     "string.base": "La imagen debe ser de tipo string.",
   }),
   comentarios: Joi.array().items(
