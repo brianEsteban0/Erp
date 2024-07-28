@@ -23,14 +23,14 @@ function LoginForm() {
         name="email"
         type="email"
         {...register('email', { required: true })}
-        className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-white text-black"
         placeholder="Email"
       />
       <input
         type="password"
         name="password"
         {...register('password', { required: true })}
-        className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+        className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500 bg-white text-black"
         placeholder="Password"
       />
       {errors.exampleRequired && <span className="text-red-500">This field is required</span>}

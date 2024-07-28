@@ -642,3 +642,8 @@ input:checked + .slider:before {
 .custom-button:hover {
   background-color: #2b3544; /* un poco más oscuro en hover */
 }
+
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(22%) sepia(15%) saturate(497%) hue-rotate(175deg) brightness(50%) contrast(92%);
+}
+

@@ -162,7 +162,7 @@ const UserManagement = () => {
                   placeholder="Username"
                   value={newUser.username}
                   onChange={(e) => handleInputChange(e, setNewUser)}
-                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                 />
                 <input
                   type="text"
@@ -170,7 +170,7 @@ const UserManagement = () => {
                   placeholder="RUT"
                   value={newUser.rut}
                   onChange={(e) => handleInputChange(e, setNewUser)}
-                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                 />
                 <input
                   type="password"
@@ -178,7 +178,7 @@ const UserManagement = () => {
                   placeholder="Password"
                   value={newUser.password}
                   onChange={(e) => handleInputChange(e, setNewUser)}
-                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                 />
                 <input
                   type="email"
@@ -186,13 +186,13 @@ const UserManagement = () => {
                   placeholder="Email"
                   value={newUser.email}
                   onChange={(e) => handleInputChange(e, setNewUser)}
-                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                 />
                 <select
                   name="roles"
                   value={newUser.roles.length > 0 ? newUser.roles[0] : ""}
                   onChange={(e) => setNewUser({ ...newUser, roles: [e.target.value] })}
-                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                 >
                   <option value="">Seleccione un rol</option>
                   <option value="user">Usuario</option>
@@ -230,7 +230,7 @@ const UserManagement = () => {
                   placeholder="Buscar por RUT"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                  className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                 />
                 <div className="overflow-y-auto h-64">
                   <ul className="space-y-2">
@@ -292,7 +292,7 @@ const UserManagement = () => {
                     placeholder="Username"
                     value={editingUser.username}
                     onChange={(e) => handleInputChange(e, setEditingUser)}
-                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                   />
                   <input
                     type="text"
@@ -300,7 +300,7 @@ const UserManagement = () => {
                     placeholder="RUT"
                     value={editingUser.rut}
                     onChange={(e) => handleInputChange(e, setEditingUser)}
-                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                   />
                   <input
                     type="password"
@@ -308,7 +308,7 @@ const UserManagement = () => {
                     placeholder="Password"
                     value={editingUser.password}
                     onChange={(e) => handleInputChange(e, setEditingUser)}
-                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                   />
                   <input
                     type="password"
@@ -316,7 +316,7 @@ const UserManagement = () => {
                     placeholder="New Password"
                     value={editingUser.newPassword || ''}
                     onChange={(e) => handleInputChange(e, setEditingUser)}
-                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                   />
                   <input
                     type="email"
@@ -324,13 +324,13 @@ const UserManagement = () => {
                     placeholder="Email"
                     value={editingUser.email}
                     onChange={(e) => handleInputChange(e, setEditingUser)}
-                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                   />
                   <select
                     name="roles"
                     value={editingUser.roles.length > 0 ? editingUser.roles[0] : ""}
                     onChange={(e) => setEditingUser({ ...editingUser, roles: [e.target.value] })}
-                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black"
+                    className="p-2 border border-gray-300 rounded mb-2 w-full text-black bg-white"
                   >
                     <option value="">Seleccione un rol</option>
                     <option value="user">Usuario</option>
@@ -363,7 +363,7 @@ const UserManagement = () => {
               <tr>
                 <td className="py-4 px-6 border-b border-gray-200 flex flex-col items-center">
                   <img src={`${import.meta.env.VITE_BASE_URL}${enrollingUser.photoUrl}`} alt="Foto del usuario" className="mb-4 w-32 h-32 object-cover rounded-full" />
-                  <div className="bg-gray-200 p-4 rounded text-black text-center mb-4 w-full">
+                  <div className="bg-gray-200 p-4 rounded-lg text-black text-center mb-4 w-full">
                     <span className="font-medium">{enrollingUser.username}</span> - <span>{enrollingUser.rut}</span>
                   </div>
                   {isWaiting ? (
