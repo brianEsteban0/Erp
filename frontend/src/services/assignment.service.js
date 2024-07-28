@@ -1,6 +1,6 @@
 import axios from './root.service';
 
-const API_URL = `${import.meta.env.VITE_BASE_URL}/api/asisgnaciones`;
+const API_URL = `${import.meta.env.VITE_BASE_URL}/api/asignaciones`;
 
 export const getAvailableParticipants = async () => {
     try {
