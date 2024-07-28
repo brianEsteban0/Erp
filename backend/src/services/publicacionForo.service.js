@@ -80,6 +80,22 @@ async function updatePublicacionForo(id, publicacion) {
         const { titulo, contenido, imagen, comentarios, autor, fechaCreacion } = publicacion;
         if (autor !== publicacionFound.autor) return [null, "No puedes editar esta publicacion"];
 
+        if (imagen === "") {
+            const publicacionUpdated = await PublicacionForo.findByIdAndUpdate(
+                id,
+                {
+                    titulo,
+                    contenido,
+                    comentarios,
+                    autor,
+                    fechaCreacion,
+                },
+                { new: true },
+            );
+
+            return [publicacionUpdated, null];
+        }
+
         const publicacionUpdated = await PublicacionForo.findByIdAndUpdate(
             id,
             {
