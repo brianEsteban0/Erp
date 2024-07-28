@@ -93,7 +93,7 @@ function AgregarActividad({ onActividadAdded }) {
           name="nombre"
           value={actividadData.nombre}
           onChange={handleActividadInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
         />
       </div>
 
@@ -105,7 +105,7 @@ function AgregarActividad({ onActividadAdded }) {
           name="descripcion"
           value={actividadData.descripcion}
           onChange={handleActividadInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
         />
       </div>
 
@@ -115,7 +115,7 @@ function AgregarActividad({ onActividadAdded }) {
           selected={actividadData.fecha_inicio}
           onChange={(date) => handleActividadDateChange(date, 'fecha_inicio')}
           dateFormat="dd/MM/yyyy"
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
         />
       </div>
 
@@ -125,7 +125,7 @@ function AgregarActividad({ onActividadAdded }) {
           selected={actividadData.fecha_termino}
           onChange={(date) => handleActividadDateChange(date, 'fecha_termino')}
           dateFormat="dd/MM/yyyy"
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
         />
       </div>
 
@@ -137,7 +137,7 @@ function AgregarActividad({ onActividadAdded }) {
           name="responsable"
           value={actividadData.responsable}
           onChange={handleActividadInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
         />
       </div>
 
@@ -148,7 +148,7 @@ function AgregarActividad({ onActividadAdded }) {
           name="estado"
           value={actividadData.estado}
           onChange={handleActividadInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full text-black"
         >
           <option value={false}>Incompleto</option>
           <option value={true}>Completo</option>

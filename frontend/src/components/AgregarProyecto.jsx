@@ -94,7 +94,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="titulo"
           value={proyectoData.titulo}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           required
         />
       </div>
@@ -106,7 +106,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="descripcion"
           value={proyectoData.descripcion}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           required
         />
       </div>
@@ -119,7 +119,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="empresa_licitante"
           value={proyectoData.empresa_licitante}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           required
         />
       </div>
@@ -130,7 +130,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           selected={proyectoData.fecha_inicio}
           onChange={(date) => handleProyectoDateChange(date, 'fecha_inicio')}
           dateFormat="yyyy-MM-dd"
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           required
         />
       </div>
@@ -141,7 +141,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           selected={proyectoData.fecha_termino}
           onChange={(date) => handleProyectoDateChange(date, 'fecha_termino')}
           dateFormat="yyyy-MM-dd"
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           required
         />
       </div>
@@ -154,7 +154,7 @@ function AgregarProyecto({ onProyectoAdded }) {
           name="presupuesto"
           value={proyectoData.presupuesto}
           onChange={handleProyectoInputChange}
-          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+          className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           required
         />
       </div>
@@ -169,7 +169,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="nombre"
             value={actividadData.nombre}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           />
         </div>
 
@@ -181,7 +181,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="descripcion"
             value={actividadData.descripcion}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           />
         </div>
 
@@ -191,7 +191,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             selected={actividadData.fecha_inicio}
             onChange={(date) => handleActividadDateChange(date, 'fecha_inicio')}
             dateFormat="yyyy-MM-dd"
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           />
         </div>
 
@@ -201,7 +201,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             selected={actividadData.fecha_termino}
             onChange={(date) => handleActividadDateChange(date, 'fecha_termino')}
             dateFormat="yyyy-MM-dd"
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           />
         </div>
 
@@ -213,7 +213,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="responsable"
             value={actividadData.responsable}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           />
         </div>
 
@@ -224,7 +224,7 @@ function AgregarProyecto({ onProyectoAdded }) {
             name="estado"
             value={actividadData.estado}
             onChange={handleActividadInputChange}
-            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-gray-200"
+            className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
           >
             <option value={false}>Incompleto</option>
             <option value={true}>Completo</option>
