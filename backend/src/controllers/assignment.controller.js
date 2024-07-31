@@ -42,6 +42,7 @@ async function addUserToProyect(req, res) {
     return respondSuccess(req, res, 200, updatedProject);
 }
 
+
 // Eliminar un usuario de un proyecto
 async function removeUserFromProyect(req, res) {
     // Obtener los datos de la petición
