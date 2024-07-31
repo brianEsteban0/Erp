@@ -48,12 +48,19 @@ const AttendanceForm = () => {
   const fetchAttendanceRecords = async () => {
     try {
       const response = await attendanceService.getAttendanceRecords(searchRut, startDate, endDate);
-      setAttendanceRecords(response.records);
+      const formattedRecords = response.records.map(record => ({
+        ...record,
+        date: format(new Date(record.checkIn), 'dd/MM/yyyy'),
+        checkIn: format(new Date(record.checkIn), 'HH:mm:ss'),
+        checkOut: format(new Date(record.checkOut), 'HH:mm:ss'),
+      }));
+      setAttendanceRecords(formattedRecords);
     } catch (error) {
       console.error('Error al obtener registros de asistencia:', error);
       toast.error('Hubo un error al obtener los registros de asistencia');
     }
   };
+
 
   const fetchWorkHours = async () => {
     try {
@@ -112,7 +119,7 @@ const AttendanceForm = () => {
     try {
       const doc = new jsPDF();
       const { rut, username, email, photoUrl } = workUserInfo;
-
+ 
       doc.addImage(getPhotoUrl(photoUrl), 'JPEG', 10, 10, 30, 30);
       doc.setFontSize(12);
       doc.text(`RUT: ${rut}`, 10, 50);
@@ -128,9 +135,9 @@ const AttendanceForm = () => {
 
       attendanceRecords.forEach(record => {
         const recordData = [
-          formatDateTime(record.date),
-          formatDateTime(record.checkIn),
-          formatDateTime(record.checkOut)
+          record.date,
+          record.checkIn,
+          record.checkOut
         ];
         tableRows.push(recordData);
       });
@@ -149,6 +156,7 @@ const AttendanceForm = () => {
       toast.error('Hubo un error al generar el informe PDF');
     }
   };
+
 
   return (
     <div className="grid grid-cols-2 gap-4 ">
@@ -176,10 +184,10 @@ const AttendanceForm = () => {
                   <div className="mb-4 flex items-center justify-center">
                     <label className="mr-2 text-black ">Registro manual:</label>
                     <label className="switch ">
-                      <input 
-                        type="checkbox" 
-                        checked={overrideAdmin} 
-                        onChange={() => setOverrideAdmin(!overrideAdmin)} 
+                      <input
+                        type="checkbox"
+                        checked={overrideAdmin}
+                        onChange={() => setOverrideAdmin(!overrideAdmin)}
                       />
                       <span className="slider round"></span>
                     </label>
@@ -282,12 +290,13 @@ const AttendanceForm = () => {
                           <tbody>
                             {attendanceRecords.map((record) => (
                               <tr key={record._id}>
-                                <td className="py-2 text-black bg-gray-100">{formatDateTime(record.date)}</td>
-                                <td className="py-2 text-black bg-gray-100">{formatDateTime(record.checkIn)}</td>
-                                <td className="py-2 text-black bg-gray-100">{formatDateTime(record.checkOut)}</td>
+                                <td className="py-2 text-black bg-gray-100 text-center">{record.date}</td>
+                                <td className="py-2 text-black bg-gray-100 text-center">{record.checkIn}</td>
+                                <td className="py-2 text-black bg-gray-100 text-center">{record.checkOut}</td>
                               </tr>
                             ))}
                           </tbody>
+
                         </table>
                       ) : (
                         <p className="text-black">No se encontraron registros</p>
