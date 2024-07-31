@@ -34,6 +34,11 @@ async function createAssignment(proyectId, userIds, description) {
         const proyecto = await Proyecto.findById(proyectId);
         if (!proyecto) return [null, 'Proyecto no encontrado.'];
 
+        const currentDate = new Date();
+        if (new Date(proyecto.fecha_termino) < currentDate) {
+            return [null, 'No se puede asignar participantes porque este proyecto ya está terminado.'];
+        }
+
         // Asegurar que proyecto.Participantes es un arreglo
         if (!proyecto.Participantes) {
             proyecto.Participantes = [];
@@ -43,6 +48,12 @@ async function createAssignment(proyectId, userIds, description) {
         const invalidUserId = userIds.find(id => !mongoose.Types.ObjectId.isValid(id));
         if (invalidUserId) {
             return [null, 'Uno o más IDs de participantes no son válidos.'];
+        }
+ 
+        // Verificar que todas las actividades del proyecto estén completas
+        const allActivitiesComplete = proyecto.actividades.every(actividad => actividad.estado === true);
+        if (allActivitiesComplete) {
+            return [null, 'No se puede asignar participantes al proyecto porque todas las actividades están completas.'];
         }
 
         // Verificar que usuario no esté en otro proyecto en curso
