@@ -77,7 +77,7 @@ async function createProyecto(req, res) {
 
     // Validaciones título
     if (typeof titulo !== "string" || titulo.length < 2 || titulo.length > 70) {
-      return respondError(req, res, 400, "Verificar largo del título (min 10 max 70 caracteres).");
+      return respondError(req, res, 400, "Verificar largo del título (min 2 max 70 caracteres).");
     }
 
     const regexTitulo = /^(?=.*[a-zA-Z])[a-zA-Z\d\s!@#-]+$/;
@@ -128,12 +128,49 @@ async function createProyecto(req, res) {
     }
     if (
       parsedFechaTermino <= parsedFechaInicio || // La fecha de término no puede ser menor o igual que la fecha de inicio
-      parsedFechaTermino > maxDate // No puede exceder 250 años desde la fecha actual
+      parsedFechaTermino > maxDate // No puede exceder 150 años desde la fecha actual
     ) {
       if (parsedFechaTermino <= parsedFechaInicio) {
         return respondError(req, res, 400, "La fecha de término debe ser posterior a la fecha de inicio");
       } else {
-        return respondError(req, res, 400, "La fecha de término no puede exceder los 250 años desde la fecha actual");
+        return respondError(req, res, 400, "La fecha de término no puede exceder los 150 años desde la fecha actual");
+      }
+    }
+
+    // Validaciones actividades
+    if (!Array.isArray(actividades)) {
+      return respondError(req, res, 400, "Las actividades deben ser un array.");
+    }
+
+    for (const actividad of actividades) {
+      if (typeof actividad !== "object" || actividad === null) {
+        return respondError(req, res, 400, "Cada actividad debe ser un objeto.");
+      }
+
+      const { nombre, fecha } = actividad;
+
+      // Validar nombre de actividad
+      if (typeof nombre !== "string" || nombre.length < 2 || nombre.length > 100) {
+        return respondError(req, res, 400, "El nombre de cada actividad debe tener entre 2 y 100 caracteres.");
+      }
+
+      // Validar fecha de actividad
+      const parsedFechaActividad = new Date(fecha);
+      if (
+        isNaN(parsedFechaActividad.getTime()) || // Verificar si es una fecha válida
+        parsedFechaActividad < parsedFechaInicio || // La fecha de actividad no puede ser antes de la fecha de inicio del proyecto
+        parsedFechaActividad > parsedFechaTermino || // La fecha de actividad no puede ser después de la fecha de término del proyecto
+        parsedFechaActividad > maxDate // La fecha de actividad no puede ser más allá de 150 años desde la fecha actual
+      ) {
+        if (isNaN(parsedFechaActividad.getTime())) {
+          return respondError(req, res, 400, "Fecha de actividad no válida.");
+        } else if (parsedFechaActividad < parsedFechaInicio) {
+          return respondError(req, res, 400, "La fecha de la actividad no puede ser anterior a la fecha de inicio del proyecto.");
+        } else if (parsedFechaActividad > parsedFechaTermino) {
+          return respondError(req, res, 400, "La fecha de la actividad no puede ser posterior a la fecha de término del proyecto.");
+        } else {
+          return respondError(req, res, 400, "La fecha de la actividad no puede exceder los 150 años desde la fecha actual.");
+        }
       }
     }
 
@@ -149,13 +186,12 @@ async function createProyecto(req, res) {
         return respondError(req, res, 400, "El presupuesto debe ser un número válido");
       } else if (parsedPresupuesto <= 0) {
         return respondError(req, res, 400, "El presupuesto no puede ser negativo o igual a 0");
-      } else if (isNaN(parsedPresupuesto) || parsedPresupuesto !== parseFloat(presupuesto)) {
+      } else if (parsedPresupuesto !== parseFloat(presupuesto)) {
         return respondError(req, res, 400, "El presupuesto debe ser un número entero válido");
       } else {
         return respondError(req, res, 400, "El presupuesto no puede exceder los 999.999.999");
       }
     }
- 
 
     const proyecto = {
       titulo,
