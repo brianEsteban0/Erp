@@ -84,7 +84,7 @@ const Foro = () => {
                         ))}
                         <div className='flex justify-between'>
                             <div></div>
-                            <button onClick={() => openModal(post._id)} className='bg-gray-700 hover:bg-gray-500 rounded-sm m-2 p-1'>
+                            <button onClick={() => openModal(post._id)} className='bg-gray-700 hover:bg-gray-500 rounded-lg m-2 p-1'>
                                 <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addcomentar.png`} alt="" />
                             </button>
                         </div>

@@ -44,6 +44,7 @@ const ModalAlmacen = ({ isOpen, onClose}) => {
             isOpen={isOpen}
             onRequestClose={onClose}
             contentLabel="Subir Archivo"
+            className={'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl rounded-md p-5 w-1/3'}
         >
             <div className="flex justify-between items-center mb-4 text-gray-800">
                 <h2 className="text-lg font-bold">Registrar Nuevo Almacen</h2>

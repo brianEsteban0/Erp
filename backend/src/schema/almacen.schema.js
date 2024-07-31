@@ -19,25 +19,30 @@ const almacenIdSchema = Joi.object({
  * @constant {Object}
  */
 const almacenBodySchema = Joi.object({
-    nombre: Joi.string().min(2).max(40).required().messages({
+    nombre: Joi.string().min(2).max(40).required().pattern(/^(?!\d+$)[\s\S]*$/).messages({
         "string.empty": "El nombre del inventario no puede estar vacío.",
         "any.required": "El nombre del inventario es obligatorio.",
         "string.base": "El nombre del inventario debe ser de tipo string.",
         "string.min": "El nombre del inventario debe tener al menos 2 caracteres.",
         "string.max": "El nombre del inventario es muy grande.",
+        "string.pattern.base": "El nombre del inventario no puede ser solo números.",
     }),
-    ubicacion: Joi.string().allow("").min(3).max(2000).optional().messages({
-        "string.base": "La descripción debe ser de tipo string.",
-        "string.min": "La descripción debe tener mas de 3 caracteres.",
-        "string.max": "La descripción es muy grande.",
+    ubicacion: Joi.string().allow("").min(3).max(2000).pattern(/^(?!\d+$)[\s\S]*$/).required().messages({
+        "string.base": "La ubicacion debe ser de tipo string.",
+        "string.empty": "La ubicacion no puede estar vacía.",
+        "any.required": "La ubicacion es obligatoria.",
+        "string.min": "La  ubicacion tener mas de 3 caracteres.",
+        "string.max": "La ubicacion es muy grande.",
+        "string.pattern.base": "La ubicacion no puede ser solo números.",
     }),
-    fono: Joi.number().positive().min(0).max(999999999).required().messages({
-        "number.empty": "El precio no puede estar vacío.",
-        "any.required": "El precio es obligatorio.",
-        "number.base": "El precio debe ser de tipo numérico.",
-        "number.positive": "El precio debe ser un número positivo.",
-        "number.min": "El precio debe ser mayor o igual a cero.",
-        "number.max": "El precio es muy grande.",
+    fono: Joi.number().positive().min(0).max(999999999).integer().required().messages({
+        "number.empty": "El numero no puede estar vacío.",
+        "any.required": "El numero es obligatorio.",
+        "number.base": "El numero debe ser de tipo numérico.",
+        "number.positive": "El numero debe ser un número positivo.",
+        "number.min": "El numero debe ser mayor o igual a cero.",
+        "number.max": "El numero es muy grande.",
+        "number.integer": "El numero debe ser un número entero.",
     }),
 
 }).messages({
