@@ -105,7 +105,7 @@ const AssignmentList = () => {
                     className="bg-gray-500 text-white p-2 rounded flex items-center"
                     onClick={() => handleStatusChange(assignment._id, 'Completado')}
                   >
-                    <img src={`${import.meta.env.VITE_BASE_URL}/uploads/completado.png`} alt="Completado" className="w-5 h-5 mr-2" />
+                    <img src={`${import.meta.env.VITE_BASE_URL}/uploads/vermas.png`} alt="Completado" className="w-5 h-5 mr-2" />
                     Marcar como Completado
                   </button>
                 )}

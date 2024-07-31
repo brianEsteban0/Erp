@@ -7,21 +7,23 @@ const Joi = require("joi");
  * @constant {Object}
  */
 const publicacionForoBodySchema = Joi.object({
-  titulo: Joi.string().required().min(5).max(200).messages({
+  titulo: Joi.string().required().min(5).max(200).pattern(/^(?!\d+$)[\s\S]*$/).messages({
     "string.empty": "El título no puede estar vacío.",
     "any.required": "El título es obligatorio.",
     "string.base": "El título debe ser de tipo string.",
     "string.min": "El título debe tener al menos 5 caracteres.",
     "string.max": "El título debe tener como máximo 30 caracteres.",
+    "string.pattern.base": "El título no puede ser solo números.",
   }),
-  contenido: Joi.string().required().min(10).max(3000).messages({
+  contenido: Joi.string().required().min(10).max(3000).pattern(/^(?!\d+$)[\s\S]*$/).messages({
     "string.empty": "El contenido no puede estar vacío.",
     "any.required": "El contenido es obligatorio.",
     "string.base": "El contenido debe ser de tipo string.",
     "string.min": "El contenido debe tener al menos 10 caracteres.",
     "string.max": "El contenido debe tener como máximo 200 caracteres.",
+    "string.pattern.base": "El contenido no puede ser solo números.",
   }),
-  imagen: Joi.string().allow("").optional().messages({
+  imagen: Joi.string().allow('',"").optional().messages({
     "string.base": "La imagen debe ser de tipo string.",
   }),
   comentarios: Joi.array().items(

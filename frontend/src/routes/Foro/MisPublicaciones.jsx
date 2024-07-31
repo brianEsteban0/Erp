@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getMisPublicaciones } from './../../services/foro.service.js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { toast } from 'react-toastify';
 
 const MisPublicaciones = () => {
     const { user } = useAuth();
@@ -14,6 +15,7 @@ const MisPublicaciones = () => {
           setpublicacion(reverseData);
       } catch (error) {
           console.error("Error al obtener datos", error);
+          toast.error('Error al obtener datos');
       }
     };
 

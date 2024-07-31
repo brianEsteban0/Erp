@@ -269,7 +269,7 @@ const ModificarProyecto = () => {
                                 name="nombre"
                                 value={actividadData.nombre}
                                 onChange={handleActividadInputChange}
-                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
                             />
                         </div>
 
@@ -280,7 +280,7 @@ const ModificarProyecto = () => {
                                 name="descripcion"
                                 value={actividadData.descripcion}
                                 onChange={handleActividadInputChange}
-                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
                                 rows="3"
                             ></textarea>
                         </div>
@@ -293,7 +293,7 @@ const ModificarProyecto = () => {
                                 name="fecha_inicio"
                                 value={actividadData.fecha_inicio}
                                 onChange={handleActividadInputChange}
-                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
                             />
                         </div>
 
@@ -305,7 +305,7 @@ const ModificarProyecto = () => {
                                 name="fecha_termino"
                                 value={actividadData.fecha_termino}
                                 onChange={handleActividadInputChange}
-                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
                             />
                         </div>
 
@@ -317,7 +317,7 @@ const ModificarProyecto = () => {
                                 name="responsable"
                                 value={actividadData.responsable}
                                 onChange={handleActividadInputChange}
-                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full bg-white text-black"
                             />
                         </div>
 
@@ -328,7 +328,7 @@ const ModificarProyecto = () => {
                                 name="estado"
                                 value={actividadData.estado}
                                 onChange={handleActividadInputChange}
-                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full"
+                                className="p-2 border border-gray-300 rounded-md shadow-sm w-full text-black"
                             >
                                 <option value={false}>Incompleto</option>
                                 <option value={true}>Completo</option>

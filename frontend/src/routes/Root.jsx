@@ -22,7 +22,7 @@ function PageRoot() {
     <div className="bg-gray-100 min-h-screen">
       <div className="bg-gray-200 rounded shadow-md text-gray-700 flex justify-between items-center p-4">
         <div>
-          <h1 className="text-3xl mb-2">ERP</h1>
+          <h1 className="text-3xl mb-2">ERP Constructora Vladimir Robinson Endia E.I.R.L</h1>
         </div>
         <RootUsuario />
       </div>

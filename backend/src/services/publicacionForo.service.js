@@ -23,6 +23,17 @@ async function createPublicacionForo(publicacion) {
         const publicacionFound = await PublicacionForo.findOne({ titulo: publicacion.titulo });
         if (publicacionFound) return [null, "La publicacion ya existe"];
 
+        if (imagen === "") {
+            const newPublicacion = new PublicacionForo({
+                titulo,
+                contenido,
+                comentarios,
+                autor,
+                fechaCreacion,
+            });
+            await newPublicacion.save();
+            return [newPublicacion, null];
+        } else {
         const newPublicacion = new PublicacionForo({
             titulo,
             contenido,
@@ -32,9 +43,9 @@ async function createPublicacionForo(publicacion) {
             fechaCreacion,
         
         });
-        await newPublicacion.save();
-        
-        return [newPublicacion, null];
+            await newPublicacion.save();
+            return [newPublicacion, null];
+    }
     }catch (error) {
         handleError(error, "publicacionForo.service -> createPublicacionForo");
     }   
@@ -68,6 +79,22 @@ async function updatePublicacionForo(id, publicacion) {
 
         const { titulo, contenido, imagen, comentarios, autor, fechaCreacion } = publicacion;
         if (autor !== publicacionFound.autor) return [null, "No puedes editar esta publicacion"];
+
+        if (imagen === "") {
+            const publicacionUpdated = await PublicacionForo.findByIdAndUpdate(
+                id,
+                {
+                    titulo,
+                    contenido,
+                    comentarios,
+                    autor,
+                    fechaCreacion,
+                },
+                { new: true },
+            );
+
+            return [publicacionUpdated, null];
+        }
 
         const publicacionUpdated = await PublicacionForo.findByIdAndUpdate(
             id,

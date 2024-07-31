@@ -25,18 +25,12 @@ const inventarioSchema = Joi.object({
       "string.base": "El id del inventario debe ser de tipo string.",
       "string.pattern.base": "El id del inventario proporcionado no es un ObjectId válido.",
     }),
-  cantidadEnProyecto: Joi.number().min(0).max(99999).required().messages({
+  cantidadAsignada: Joi.number().min(0).max(99999).required().messages({
     "number.base": "La cantidad en proyecto debe ser un número.",
     "any.required": "La cantidad en proyecto es obligatoria.",
     "number.min": "La cantidad en proyecto debe ser mayor o igual a cero.",
     "number.max": "La cantidad en proyecto es muy grande.",
-  }),
-  precioTotal: Joi.number().min(0).max(99999999999).required().messages({
-    "number.base": "El precio total debe ser un número.",
-    "any.required": "El precio total es obligatorio.",
-    "number.min": "El precio total debe ser mayor o igual a cero.",
-    "number.max": "El precio total es muy grande.",
-  }),
+  })
 });
 
 const inventarioProyectoBodySchema = Joi.object({

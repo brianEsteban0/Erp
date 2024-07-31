@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from 'react-modal';
 import { createAlmacen } from '../../services/almace.service';
+import { toast } from 'react-toastify';
 
 const ModalAlmacen = ({ isOpen, onClose}) => {
     const [almacen, setAlmacen] = useState({
@@ -23,7 +24,7 @@ const ModalAlmacen = ({ isOpen, onClose}) => {
                 fono: almacen.fono,
             };
             await createAlmacen(newAlmacen);
-            alert('Almacen creado con éxito');
+            toast.success('Almacen creado con éxito');
             onClose();
             setAlmacen({
                 nombre: '',
@@ -32,6 +33,7 @@ const ModalAlmacen = ({ isOpen, onClose}) => {
             });
         } catch (error) {
             console.error('Error al crear almacen:', error);
+            toast.error('Error:', error.resonse.data.message);
         }
     };
 
@@ -42,6 +44,7 @@ const ModalAlmacen = ({ isOpen, onClose}) => {
             isOpen={isOpen}
             onRequestClose={onClose}
             contentLabel="Subir Archivo"
+            className={'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white shadow-2xl rounded-md p-5 w-1/3'}
         >
             <div className="flex justify-between items-center mb-4 text-gray-800">
                 <h2 className="text-lg font-bold">Registrar Nuevo Almacen</h2>

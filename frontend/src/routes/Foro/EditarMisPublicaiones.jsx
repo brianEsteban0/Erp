@@ -26,6 +26,18 @@ const EditarMisPublicaciones = () => {
     const publicacionDataById = async (id) => {
         try {
             const response = await getForoById(id);
+            if (response.data.imagen === null) {
+                setPublicacion(
+                    {
+                        titulo: response.data.titulo,
+                        contenido: response.data.contenido,
+                        imagen: '',
+                        comentarios: response.data.comentarios,
+                        autor: response.data.autor,
+                        fechaCreacion: response.data.fechaCreacion,
+                    }
+                );
+            } else {
             setPublicacion(
                 {
                     titulo: response.data.titulo,
@@ -35,7 +47,8 @@ const EditarMisPublicaciones = () => {
                     autor: response.data.autor,
                     fechaCreacion: response.data.fechaCreacion,
                 }
-            );
+                );
+            }
         } catch (error) {
             console.error('Error al obtener la publicación:', error);
             alert('Hubo un error al obtener la publicación');

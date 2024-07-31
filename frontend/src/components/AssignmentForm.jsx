@@ -88,7 +88,7 @@ const AssignmentForm = () => {
           <label htmlFor="projects" className="block text-gray-700">Proyectos:</label>
           <select
             id="projects"
-            className="border rounded p-2 w-full mb-2 text-black"
+            className="border rounded p-2 w-full mb-2 text-black bg-white"
             value={selectedProject}
             onChange={(e) => setSelectedProject(e.target.value)}
           >
@@ -112,7 +112,7 @@ const AssignmentForm = () => {
           <div className="flex mb-2">
             <select
               id="participants"
-              className="border rounded p-2 w-full text-black"
+              className="border rounded p-2 w-full text-black bg-white"
               value={selectedParticipant}
               onChange={(e) => setSelectedParticipant(e.target.value)}
             >

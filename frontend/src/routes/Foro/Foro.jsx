@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getForo } from './../../services/foro.service.js';
 import { useNavigate } from 'react-router-dom';
 import ComentarModal from './ComentarModal';
+import { toast } from 'react-toastify';
 
 const Foro = () => {
 
@@ -16,6 +17,7 @@ const Foro = () => {
           setpublicacion(reverseData);
       } catch (error) {
           console.error("Error al obtener datos", error);
+          toast.error('Error al obtener datos');
       }
     };
 
@@ -65,7 +67,7 @@ const Foro = () => {
                             <h2 className='font-bold text-xl mb-2 text-blue-900 uppercase'>{post.titulo}</h2>
                         </div>
                         {post.imagen && <img src={getPhotoUrl(post.imagen.imageUrl)} alt="archivos"  className='max-w-lg max-h-lvh shadow-xl rounded-xl' onError={handlePhotoError}/>}
-                        <p className='text-gray-700 text-base text-justify overflow-ellipsis overflow-hidden p-2'>{post.contenido}</p>
+                        <p className='text-gray-800 leading-snug bg-white rounded-lg overflow-auto whitespace-pre-line'>{post.contenido}</p>
                         <div className='flex justify-between'>
                             <p className='text-xs text-gray-600'>{post.autor}</p>
                             <p className='text-xs text-gray-600'>{formatearFecha(post.fechaCreacion)}</p>
@@ -82,7 +84,7 @@ const Foro = () => {
                         ))}
                         <div className='flex justify-between'>
                             <div></div>
-                            <button onClick={() => openModal(post._id)} className='bg-gray-700 hover:bg-gray-500 rounded-sm m-2 p-1'>
+                            <button onClick={() => openModal(post._id)} className='bg-gray-700 hover:bg-gray-500 rounded-lg m-2 p-1'>
                                 <img className='w-5 h-5' src={`${import.meta.env.VITE_BASE_URL}/uploads/addcomentar.png`} alt="" />
                             </button>
                         </div>

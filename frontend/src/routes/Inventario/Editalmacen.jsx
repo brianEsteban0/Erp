@@ -13,7 +13,7 @@ const EditarAlmacen = () => {
     });
     
     const handleUpdate = (e) => {
-        const shouldUpdate = window.confirm('¿Estás seguro de que deseas editar esta rubrica?');
+        const shouldUpdate = window.confirm('¿Estás seguro de que deseas editar el Almacen?');
 
         if (shouldUpdate) {
             handleSubmit(e);
@@ -38,6 +38,7 @@ const EditarAlmacen = () => {
             setAlmacen(newI);
         } catch (error) {
             console.error('Error al obtener los detalles del inventario', error);
+            toast.error('Hubo un error al obtener los detalles del inventario');
             navigate('/inventario/almacen');
         }
     };
@@ -109,13 +110,13 @@ const EditarAlmacen = () => {
                 <div>
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-2"
+                        className="bg-gray-700 hover:bg-gray-500 text-white py-2 px-4 rounded-md mr-2"
                     >
                         Modificar
                     </button>
                     <button
                         onClick={() => navigate('/inventario/almacen')}
-                        className="text-gray-500 hover:text-gray-700 py-2 px-4 rounded-md"
+                        className="bg-gray-700 hover:bg-gray-500 py-2 px-4 rounded-md"
                     >
                         Cancelar
                     </button>
